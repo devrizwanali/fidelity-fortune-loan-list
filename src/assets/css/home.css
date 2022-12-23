@@ -1,0 +1,62 @@
+:root {
+  --red-color: #CC0606;
+  --white-color: #FFFFFF;
+}
+
+.loans__table h1 {
+  font-weight: 600;
+  font-size: 24px;
+  color: #131518;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.loans__table {
+  padding: 20px;
+  background: var(--white-color);
+  box-shadow: 0px 0px 30px rgba(42, 89, 152, 0.03);
+  border-radius: 10px;
+}
+
+.loans__table input {
+  width: 388px;
+  padding-left: 40px;
+  height: 50px;
+  background: var(--white-color);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+}
+
+.add-customer {
+  background: #06B941 !important;
+  border: #06B941 !important;
+}
+
+.export {
+  background: #0044AA !important;
+  border: #0044AA !important;
+}
+
+.bulk-pay {
+  background: var(--red-color) !important;
+  border: var(--red-color) !important;
+}
+
+thead {
+  background: #f4f5f5;
+}
+
+.status {
+  border-radius: 4px;
+}
+
+.search-icon {
+  position: absolute; 
+  margin-top: 15px
+}
+
+.loans__table--header {
+  display: flex;
+  justify-content: space-between;
+   margin-bottom: 20px;
+}
