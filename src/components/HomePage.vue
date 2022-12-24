@@ -4,7 +4,7 @@
     <div class="loans__table--header">
       <img src="@/assets/search.png" class="px-3 search-icon">
       <input type="text" v-model="filter" placeholder="Search by Loan No, Comput..." >
-      <div style="gap: 15px; display: flex;">
+      <div class="action-btns">
         <b-button class="add-customer px-3">
           <img src="@/assets/plus.png">
           Add Customer
@@ -27,6 +27,7 @@
       :per-page="perPage"
       show-empty
       small
+      responsive
       @filtered="onFiltered"
       >
       <template #cell(status)="data">
@@ -38,7 +39,7 @@
         </span>
       </template>
     </b-table>
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center p-footer">
       <div class="d-flex align-items-center" style="gap: 8px">
         <p>Show</p>
         <b-form-select

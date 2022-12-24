@@ -60,3 +60,28 @@ thead {
   justify-content: space-between;
    margin-bottom: 20px;
 }
+
+.action-btns {
+  display: flex;
+  gap: 15px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .loans__table--header {
+    flex-direction: column;
+  }
+
+  .action-btns {
+    margin-top: 20px;
+  }
+
+  .loans__table input {
+    max-width: 100%;
+  }
+}
+
+@media only screen and (max-width: 585px) {
+  .p-footer {
+    flex-direction: column;
+  }
+}
