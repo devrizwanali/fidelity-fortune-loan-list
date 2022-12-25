@@ -38,6 +38,18 @@
           {{data.value}}
         </span>
       </template>
+
+      <template #cell(ministry)="data">
+        {{ data.item.customerName }}
+      </template>
+
+      <template #cell(loanAmount)="data">
+        {{ data.item.totalRepaymentAmount }}
+      </template>
+
+      <template #cell(cDate)="data">
+        {{data.item.paymentStartDate}}
+      </template>
     </b-table>
     <div class="d-flex justify-content-between align-items-center p-footer">
       <div class="d-flex align-items-center" style="gap: 8px">
@@ -78,13 +90,13 @@
           {label: 'Como. No', key: 'computerNo'},
           {label: 'Name', key: 'customerName'},
           {label: 'Loan No.', key: 'loanNo'},
-          {label: 'Ministry', key: 'customerName'},
+          {label: 'Ministry', key: 'ministry'},
           {label: 'Duration', key: 'duration'},
           {label: 'AMT. Disb', key: 'totalRepaymentAmount'},
-          {label: 'Loan Amt', key: 'totalRepaymentAmount'},
+          {label: 'Loan Amt', key: 'loanAmount'},
           {label: 'Monthly', key: 'monthlyRepaymentAmount'},
           {label: 'S. Date', key: 'paymentStartDate'},
-          {label: 'C. Date', key: 'paymentStartDate'},
+          {label: 'C. Date', key: 'cDate'},
           {label: 'Status', key: 'status'},
         ]
       }
