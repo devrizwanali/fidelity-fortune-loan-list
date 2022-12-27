@@ -26,10 +26,20 @@
       :current-page="currentPage"
       :per-page="perPage"
       show-empty
+      :busy.sync="isBusy"
       small
+      ref="loans-table"
       responsive
       @filtered="onFiltered"
       >
+
+      <template v-slot:table-busy>
+        <div class="text-center my-2" style="color: #059e37;">
+          <b-spinner class="align-middle"></b-spinner>
+          <strong> Loading...</strong>
+        </div>
+      </template>
+
       <template #cell(status)="data">
         <span 
           :style="{color: getColor(data.item.approved), background: getBgColor(data.item.approved)}" 
@@ -64,14 +74,15 @@
       </div>
       <b-pagination
         v-model="currentPage"
-        :total-rows="totalRows"
+        :total-rows="totalPages"
         :per-page="perPage"
         pills
+        @change="pageChangeHandler"
         size="sm">
       </b-pagination>
 
       <p>
-        Showing {{((currentPage - 1) * perPage ) + 1}} to {{showingEnteries}} of {{totalRows}} entries
+        Showing {{((currentPage - 1) * perPage ) + 1}} to {{showingEnteries}} of {{totalElements}} entries
       </p>
     </div>
   </div>
@@ -84,6 +95,7 @@
         currentPage: 1,
         perPage: 10,
         filter: null,
+        interval: null,
         options: [10, 20, 50],
         headers: [
           {label: 'Office', key: 'referral'},
@@ -102,25 +114,33 @@
       }
     },
     computed:  {
-      ...mapGetters(['loans', 'totalLoans', 'isBusy']),
+      ...mapGetters(['loans', 'totalLoans', 'totalElements', 'totalPages', 'isBusy']),
 
       totalRows() {
         return this.totalLoans || 1
       },
 
       showingEnteries () {
-        if((this.currentPage * this.perPage) > this.totalLoans)
-          return this.totalLoans
+        if((this.currentPage * this.perPage) > this.totalElements)
+          return this.totalElements
         else
           return this.currentPage * this.perPage
       }
     },
 
-    async mounted() {
-      await this.$store.dispatch('fetchLoans')
+    async beforeCreate() {
+      await this.$store.dispatch('fetchLoans', { page: 1, size: this.perPage || 10 })
     },
-
+    beforeDestroy() {
+      console.log('Good bye!')
+    },
     methods: {
+      pageChangeHandler(page) {
+        if((page * this.perPage > this.loans.length && this.totalElements > this.loans.length)) {
+          this.$store.dispatch('fetchLoans', { page: page, size: this.perPage || 10 })
+          this.$root.$emit('bv::refresh::table', 'loans-table')
+        }
+      },
       getColor(approved) {
         return approved ?  '#CC0606' :  '#06B941'
       },

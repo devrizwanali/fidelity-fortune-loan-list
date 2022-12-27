@@ -4,16 +4,17 @@ const state = {
   loans: [],
   totalLoans: 0,
   totalElements: 0,
-  totalPages: 1,
+  totalPages: 0,
   isBusy: true,
 };
 
 const mutations = {
   'SET_LOANS'(state, payload) {
-    state.loans = payload.content
-    // state.totalLoans = payload.length
-    // state.totalElements = payload.totalElements
-    // state.totalPages = payload.totalPages
+    const loans = [...state.loans, ...payload.content]
+    state.loans = loans
+    state.totalLoans = payload.length
+    state.totalElements = payload.totalElements
+    state.totalPages = payload.totalPages
   },
 
   'SET_BUSY'(state, isBusy) {
@@ -22,26 +23,17 @@ const mutations = {
 };
 
 const actions = {
-  async fetchLoans({ commit, state }) {
+  async fetchLoans({ commit }, params) {
     commit('SET_BUSY', true)
-    let size = 10
-    let page = 0
-
-    for(let i = 0; i < 5; i++) {
-          console.log('========', i)
-
-        await axios.get(`http://35.176.190.21:8080/lms/api/loan/page?size=${size}&page=${page}`)
-        .then(res => {
-          let newAr = [...state.loans, res.data.response]
-          commit('SET_LOANS', newAr)
-          commit('SET_BUSY', false)
-          page += 1;
-        })
-        .catch(error => {
-          commit('SET_BUSY', false)
-          console.log(error)
-        })
-    }
+    await axios.get(`http://18.133.243.4:8080/lms/api/loan/page?size=${params.size}&page=${params.page}`)
+    .then(res => {
+      commit('SET_LOANS', res.data.response)
+      commit('SET_BUSY', false)
+    })
+    .catch(error => {
+      commit('SET_BUSY', false)
+      console.log(error)
+    })
   }
 };
 
