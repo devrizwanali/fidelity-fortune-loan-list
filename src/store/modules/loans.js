@@ -1,30 +1,56 @@
-import axios from 'axios'
+import axios from '@/axios'
 
 const state = {
   loans: [],
-  totalLoans: 0
+  totalLoans: 0,
+  totalElements: 0,
+  totalPages: 1,
+  isBusy: true,
 };
 
 const mutations = {
   'SET_LOANS'(state, payload) {
-    state.loans = payload
-    state.totalLoans = payload.length
+    state.loans = payload.content
+    // state.totalLoans = payload.length
+    // state.totalElements = payload.totalElements
+    // state.totalPages = payload.totalPages
+  },
+
+  'SET_BUSY'(state, isBusy) {
+    state.isBusy = isBusy
   }
 };
 
 const actions = {
-  async fetchLoans({ commit }) {
-    await axios.get("https://5ca88ead-2c7d-4577-a4d4-2b63825870e4.mock.pstmn.io/lms/api/loan/page")
-    .then(res => {
-      commit('SET_LOANS', res.data.response.content)
-    })
-    .catch(error => console.log(error))
+  async fetchLoans({ commit, state }) {
+    commit('SET_BUSY', true)
+    let size = 10
+    let page = 0
+
+    for(let i = 0; i < 5; i++) {
+          console.log('========', i)
+
+        await axios.get(`http://35.176.190.21:8080/lms/api/loan/page?size=${size}&page=${page}`)
+        .then(res => {
+          let newAr = [...state.loans, res.data.response]
+          commit('SET_LOANS', newAr)
+          commit('SET_BUSY', false)
+          page += 1;
+        })
+        .catch(error => {
+          commit('SET_BUSY', false)
+          console.log(error)
+        })
+    }
   }
 };
 
 const getters = {
   loans: state => state.loans,
-  totalLoans: state => state.totalLoans
+  totalLoans: state => state.totalLoans,
+  totalPages: state => state.totalPages,
+  totalElements: state => state.totalElements,
+  isBusy: state => state.isBusy
 };
 
 export default {

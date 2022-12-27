@@ -102,7 +102,7 @@
       }
     },
     computed:  {
-      ...mapGetters(['loans', 'totalLoans']),
+      ...mapGetters(['loans', 'totalLoans', 'isBusy']),
 
       totalRows() {
         return this.totalLoans || 1
