@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <NavBar />
-    <b-container fluid class="mt-5">
-      <HomePage />
-    </b-container>
+    <!-- <NavBar /> -->
+    <!-- <b-container fluid class="mt-5"> -->
+      <router-view />
+    <!-- </b-container> -->
   </div>
 </template>
 <script>
@@ -24,7 +24,7 @@ export default {
   height: 100vh;
 }
 
-*{
+* {
   box-sizing: border-box;
 }
 </style>
