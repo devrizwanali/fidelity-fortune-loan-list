@@ -1,7 +1,8 @@
 import axios from '@/axios'
 
 const state = {
-  user: null
+  user: null,
+  isAuthenticated: false
 }
 
 const mutations = {
@@ -17,7 +18,8 @@ const actions = {
 }
 
 const getters = {
-  user: state => state.user
+  user: state => state.user,
+  isAuthenticated: state => !!state.user
 }
 
 export default {

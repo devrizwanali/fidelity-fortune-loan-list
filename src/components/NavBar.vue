@@ -6,10 +6,26 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item href="#" class="active link">Dashboard</b-nav-item>
-        <b-nav-item class="link">Staff</b-nav-item>
-        <b-nav-item class="link">Reports</b-nav-item>
-        <b-nav-item class="link">Settings</b-nav-item>
+        <b-nav-item 
+          @click="$router.push({name: 'Dashboard'})"
+          class="link" 
+          :class="$route.name =='Dashboard' ? 'active' : ''"
+          >Dashboard
+        </b-nav-item>
+        <b-nav-item 
+          class="link"
+          >Staff
+        </b-nav-item>
+        <b-nav-item 
+          class="link"
+          >Reports
+        </b-nav-item>
+        <b-nav-item 
+          class="link"
+          @click="$router.push({name: 'DashboardSettingsAppParameters'})"
+          :class="$route.path.includes('settings') ? 'active' : ''"
+          >Settings
+        </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item-dropdown right>
@@ -31,5 +47,5 @@
 </script>
 
 <style scoped>
-  @import '../assets/css/navbar.css'; 
+  @import '../assets/css/navbar.css';
 </style>

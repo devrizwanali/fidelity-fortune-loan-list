@@ -1,10 +1,11 @@
 .link a {
   font-size: 18px;
   position: relative;
-  color: #131518;
+  color: #131518 !important;
+  cursor: pointer;
 }
 .link.active a {
-  color: #0044AA;
+  color: #0044AA !important;
 }
 .link.active a:before {
   content: "";
@@ -12,7 +13,7 @@
   width: 50%;
   bottom: 0;
   left: 25%;
-  border-bottom: 2px solid #0044AA;
+  border-bottom: 2px solid #0044AA !important;
 }
 em {
   font-weight: 500;

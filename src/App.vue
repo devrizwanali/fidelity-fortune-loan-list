@@ -1,20 +1,11 @@
 <template>
   <div id="app">
-    <!-- <NavBar /> -->
-    <!-- <b-container fluid class="mt-5"> -->
-      <router-view />
-    <!-- </b-container> -->
+    <router-view :key="$route.path"/>
   </div>
 </template>
 <script>
-import HomePage from '@/components/HomePage.vue'
-import NavBar from '@/components/NavBar.vue'
-
 export default {
-  components: {
-    HomePage,
-    NavBar
-  }
+  name: 'App'
 }
 </script>
 <style>
@@ -26,5 +17,21 @@ export default {
 
 * {
   box-sizing: border-box;
+}
+
+
+.main h1 {
+  font-weight: 600;
+  font-size: 24px;
+  color: #131518;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.main {
+  padding: 20px;
+  background: var(--white-color);
+  box-shadow: 0px 0px 30px rgba(42, 89, 152, 0.03);
+  border-radius: 10px;
 }
 </style>

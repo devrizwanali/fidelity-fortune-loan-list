@@ -1,5 +1,5 @@
 <template>
-  <div class="loans__table">
+  <div class="main">
     <h1>Dashboard</h1>
     <div class="loans__table--header">
       <img src="@/assets/search.png" class="px-3 search-icon">

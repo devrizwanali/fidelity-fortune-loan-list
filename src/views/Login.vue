@@ -7,7 +7,6 @@
         <form v-on:submit.prevent="submitHandler">
           <b-form-group id="email">
             <b-form-input
-              id="input-1"
               v-model="user.email"
               type="email"
               placeholder="User Name"
@@ -17,12 +16,12 @@
 
           <b-form-group id="password" class="mt-5">
             <b-form-input
-              id="input-1"
               v-model="user.password"
               type="password"
               class="mb-1"
               placeholder="Password"
               required
+              autocomplete="on"
             ></b-form-input>
           </b-form-group>
           <p class="forgot-password mt-4">Forgot Password</p>
