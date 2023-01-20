@@ -22,7 +22,7 @@
         </b-nav-item>
         <b-nav-item 
           class="link"
-          @click="$router.push({name: 'DashboardSettingsAppParameters'})"
+          @click="$router.push({name: 'SettingsAppParameter'})"
           :class="$route.path.includes('settings') ? 'active' : ''"
           >Settings
         </b-nav-item>
@@ -34,15 +34,24 @@
             <em class="mx-2">Ronald C.</em>
           </template>
           <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+          <b-dropdown-item @click="signOut">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
 </template>
 <script>
+  import { mapActions } from 'vuex';
   export default {
-    name: 'NavBar'
+    name: 'NavBar',
+    methods: {
+      ...mapActions(['logOut']),
+      signOut() {
+        this.logOut().then(res => {
+          this.$router.push("/")
+        })
+      }
+    }
   }
 </script>
 

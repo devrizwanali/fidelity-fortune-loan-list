@@ -1,13 +1,14 @@
 :root {
-  --red-color: #CC0606;
-  --white-color: #FFFFFF;
+  --red: #CC0606;
+  --white: #FFFFFF;
+  --blue: #0044AA;
 }
 
 .main input {
   width: 388px;
   padding-left: 40px;
   height: 50px;
-  background: var(--white-color);
+  background: var(--white);
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 5px;
 }
@@ -18,13 +19,13 @@
 }
 
 .export {
-  background: #0044AA !important;
-  border: #0044AA !important;
+  background: var(--blue) !important;
+  border: var(--blue) !important;
 }
 
 .bulk-pay {
-  background: var(--red-color) !important;
-  border: var(--red-color) !important;
+  background: var(--red) !important;
+  border: var(--red) !important;
 }
 
 thead {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-table
-      :items="branchCodes"
+      :items="[]"
       :fields="headers"
       current-page="1"
       per-page="10"
@@ -20,7 +20,7 @@
       </template>
 
       <template #cell(actions)="data">
-        <button @click="editBranch" class="btn-edit cursor-pointer">EDIT</button>
+       <button>Edit</button>
       </template>
     </b-table>
     <pagination />
@@ -28,47 +28,26 @@
 </template>
 <script>
   import Pagination from '@/components/Pagination'
-  import { mapGetters } from 'vuex'
   export default {
-    name: 'BranchCodes',
+    name: 'Managers',
     data() {
       return {
         headers: [
-          {label: 'S/N', key: 'id'},
-          {label: 'Branch Name', key: 'name'},
-          {label: 'Branch Code', key: 'code'},
-          {label: 'Old Branch', key: 'oldCode'},
-          {label: '', key: 'actions'},
+          {label: 'S/N', key: 'referral'},
+          {label: 'Branch Manager Name', key: 'computerNo'},
+          {label: 'Office', key: 'customerName'},
+          {label: '', key: 'Actions'},
           {label: 'Created By', key: 'createdBy'}
         ]
       }
     },
     components: {
       Pagination
-    },
-    created() {
-      this.$store.dispatch('fetchBrachCodes')
-    },
-    computed: {
-      ...mapGetters(['branchCodes'])
-    },
-    methods: {
-      editBranch() {
-
-      }
     }
   }
 </script>
 <style>
   .table thead th {
     padding: 15px !important;
-  }
-  .btn-edit {
-    font-size: 16px;
-    color: var(--blue);
-    background: rgba(0, 68, 170, 0.1);
-    border-radius: 4px;
-    border: 0;
-    width: 117px;
   }
 </style>

@@ -7,6 +7,7 @@ import Dashboard from '@/views/Dashboard'
 import Settings from '@/views/Settings'
 import ApplicationParameters from '@/views/settings/ApplicationParameters'
 import BranchCodes from '@/views/settings/BranchCodes'
+import Managers from '@/views/settings/Managers'
 
 
 Vue.use(VueRouter)
@@ -20,6 +21,7 @@ const routes = [
   {
     path: '/dashboard',
     component: Home,
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -33,13 +35,18 @@ const routes = [
         children: [
           {
             path: '',
-            name: 'DashboardSettingsAppParameters',
+            name: 'SettingsAppParameter',
             component: ApplicationParameters
           },
           {
             path: "branch-codes",
-            name: 'DashboardSettingsBranchCodes',
+            name: 'SettingsBranchCodes',
             component: BranchCodes
+          },
+          {
+            path: "managers",
+            name: 'SettingsManagers',
+            component: Managers
           }
         ]
       }

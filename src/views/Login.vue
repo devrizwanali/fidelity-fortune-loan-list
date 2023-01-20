@@ -7,8 +7,8 @@
         <form v-on:submit.prevent="submitHandler">
           <b-form-group id="email">
             <b-form-input
-              v-model="user.email"
-              type="email"
+              v-model="user.usernameOrEmailOrPhone"
+              type="text"
               placeholder="User Name"
               required
             ></b-form-input>
@@ -38,7 +38,7 @@
     data() {
       return {
         user: {
-          email: '',
+          usernameOrEmailOrPhone: '',
           password: ''
         }
       }
@@ -46,7 +46,11 @@
     methods: {
       ...mapActions(['login']),
       submitHandler() {
-        this.login(this.user)
+        this.login(this.user).then(res => {
+          this.$router.push('/dashboard')
+        }).catch(error => {
+          alert(error)
+        })
       }
     }
   }

@@ -30,8 +30,13 @@ export default {
 
 .main {
   padding: 20px;
-  background: var(--white-color);
+  background: var(--white);
   box-shadow: 0px 0px 30px rgba(42, 89, 152, 0.03);
   border-radius: 10px;
 }
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
 </style>

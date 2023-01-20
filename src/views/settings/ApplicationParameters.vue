@@ -1,17 +1,15 @@
 <template>
   <div>
     <b-table
-      :items="loans"
+      :items="parameters"
       :fields="headers"
-      :filter="filter"
       :current-page="currentPage"
       :per-page="perPage"
       show-empty
-      :busy.sync="isBusy"
+      :busy.sync="busy"
       small
       ref="loans-table"
       responsive
-      @filtered="onFiltered"
       >
 
       <template v-slot:table-busy>
@@ -21,55 +19,64 @@
         </div>
       </template>
 
-      <template #cell(cDate)="actions">
-        <button>Edit</button>
-        <button>Delete</button>
+      <template #cell(edit)="data">
+        <button class="btn-edit">EDIT</button>
+      </template>
+
+      <template #cell(delete)="data">
+        <button @click="showDelModal(data.item.id)" class="btn-delete">DELETE</button>
       </template>
     </b-table>
 
-    <div class="d-flex justify-content-between align-items-center p-footer">
-      <div class="d-flex align-items-center" style="gap: 8px">
-        <p>Show</p>
-        <b-form-select
-          v-model="perPage"
-          :options="options"
-          class="mb-3"
-          >
-        </b-form-select>
-        <p>entries</p>
-      </div>
-      <b-pagination
-        v-model="currentPage"
-        :total-rows="totalPages"
-        :per-page="perPage"
-        pills
-        @change="pageChangeHandler"
-        size="sm">
-      </b-pagination>
+    <Pagination />
 
-      <p>
-        Showing {{((currentPage - 1) * perPage ) + 1}} to {{showingEnteries}} of {{totalElements}} entries
-      </p>
-    </div>
+    <!-- Delete modal -->
+    <b-modal ref="delete-modal-p" title="Delete" hide-header-close>
+      <p class="text-center mt-5 del-p">Delete  Parameter?</p>
+      <template #modal-footer>
+        <button class="button-cancel no" @click="$refs['delete-modal-p'].hide()">No</button>
+        <button @click="deleteApplication(selectedItemId)" class="button-save yes">Yes</button>
+      </template>
+    </b-modal>
   </div>
 </template>
 <script>
+  import Pagination from '@/components/Pagination'
+  import { mapGetters, mapActions } from 'vuex'
   export default {
     name: 'ApplicationParameters',
-      data() {
+    data() {
       return {
         currentPage: 1,
         perPage: 10,
         filter: null,
         interval: null,
         options: [10, 20, 50],
+        selectedItemId: null,
         headers: [
-          {label: 'Parameter Name', key: 'referral'},
-          {label: 'Value', key: 'computerNo'},
-          {label: 'Unit', key: 'customerName'},
-          {label: 'Description', key: 'loanNo'},
-          {label: '', key: 'Actions'},
+          {label: 'Parameter Name', key: 'name'},
+          {label: 'Value', key: 'value'},
+          {label: 'Unit', key: 'unit'},
+          {label: 'Description', key: 'description'},
+          {label: '', key: 'edit'},
+          {label: '', key: 'delete'}        
         ]
+      }
+    },
+    components: {
+      Pagination
+    },
+    created() {
+      this.$store.dispatch('fetchParameters')
+    },
+    computed: {
+      ...mapGetters(['parameters', 'busy'])
+    },
+    methods: {
+      ...mapActions(['deleteApplication']),
+      showDelModal(id) {
+        this.selectedItemId = id;
+        this.$refs['delete-modal-p'].show()
       }
     }
   }
@@ -78,4 +85,32 @@
   .table thead th {
     padding: 15px !important;
   }
+
+  .btn-delete {
+    color: var(--red);
+    width: 117px;
+    border: 0;
+    background: rgba(204, 6, 6, 0.1);
+    border-radius: 4px;
+  }
+
+  p.del-p {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 36px;
+    color: #000000;
+  }
+
+  .no, .yes {
+    font-weight: 500;
+    font-size: 20px;
+    height: 47px;
+  }
+
+.modal-title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 36px;
+  color: var(--white);
+}
 </style>
