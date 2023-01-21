@@ -43,6 +43,22 @@ const actions = {
           reject(error)
         })
     })
+  },
+
+  addBranch({commit, state}, branch) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/branch`, branch)
+        .then(res => {
+          debugger
+          let branches = [res.data.response].concat(state.branchCodes)
+          commit('SET_BRANCH', branches)
+          resolve(res)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+    })
   }
 }
 

@@ -31,12 +31,12 @@
     <Pagination />
 
     <!-- Delete modal -->
-    <b-modal ref="delete-modal-p" title="Delete" hide-header-close>
+    <b-modal ref="delete-modal-p" title="Delete" hide-header-close hide-footer>
       <p class="text-center mt-5 del-p">Delete  Parameter?</p>
-      <template #modal-footer>
+      <div class="d-flex justify-content-between mt-4">
         <button class="button-cancel no" @click="$refs['delete-modal-p'].hide()">No</button>
         <button @click="deleteParameter()" class="button-save yes">Yes</button>
-      </template>
+      </div>
     </b-modal>
 
     <!-- Edit application parameter -->

@@ -42,6 +42,21 @@ const actions = {
           reject(error)
         })
     })
+  },
+
+  addManager({commit, state}, manager) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/manager`, manager)
+        .then(res => {
+          let managers = [res.data.response].concat(state.managers)
+          commit('SET_MANAGERS', managers)
+          resolve(res)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+    })
   }
 }
 

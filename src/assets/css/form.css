@@ -43,12 +43,29 @@
   height: 53px;
   color: white;
   border: 0;
+  font-weight: 500;
+  font-size: 20px;
   background: #06B941;
   border-radius: 24px;
 }
 
-.no, .yes {
+.button-save {
   font-weight: 500;
   font-size: 20px;
-  height: 47px;
+  width: 130px;
+  height: 53px;
+  color: white;
+  border: 0;
+  background: var(--blue-color);
+  border-radius: 24px;
+}
+
+.button-cancel {
+  font-weight: 500;
+  font-size: 20px;
+  width: 130px;
+  height: 53px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 24px;
+  border: 0;
 }

@@ -4,7 +4,7 @@
       :items="branchCodes"
       :fields="headers"
       current-page="1"
-      per-page="10"
+      per-page="100"
       show-empty
       :busy.sync="bBusy"
       small

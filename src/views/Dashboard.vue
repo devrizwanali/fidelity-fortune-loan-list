@@ -34,7 +34,7 @@
       >
 
       <template v-slot:table-busy>
-        <div class="text-center my-2" style="color: #059e37;">
+        <div class="text-center my-2" style="color: var(--blue-color);">
           <b-spinner class="align-middle"></b-spinner>
           <strong> Loading...</strong>
         </div>
