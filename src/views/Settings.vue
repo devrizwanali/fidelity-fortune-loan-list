@@ -47,29 +47,20 @@
       <router-view :key="$route.path" />
     </div>
 
-
-     <b-modal :ref="routeName" :title="'Add ' + modalHeader" hide-header-close>
-      <p class="my-4">{{this.routeName}}</p>
-
-      <input type="text" name="" style="background: rgba(255, 255, 255, 0.01);
-background-blend-mode: multiply;">
-
-      <template #modal-footer>
-           <button class="button-cancel" @click="$refs[routeName].hide()">Cancel</button>
-           <button class="button-save">Save</button>
-      </template>
-     </b-modal>
+    <AddBranch :routeName="routeName" />
   </div>
 </template>
 
 <script>
   import BranchCode from '@/components/icons/BranchCode'
   import AppParamtere from '@/components/icons/AppParamtere'
+  import AddBranch from '@/components/AddBranch'
 
   export default {
     name: 'Settings',
     components: {
       BranchCode,
+      AddBranch,
       AppParamtere
     },
     computed: {
@@ -90,7 +81,7 @@ background-blend-mode: multiply;">
     },
     methods: {
       showModal() {
-        this.$refs[this.routeName].show()
+        this.$refs['ok'].show()
       }
     }
   }
@@ -109,15 +100,29 @@ background-blend-mode: multiply;">
     text-align: center;
     display: block !important;
     color: #FFFFFF;
-    background: var(--blue);
+    background: var(--blue-color) !important;
   }
 
+  .table thead th {
+    padding: 15px !important;
+  }
   .modal-content {
     border: none;
     border-radius: 0;
   }
+
+  .modal-title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 36px;
+  color: var(--white);
+}
+
+.modal-body {
+  text-align: center !important;
+}
   .modal-dialog {
-    max-width: 349px;
+    max-width: 349px !important;
   }
   .button-cancel {
     width: 130px;
@@ -128,8 +133,8 @@ background-blend-mode: multiply;">
 }
 
 .modal-footer {
-  border-top: 0;
-  justify-content: space-between;
+  border-top: 0 !important;
+  justify-content: space-between !important;
 }
 
   .button-save {
@@ -137,7 +142,7 @@ background-blend-mode: multiply;">
     height: 53px;
     color: white;
     border: 0;
-    background: var(--blue);
+    background: var(--blue-color);
     border-radius: 24px;
   }
 </style>

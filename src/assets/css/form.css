@@ -1,0 +1,54 @@
+.name-label{
+  left: 42px;
+  top: -10px;
+  position: absolute;
+  z-index: 9;
+  padding: 0 5px 0 5px;
+  background: white;
+  color: var(--blue-color);
+}
+
+.textarea {
+  height: 126px;
+  width: 256px !important;
+  border: 2px solid var(--blue-color) !important;
+  padding: 12px 0 0 12px;
+  border-radius: 24px !important;
+}
+
+.input {
+  width: 256px !important;
+  padding-left: 12px;
+  border: 2px solid var(--blue-color) !important;
+  border-radius: 24px !important;
+  height: 59px !important;
+}
+
+::-webkit-input-placeholder {
+  color: rgba(48, 36, 82, 0.5);
+  text-align: center;
+}
+
+.btn-edit {
+  font-size: 16px;
+  color: var(--blue-color);
+  background: rgba(0, 68, 170, 0.1);
+  border-radius: 4px;
+  border: 0;
+  width: 117px;
+}
+
+.btn-update {
+  width: 130px;
+  height: 53px;
+  color: white;
+  border: 0;
+  background: #06B941;
+  border-radius: 24px;
+}
+
+.no, .yes {
+  font-weight: 500;
+  font-size: 20px;
+  height: 47px;
+}

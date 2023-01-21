@@ -1,7 +1,7 @@
 :root {
   --red: #CC0606;
   --white: #FFFFFF;
-  --blue: #0044AA;
+  --blue-color: #0044AA;
 }
 
 .main input {
@@ -19,8 +19,8 @@
 }
 
 .export {
-  background: var(--blue) !important;
-  border: var(--blue) !important;
+  background: var(--blue-color) !important;
+  border: var(--blue-color) !important;
 }
 
 .bulk-pay {

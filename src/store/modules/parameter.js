@@ -27,7 +27,34 @@ const actions = {
     })
   },
 
-  deleteApplication({commit}, id) {
+  deleteApplication({commit, state}, id) {
+    return new Promise((resolve, reject) => {
+      axios.delete(`/parameter/delete/${id}`).then(res => {
+        const parameters = state.parameters.filter(x => x.id == id)
+        commit('SET_PARAMETERS', parameters)
+        resolve(res)
+      }).catch(error => {
+        console.log(error)
+        reject(error)
+      })
+    })
+  },
+
+  updateApplication({commit, state}, parameter) {
+    return new Promise((resolve, reject) => {
+      axios.put(`/parameter/${parameter.id}`, parameter)
+        .then(res => {
+          const index = state.parameters.findIndex(x => x.id == parameter.id)
+          let parameters = [...state.parameters]
+          parameters[index] = res.data.response
+          commit('SET_PARAMETERS', parameters)
+          resolve(res)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+    })
   }
 }
 

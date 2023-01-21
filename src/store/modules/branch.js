@@ -1,35 +1,7 @@
 import axios from '@/axios'
 
 const state = {
-  branchCodes: [
-        {
-            "id": 52,
-            "delFlag": "N",
-            "version": 0,
-            "created": "2021-05-04T11:34:44.878",
-            "updated": "2021-05-04T11:34:44.878",
-            "createdBy": "Chinyere.ib",
-            "updatedBy": "Chinyere.ib",
-            "userAction": null,
-            "userIp": null,
-            "name": "HEAD OFFICE",
-            "code": "001",
-            "oldCode": "70500"
-        },
-        {
-            "id": 57,
-            "delFlag": "N",
-            "version": 0,
-            "created": "2021-05-04T11:39:54.23",
-            "updated": "2021-05-04T11:39:54.23",
-            "createdBy": "Chinyere.ib",
-            "updatedBy": "Chinyere.ib",
-            "userAction": null,
-            "userIp": null,
-            "name": "ASHAKA",
-            "code": "002",
-            "oldCode": "71000"
-        }]
+  branchCodes: []
 }
 
 const mutations = {
@@ -43,6 +15,24 @@ const actions = {
     axios.get('/branch').then(res => {
       commit('SET_BRANCH', res.data.response)
     }).catch(error => console.log(error))
+  },
+
+  updateBranch({commit, state}, branch) {
+    return new Promise((resolve, reject) => {
+      axios.put(`/branch/${branch.id}`, branch)
+        .then(res => {
+          const index = state.branchCodes.findIndex(x => x.id == branch.id)
+          let branchCodes = [...state.branchCodes]
+          let updatedBranch = {...branchCodes[index], ...res.data.response}
+          branchCodes[index] = updatedBranch
+          commit('SET_BRANCH', branchCodes)
+          resolve(res)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+    })
   }
 }
 

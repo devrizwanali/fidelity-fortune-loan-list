@@ -12,9 +12,26 @@ const mutations = {
 
 const actions = {
   fetchManagers({commit}) {
-    axios.get('/managers').then(res => {
+    axios.get('/manager').then(res => {
       commit('SET_MANAGERS', res.data.response)
     }).catch(error => console.log(error))
+  },
+
+  updateManager({commit, state}, manager) {
+    return new Promise((resolve, reject) => {
+      axios.put(`/manager/${manager.id}`, manager)
+        .then(res => {
+          const index = state.managers.findIndex(x => x.id == manager.id)
+          let managers = [...state.managers]
+          managers[index] = res.data.response
+          commit('SET_MANAGERS', managers)
+          resolve(res)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+    })
   }
 }
 

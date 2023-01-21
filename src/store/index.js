@@ -6,9 +6,6 @@ import branch from './modules/branch';
 import parameter from './modules/parameter';
 import manager from './modules/manager';
 
-
-
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
