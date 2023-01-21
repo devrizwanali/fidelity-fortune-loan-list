@@ -6,7 +6,7 @@
       current-page="1"
       per-page="10"
       show-empty
-      busy.sync="true"
+      :busy.sync="mBusy"
       small
       ref="branch-codes-table"
       responsive
@@ -67,7 +67,7 @@
       Pagination
     },
     computed: {
-      ...mapGetters(['managers'])
+      ...mapGetters(['managers', 'mBusy'])
     },
     created() {
       this.$store.dispatch('fetchManagers')

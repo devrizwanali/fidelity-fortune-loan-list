@@ -1,6 +1,5 @@
 <template>
     <div>
-      {{routeName}}
        <b-modal ref="ok" :title="'Add Branch'" hide-header-close>
       <p class="my-4">{{this.routeName}}</p>
 

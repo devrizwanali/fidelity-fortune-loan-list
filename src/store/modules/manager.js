@@ -1,20 +1,30 @@
 import axios from '@/axios'
 
 const state = {
-  managers: []
+  managers: [],
+  mBusy: true
 }
 
 const mutations = {
   'SET_MANAGERS'(state, managers) {
     state.managers = managers
+  },
+
+  'SET_BUSY'(state, isBusy) {
+    state.mBusy = isBusy
   }
 }
 
 const actions = {
   fetchManagers({commit}) {
+    commit('SET_BUSY', true)
     axios.get('/manager').then(res => {
       commit('SET_MANAGERS', res.data.response)
-    }).catch(error => console.log(error))
+      commit('SET_BUSY', false)
+    }).catch(error => {
+      console.log(error)
+      commit('SET_BUSY', false)
+    })
   },
 
   updateManager({commit, state}, manager) {
@@ -36,7 +46,8 @@ const actions = {
 }
 
 const getters = {
-  managers: state => state.managers
+  managers: state => state.managers,
+  mBusy: state => state.mBusy
 }
 
 export default {

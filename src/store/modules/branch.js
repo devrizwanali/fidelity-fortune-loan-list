@@ -1,20 +1,30 @@
 import axios from '@/axios'
 
 const state = {
-  branchCodes: []
+  branchCodes: [],
+  bBusy: true
 }
 
 const mutations = {
   'SET_BRANCH'(state, branchCodes) {
     state.branchCodes = branchCodes
+  },
+
+  'SET_BUSY'(state, isBusy) {
+    state.bBusy = isBusy
   }
 }
 
 const actions = {
   fetchBrachCodes({commit}) {
+    commit('SET_BUSY', true)
     axios.get('/branch').then(res => {
       commit('SET_BRANCH', res.data.response)
-    }).catch(error => console.log(error))
+      commit('SET_BUSY', false)
+    }).catch(error => {
+      commit('SET_BUSY', false)
+      console.log(error)
+    })
   },
 
   updateBranch({commit, state}, branch) {
@@ -37,7 +47,8 @@ const actions = {
 }
 
 const getters = {
-  branchCodes: state => state.branchCodes
+  branchCodes: state => state.branchCodes,
+  bBusy: state => state.bBusy
 }
 
 export default {

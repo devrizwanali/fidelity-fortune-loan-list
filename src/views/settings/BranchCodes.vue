@@ -6,14 +6,14 @@
       current-page="1"
       per-page="10"
       show-empty
-      busy.sync="false"
+      :busy.sync="bBusy"
       small
       ref="branch-codes-table"
       responsive
       >
 
       <template v-slot:table-busy>
-        <div class="text-center my-2" style="color: #059e37;">
+        <div class="text-center my-2" style="color: var(--blue-color);">
           <b-spinner class="align-middle"></b-spinner>
           <strong> Loading...</strong>
         </div>
@@ -78,7 +78,7 @@
       this.$store.dispatch('fetchBrachCodes')
     },
     computed: {
-      ...mapGetters(['branchCodes'])
+      ...mapGetters(['branchCodes', 'bBusy'])
     },
     methods: {
       ...mapActions(['updateBranch']),
