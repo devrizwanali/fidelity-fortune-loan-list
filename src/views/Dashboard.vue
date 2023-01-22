@@ -57,8 +57,16 @@
         {{ data.item.totalRepaymentAmount }}
       </template>
 
-      <template #cell(cDate)="data">
-        {{data.item.paymentStartDate}}
+      <template #cell(CDate)="data">
+        {{data.item.created | formatDate }}
+      </template>
+
+      <template #cell(SDate)="data">
+        {{data.item.paymentStartDate | formatDate }}
+      </template>
+
+      <template #cell(loanNo)="data">
+        <span @click="generateReport(data.item.id)" class="cursor-pointer">{{data.item.loanNo}}</span>
       </template>
     </b-table>
     <div class="d-flex justify-content-between align-items-center p-footer">
@@ -89,6 +97,8 @@
 </template>
 <script>
   import { mapGetters } from 'vuex'
+  import axios from '@/axios'
+  import moment from 'moment'
   export default {
     data() {
       return {
@@ -98,7 +108,7 @@
         interval: null,
         options: [10, 20, 50],
         headers: [
-          {label: 'Office', key: 'referral'},
+          {label: 'Office', key: 'managerName'},
           {label: 'Como. No', key: 'computerNo'},
           {label: 'Name', key: 'customerName'},
           {label: 'Loan No.', key: 'loanNo'},
@@ -107,8 +117,8 @@
           {label: 'AMT. Disb', key: 'totalRepaymentAmount'},
           {label: 'Loan Amt', key: 'loanAmount'},
           {label: 'Monthly', key: 'monthlyRepaymentAmount'},
-          {label: 'S. Date', key: 'paymentStartDate'},
-          {label: 'C. Date', key: 'cDate'},
+          {label: 'S. Date', key: 'SDate'},
+          {label: 'C. Date', key: 'CDate'},
           {label: 'Status', key: 'status'},
         ]
       }
@@ -124,6 +134,12 @@
           return this.totalElements
         else
           return this.currentPage * this.perPage
+      }
+    },
+
+    filters: {
+      formatDate (date) {
+        return moment(date).format("MM/DD/YYYY") 
       }
     },
 
@@ -151,6 +167,16 @@
       onFiltered(filteredItems) {
         this.totalRows = filteredItems.length
         this.currentPage = 1
+      },
+      generateReport(id) {
+        axios.post('/report', {
+          "format": "pdf",
+          "loanId": id,
+          "reportType": "ACCOUNT_STATEMENT"
+        }).then(res => {
+          debugger
+          window.open(res)
+        })
       }
     }
   }

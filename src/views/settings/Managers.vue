@@ -19,6 +19,10 @@
         </div>
       </template>
 
+      <template #cell(sn)="data">
+        {{data.index + 1}}
+      </template>
+
       <template #cell(actions)="data">
         <button @click="showModal(data.item)"  class="btn-edit cursor-pointer">EDIT</button>
       </template>
@@ -55,7 +59,7 @@
       return {
         selectedItem: {},
         headers: [
-          {label: 'S/N', key: 'id'},
+          {label: 'S/N', key: 'sn'},
           {label: 'Branch Manager Name', key: 'managerName'},
           {label: 'Office', key: 'office'},
           {label: '', key: 'Actions'},

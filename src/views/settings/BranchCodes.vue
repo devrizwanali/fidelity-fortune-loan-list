@@ -22,6 +22,10 @@
       <template #cell(actions)="data">
         <button @click="showModal(data.item)"  class="btn-edit cursor-pointer">EDIT</button>
       </template>
+
+      <template #cell(sn)="data">
+        {{data.index + 1}}
+      </template>
     </b-table>
     <pagination />
 
@@ -61,7 +65,7 @@
       return {
         selectedItem: {},
         headers: [
-          {label: 'S/N', key: 'id'},
+          {label: 'S/N', key: 'sn'},
           {label: 'Branch Name', key: 'name'},
           {label: 'Branch Code', key: 'code'},
           {label: 'Old Branch', key: 'oldCode'},

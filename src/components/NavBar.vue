@@ -12,10 +12,10 @@
           :class="$route.name =='Dashboard' ? 'active' : ''"
           >Dashboard
         </b-nav-item>
-        <b-nav-item 
+      <!--   <b-nav-item 
           class="link"
           >Staff
-        </b-nav-item>
+        </b-nav-item> -->
         <b-nav-item 
           class="link"
           >Reports
