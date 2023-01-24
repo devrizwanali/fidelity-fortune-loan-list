@@ -27,8 +27,14 @@
         <button @click="showDelModal(data.item, 'delete-modal-p')" class="btn-delete">DELETE</button>
       </template>
     </b-table>
-
-    <Pagination />
+    <pagination
+      :current-page="currentPage"
+      :per-page="perPage"
+      :total-pages="parameters.length"
+      :totalElements="parameters.length"
+      @onPageChange="pageChangeHandler"
+      @onPerPageChange="perpageChangeHandler"
+    />
 
     <!-- Delete modal -->
     <b-modal ref="delete-modal-p" title="Delete" hide-header-close hide-footer>
@@ -125,6 +131,13 @@
           this.$refs['edit-modal-p'].hide()
         })
         .catch(error => console.log(error))
+      },
+      pageChangeHandler(page) {
+        this.currentPage = page
+      },
+      perpageChangeHandler(perPage) {
+        this.perPage = perPage
+        this.currentPage = 1
       }
     }
   }

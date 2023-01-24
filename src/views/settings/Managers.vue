@@ -3,8 +3,8 @@
     <b-table
       :items="managers"
       :fields="headers"
-      current-page="1"
-      per-page="10"
+      :current-page="currentPage"
+      :per-page="perPage"
       show-empty
       :busy.sync="mBusy"
       small
@@ -27,8 +27,14 @@
         <button @click="showModal(data.item)"  class="btn-edit cursor-pointer">EDIT</button>
       </template>
     </b-table>
-    <pagination />
-
+    <pagination
+      :current-page="currentPage"
+      :per-page="perPage"
+      :total-pages="managers.length"
+      :totalElements="managers.length"
+      @onPageChange="pageChangeHandler"
+      @onPerPageChange="perpageChangeHandler"
+    />
     <!-- Edit branch code -->
     <b-modal ref="edit-modal-m" title="Edit Branch" hide-header-close hide-footer>
       <form ref="application-param-form" @submit.prevent="onSubmit">
@@ -57,6 +63,8 @@
     name: 'Managers',
     data() {
       return {
+        currentPage: 1,
+        perPage: 10,
         selectedItem: {},
         headers: [
           {label: 'S/N', key: 'sn'},
@@ -88,6 +96,13 @@
           this.$refs['edit-modal-m'].hide()
         })
         .catch(error => console.log(error))
+      },
+      pageChangeHandler(page) {
+        this.currentPage = page
+      },
+      perpageChangeHandler(perPage) {
+        this.perPage = perPage
+        this.currentPage = 1
       }
     }
   }

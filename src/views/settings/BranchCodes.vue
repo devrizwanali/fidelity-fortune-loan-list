@@ -3,8 +3,8 @@
     <b-table
       :items="branchCodes"
       :fields="headers"
-      current-page="1"
-      per-page="100"
+      :current-page="currentPage"
+      :per-page="perPage"
       show-empty
       :busy.sync="bBusy"
       small
@@ -27,7 +27,14 @@
         {{data.index + 1}}
       </template>
     </b-table>
-    <pagination />
+    <pagination
+      :current-page="currentPage"
+      :per-page="perPage"
+      :total-pages="branchCodes.length"
+      :totalElements="branchCodes.length"
+      @onPageChange="pageChangeHandler"
+      @onPerPageChange="perpageChangeHandler"
+    />
 
     <!-- Edit branch code -->
     <b-modal ref="edit-modal-b" title="Edit Branch" hide-header-close hide-footer>
@@ -63,6 +70,8 @@
     name: 'BranchCodes',
     data() {
       return {
+        currentPage: 1,
+        perPage: 10,
         selectedItem: {},
         headers: [
           {label: 'S/N', key: 'sn'},
@@ -96,6 +105,13 @@
           this.$refs['edit-modal-b'].hide()
         })
         .catch(error => console.log(error))
+      },
+      pageChangeHandler(page) {
+        this.currentPage = page
+      },
+      perpageChangeHandler(perPage) {
+        this.perPage = perPage
+        this.currentPage = 1
       }
     }
   }

@@ -9,7 +9,9 @@
           <img src="@/assets/plus.png">
           Add Customer
         </b-button>
-        <b-button class="export px-3">
+        <b-button class="export px-3"
+          @click="exportFile"
+        >
           <img src="@/assets/export.png">
           Export Page
         </b-button>
@@ -67,44 +69,27 @@
         <span @click="generateReport(data.item.id)" class="cursor-pointer">{{data.item.loanNo}}</span>
       </template>
     </b-table>
-    <div class="d-flex justify-content-between align-items-center p-footer">
-      <div class="d-flex align-items-center" style="gap: 8px">
-        <p>Show</p>
-        <b-form-select
-          v-model="perPage"
-          :options="options"
-          class="mb-3"
-          >
-        </b-form-select>
-        <p>entries</p>
-      </div>
-      <b-pagination
-        v-model="currentPage"
-        :total-rows="totalPages"
-        :per-page="perPage"
-        pills
-        @change="pageChangeHandler"
-        size="sm">
-      </b-pagination>
-
-      <p>
-        Showing {{((currentPage - 1) * perPage ) + 1}} to {{showingEnteries}} of {{totalElements}} entries
-      </p>
-    </div>
+    <pagination
+      :current-page="currentPage"
+      :per-page="perPage"
+      :total-pages="totalPages"
+      :totalElements="totalElements"
+      @onPageChange="pageChangeHandler"
+      @onPerPageChange="perpageChangeHandler"
+    />
   </div>
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
   import axios from '@/axios'
   import moment from 'moment'
+  import Pagination from '@/components/Pagination'
   export default {
     data() {
       return {
         currentPage: 1,
         perPage: 10,
         filter: null,
-        interval: null,
-        options: [10, 20, 50],
         headers: [
           {label: 'Office', key: 'managerName'},
           {label: 'Como. No', key: 'computerNo'},
@@ -121,18 +106,11 @@
         ]
       }
     },
+    components: {
+      Pagination
+    },
     computed:  {
-      ...mapGetters(['loans', 'totalLoans', 'totalElements', 'totalPages', 'isBusy']),
-      totalRows() {
-        return this.totalLoans || 1
-      },
-
-      showingEnteries () {
-        if((this.currentPage * this.perPage) > this.totalElements)
-          return this.totalElements
-        else
-          return this.currentPage * this.perPage
-      }
+      ...mapGetters(['loans', 'totalElements', 'totalPages', 'isBusy']),
     },
 
     filters: {
@@ -144,12 +122,11 @@
     async beforeCreate() {
       await this.$store.dispatch('fetchLoans', { page: 1, size: this.perPage || 10 })
     },
-    beforeDestroy() {
-      console.log('Good bye!')
-    },
+
     methods: {
       ...mapActions(['search']),
       pageChangeHandler(page) {
+        this.currentPage = page
         if((page * this.perPage > this.loans.length && this.totalElements > this.loans.length)) {
           this.$store.dispatch('fetchLoans', { page: page, size: this.perPage || 10 })
           this.$root.$emit('bv::refresh::table', 'loans-table')
@@ -157,29 +134,22 @@
       },
       getColor(loan) {
         if(loan.status == 'SETTLED' || loan.status == 'LIQUIDATED')
-          return 'var(--blue)'
-         else if (loan.status != 'SETTLED' && loan.approved)
-          return '#CC0606'
-         else
-          return '#06B941'
+        return 'var(--blue)'
+        else if (loan.approved)
+        return '#06B941'
+        else
+        return '#CC0606'
       },
-
       getBgColor(loan) {
         if(loan.status == 'SETTLED' || loan.status == 'LIQUIDATED')
-          return 'rgba(0, 68, 170, 0.1)'
-         else if (loan.status != 'SETTLED' && loan.approved)
-          return 'rgb(204, 6, 6, 0.1)'
-         else
-          return 'rgb(6, 185, 65, 0.1)'
+        return 'rgba(0, 68, 170, 0.1)'
+        else if (loan.approved)
+        return 'rgb(6, 185, 65, 0.1)'
+        else
+        return 'rgb(204, 6, 6, 0.1)'
       },
-
       searchLoans() {
         this.search({page: 1, size: this.perPage || 10, query: this.filter})
-      },
-  
-      onFiltered(filteredItems) {
-        this.totalRows = filteredItems.length
-        this.currentPage = 1
       },
       generateReport(id) {
         axios.post('/report', {
@@ -189,6 +159,12 @@
         }).then(res => {
           window.open(res.response)
         })
+      },
+      perpageChangeHandler(perPage) {
+        this.perPage = perPage
+        this.currentPage = 1
+      },
+      exportFile() {
       }
     }
   }

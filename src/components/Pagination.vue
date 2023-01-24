@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center" style="gap: 8px">
       <p>Show</p>
       <b-form-select
-        v-model="perPage"
+        v-model="perPageLocal"
         :options="options"
         class="mb-3"
         >
@@ -27,12 +27,26 @@
 <script>
   export default {
     name: 'Pagination',
+    props: {
+      totalElements: {
+        required: true,
+        type: Number
+      },
+      totalPages: {
+        required: true,
+        type: Number
+      },
+      perPage: {
+        required: true,
+        type: Number
+      },
+      currentPage: {
+        required: true,
+        type: Number
+      }
+    },
     data() {
       return {
-        currentPage: 1,
-        perPage: 10,
-        filter: null,
-        interval: null,
         options: [10, 20, 50],
       }
     },
@@ -42,11 +56,19 @@
           return this.totalElements
         else
           return this.currentPage * this.perPage
+      },
+      perPageLocal: {
+        set: function(newValue) {
+          this.$emit('onPerPageChange', newValue)
+        },
+        get: function() {
+          return this.perPage
+        }
       }
     },
     methods: {
-      handerPageChange() {
-        this.$emit('pageChangeHandler')
+      handerPageChange(page) {
+        this.$emit('onPageChange', page)
       }
     }
   }
