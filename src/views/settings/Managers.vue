@@ -34,7 +34,7 @@
       <form ref="application-param-form" @submit.prevent="onSubmit">
         <div class="position-relative mt-4">
           <label for="name" class="name-label">Edit Manager Name</label>
-          <input type="text" v-model="selectedItem.managerName" class="input" placeholder="Manger’s Name Here">
+          <input type="text" v-model="selectedItem.managerName" required class="input" placeholder="Manger’s Name Here">
         </div>
 
         <div class="position-relative mt-4">
@@ -94,4 +94,9 @@
 </script>
 <style scoped>
   @import '@/assets/css/form.css';
+
+  ::-webkit-input-placeholder {
+    color: rgba(48, 36, 82, 0.5);
+    text-align: center;
+  }
 </style>

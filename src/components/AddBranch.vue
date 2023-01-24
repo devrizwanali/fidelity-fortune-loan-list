@@ -3,17 +3,17 @@
     <form  @submit.prevent="onSubmit">
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Branch Name</label>
-        <input type="text" v-model="form.name" class="input" placeholder="Branch Name is Required">
+        <input type="text" v-model="form.name" class="input" required placeholder="Branch Name is Required">
       </div>
 
        <div class="position-relative mt-4">
         <label for="name" class="name-label">Branch Code</label>
-        <input type="text" v-model="form.code" class="input" placeholder="Branch Code is Required">
+        <input type="text" v-model="form.code" class="input" required placeholder="Branch Code is Required">
       </div>
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Old Branch Code</label>
-        <input type="text" v-model="form.oldCode" class="input">
+        <input type="text" v-model="form.oldCode" required class="input">
       </div>
 
        <div class="d-flex justify-content-between mt-4">
@@ -49,6 +49,11 @@
     }
   }
 </script>
-<style>
-  @import "@/assets/css/form"
+<style scoped>
+  @import "@/assets/css/form";
+
+  ::-webkit-input-placeholder {
+    color: rgba(48, 36, 82, 0.5);
+    text-align: center;
+  }
 </style>

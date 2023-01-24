@@ -34,7 +34,7 @@
       <form ref="application-param-form" @submit.prevent="onSubmit">
         <div class="position-relative mt-4">
           <label for="name" class="name-label">Branch Name</label>
-          <input type="text" v-model="selectedItem.name" class="input" placeholder="Branch Name is Required">
+          <input type="text" v-model="selectedItem.name" class="input" required placeholder="Branch Name is Required">
         </div>
 
          <div class="position-relative mt-4">
@@ -44,7 +44,7 @@
 
         <div class="position-relative mt-4">
           <label for="name" class="name-label">Edit Old Branch Code</label>
-          <input type="text" v-model="selectedItem.oldCode" class="input">
+          <input type="text" required  v-model="selectedItem.oldCode" class="input">
         </div>
 
         <div class="d-flex justify-content-between mt-4">
@@ -102,4 +102,9 @@
 </script>
 <style scoped>
   @import '@/assets/css/form.css';
+
+  ::-webkit-input-placeholder {
+    color: rgba(48, 36, 82, 0.5);
+    text-align: center;
+  }
 </style>

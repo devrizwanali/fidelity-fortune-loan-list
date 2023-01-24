@@ -24,11 +24,6 @@
   height: 59px !important;
 }
 
-::-webkit-input-placeholder {
-  color: rgba(48, 36, 82, 0.5);
-  text-align: center;
-}
-
 .btn-edit {
   font-size: 16px;
   color: var(--blue-color);

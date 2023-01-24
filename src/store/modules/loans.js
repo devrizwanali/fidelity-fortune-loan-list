@@ -19,6 +19,13 @@ const mutations = {
 
   'SET_BUSY'(state, isBusy) {
     state.isBusy = isBusy
+  },
+
+  SET_SEARCH_LOANS(state, payload) {
+    state.loans = payload.content
+    state.totalElements = payload.totalElements
+    state.totalLoans = payload.content.length
+    state.totalPages = payload.totalPages
   }
 };
 
@@ -33,6 +40,21 @@ const actions = {
     .catch(error => {
       commit('SET_BUSY', false)
       console.log(error)
+    })
+  },
+
+  search({commit, state}, params) {
+    commit('SET_BUSY', true)
+    return new Promise((resolve, reject) => {
+      axios.get(`/loan/page?size=${params.size}&page=${params.page}&search=${params.query}`)
+        .then(res => {
+          commit('SET_SEARCH_LOANS', res.data.response)
+          commit('SET_BUSY', false)
+        })
+        .catch(error => {
+          commit('SET_BUSY', false)
+          console.log(error)
+        })
     })
   }
 };

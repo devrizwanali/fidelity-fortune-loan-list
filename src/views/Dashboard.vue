@@ -3,7 +3,7 @@
     <h1>Dashboard</h1>
     <div class="loans__table--header">
       <img src="@/assets/search.png" class="px-3 search-icon">
-      <input type="text" v-model="filter" placeholder="Search by Loan No, Comput..." >
+      <input type="text" v-model="filter" placeholder="Search by Loan No, Comput..." v-on:keyup="searchLoans">
       <div class="action-btns">
         <b-button class="add-customer px-3">
           <img src="@/assets/plus.png">
@@ -22,7 +22,6 @@
     <b-table
       :items="loans"
       :fields="headers"
-      :filter="filter"
       :current-page="currentPage"
       :per-page="perPage"
       show-empty
@@ -30,7 +29,6 @@
       small
       ref="loans-table"
       responsive
-      @filtered="onFiltered"
       >
 
       <template v-slot:table-busy>
@@ -42,7 +40,7 @@
 
       <template #cell(status)="data">
         <span 
-          :style="{color: getColor(data.item.approved), background: getBgColor(data.item.approved)}" 
+          :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
           class= "px-3 status"
         >
           {{data.value}}
@@ -96,7 +94,7 @@
   </div>
 </template>
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import axios from '@/axios'
   import moment from 'moment'
   export default {
@@ -150,18 +148,33 @@
       console.log('Good bye!')
     },
     methods: {
+      ...mapActions(['search']),
       pageChangeHandler(page) {
         if((page * this.perPage > this.loans.length && this.totalElements > this.loans.length)) {
           this.$store.dispatch('fetchLoans', { page: page, size: this.perPage || 10 })
           this.$root.$emit('bv::refresh::table', 'loans-table')
         }
       },
-      getColor(approved) {
-        return approved ?  '#CC0606' :  '#06B941'
+      getColor(loan) {
+        if(loan.status == 'SETTLED' || loan.status == 'LIQUIDATED')
+          return 'var(--blue)'
+         else if (loan.status != 'SETTLED' && loan.approved)
+          return '#CC0606'
+         else
+          return '#06B941'
       },
 
-      getBgColor(approved) {
-        return approved ? 'rgb(204, 6, 6, 0.1)' : 'rgb(6, 185, 65, 0.1)'
+      getBgColor(loan) {
+        if(loan.status == 'SETTLED' || loan.status == 'LIQUIDATED')
+          return 'rgba(0, 68, 170, 0.1)'
+         else if (loan.status != 'SETTLED' && loan.approved)
+          return 'rgb(204, 6, 6, 0.1)'
+         else
+          return 'rgb(6, 185, 65, 0.1)'
+      },
+
+      searchLoans() {
+        this.search({page: 1, size: this.perPage || 10, query: this.filter})
       },
   
       onFiltered(filteredItems) {
@@ -174,8 +187,7 @@
           "loanId": id,
           "reportType": "ACCOUNT_STATEMENT"
         }).then(res => {
-          debugger
-          window.open(res)
+          window.open(res.response)
         })
       }
     }
