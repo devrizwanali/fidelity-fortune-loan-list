@@ -149,6 +149,7 @@
         return 'rgb(204, 6, 6, 0.1)'
       },
       searchLoans() {
+        this.currentPage = 1
         this.search({page: 1, size: this.perPage || 10, query: this.filter})
       },
       generateReport(id) {
