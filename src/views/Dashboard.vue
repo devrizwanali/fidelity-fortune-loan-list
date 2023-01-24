@@ -10,7 +10,7 @@
           Add Customer
         </b-button>
         <b-button class="export px-3"
-          @click="exportFile"
+          @click="ExportExcel"
         >
           <img src="@/assets/export.png">
           Export Page
@@ -29,7 +29,7 @@
       show-empty
       :busy.sync="isBusy"
       small
-      ref="loans-table"
+      ref="loans_table"
       responsive
       >
 
@@ -84,6 +84,7 @@
   import axios from '@/axios'
   import moment from 'moment'
   import Pagination from '@/components/Pagination'
+  import { jsontoexcel } from "vue-table-to-excel";
   export default {
     data() {
       return {
@@ -129,7 +130,7 @@
         this.currentPage = page
         if((page * this.perPage > this.loans.length && this.totalElements > this.loans.length)) {
           this.$store.dispatch('fetchLoans', { page: page, size: this.perPage || 10 })
-          this.$root.$emit('bv::refresh::table', 'loans-table')
+          this.$root.$emit('bv::refresh::table', 'loans_table')
         }
       },
       getColor(loan) {
@@ -165,7 +166,10 @@
         this.perPage = perPage
         this.currentPage = 1
       },
-      exportFile() {
+      ExportExcel() {
+        const fileName = `${new Date()}.xlsx`
+        const headers = this.headers.map(x => x.label)
+        jsontoexcel.getXlsx(this.loans, headers, fileName);
       }
     }
   }
