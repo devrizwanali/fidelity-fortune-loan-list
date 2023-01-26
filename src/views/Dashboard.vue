@@ -10,7 +10,7 @@
           Add Customer
         </b-button>
         <b-button class="export px-3"
-          @click="ExportExcel"
+          @click="exportExcel"
         >
           <img src="@/assets/export.png">
           Export Page
@@ -38,6 +38,13 @@
           <b-spinner class="align-middle"></b-spinner>
           <strong> Loading...</strong>
         </div>
+      </template>
+
+      <template #cell(customerName)="data">
+        <span class="cursor-pointer" 
+          @click="openCustomerLoanModal(data.item)">
+          {{data.value}}
+        </span>
       </template>
 
       <template #cell(status)="data">
@@ -77,6 +84,9 @@
       @onPageChange="pageChangeHandler"
       @onPerPageChange="perpageChangeHandler"
     />
+
+    <!-- customer loan list modal -->
+    <customer-loan-list ref="customer-loan-modal" :customer="selectedItem" v-if="selectedItem"/>
   </div>
 </template>
 <script>
@@ -84,13 +94,15 @@
   import axios from '@/axios'
   import moment from 'moment'
   import Pagination from '@/components/Pagination'
-  import { jsontoexcel } from "vue-table-to-excel";
+  import { jsontoexcel } from "vue-table-to-excel"
+  import CustomerLoanList from '@/components/CustomerLoanList'
   export default {
     data() {
       return {
         currentPage: 1,
         perPage: 10,
         filter: null,
+        selectedItem: null,
         headers: [
           {label: 'Office', key: 'managerName'},
           {label: 'Como. No', key: 'computerNo'},
@@ -108,7 +120,8 @@
       }
     },
     components: {
-      Pagination
+      Pagination,
+      CustomerLoanList
     },
     computed:  {
       ...mapGetters(['loans', 'totalElements', 'totalPages', 'isBusy']),
@@ -135,19 +148,19 @@
       },
       getColor(loan) {
         if(loan.status == 'SETTLED' || loan.status == 'LIQUIDATED')
-        return 'var(--blue)'
+          return 'var(--blue)'
         else if (loan.approved)
-        return '#06B941'
+          return '#06B941'
         else
-        return '#CC0606'
+          return '#CC0606'
       },
       getBgColor(loan) {
         if(loan.status == 'SETTLED' || loan.status == 'LIQUIDATED')
-        return 'rgba(0, 68, 170, 0.1)'
+          return 'rgba(0, 68, 170, 0.1)'
         else if (loan.approved)
-        return 'rgb(6, 185, 65, 0.1)'
+          return 'rgb(6, 185, 65, 0.1)'
         else
-        return 'rgb(204, 6, 6, 0.1)'
+          return 'rgb(204, 6, 6, 0.1)'
       },
       searchLoans() {
         this.currentPage = 1
@@ -166,10 +179,31 @@
         this.perPage = perPage
         this.currentPage = 1
       },
-      ExportExcel() {
-        const fileName = `${new Date()}.xlsx`
+      exportExcel() {
+        const fileName = `${new Date()}.csv`
         const headers = this.headers.map(x => x.label)
-        jsontoexcel.getXlsx(this.loans, headers, fileName);
+        var _this = this
+        let data = this.loans.map(loan => {
+          return  {
+            'Office': loan.managerName,
+            'Como. No': loan.computerNo,
+            'Name': loan.customerName,
+            'Loan No.': loan.loanNo,
+            'Ministry': loan.customerName,
+            'Duration': loan.duration,
+            'AMT. Disb': loan.totalRepaymentAmount,
+            'Loan Amt': loan.totalRepaymentAmount,
+            'Monthly': loan.monthlyRepaymentAmount,
+            'S. Date': moment(loan.paymentStartDate).format("MM/DD/YYYY") ,
+            'CDate': moment(loan.created).format("MM/DD/YYYY") ,
+            'Status': loan.status
+          }
+        })
+        jsontoexcel.getXlsx(data, headers, fileName);
+      },
+      openCustomerLoanModal(item) {
+        this.selectedItem = {...item}
+        this.$refs['customer-loan-modal'].showModal()
       }
     }
   }
