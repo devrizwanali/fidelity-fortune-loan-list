@@ -96,6 +96,7 @@
   import { jsontoexcel } from "vue-table-to-excel"
   import CustomerLoanList from '@/components/CustomerLoanList'
   import mixin from "@/mixins"
+  import moment from 'moment'
   export default {
     data() {
       return {
