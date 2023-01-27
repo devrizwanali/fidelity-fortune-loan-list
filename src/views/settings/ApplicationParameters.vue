@@ -63,7 +63,7 @@
           <input type="text" v-model="selectedItem.unit" disabled class="input">
         </div>
        
-         <div class="position-relative mt-4">
+        <div class="position-relative mt-4">
           <label for="name" class="name-label">Description</label>
           <textarea type="text" v-model="selectedItem.description" required class="textarea"></textarea>
         </div>
