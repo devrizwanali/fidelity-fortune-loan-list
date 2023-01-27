@@ -17,8 +17,7 @@ instance.interceptors.request.use(function (config) {
 
 
 instance.interceptors.response.use(null, function (error) {
-  if (error.response.status === 401) {
-    console.log('Failed to login')
+  if (error?.response?.status === 401) {
     localStorage.removeItem('token')
     router.push('/')
   }

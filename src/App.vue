@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'App'
+  name: 'App',
 }
 </script>
 <style>
@@ -39,4 +39,7 @@ export default {
   cursor: pointer !important;
 }
 
+.v-toast__item--error {
+  background-color: var(--red) !important;
+}
 </style>

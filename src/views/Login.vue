@@ -25,7 +25,10 @@
             ></b-form-input>
           </b-form-group>
           <p class="forgot-password mt-4">Forgot Password</p>
-          <button class="btn btn-light btn-block mt-5">Log in</button>
+          <button class="btn btn-light btn-block mt-5" :disabled="clicked">
+            <span v-if="clicked">Logging in...</span>
+            <span v-else>Log in</span>
+          </button>
         </form>
       </div>
     </div>
@@ -37,6 +40,7 @@
     name: 'Login',
     data() {
       return {
+        clicked: false,
         user: {
           usernameOrEmailOrPhone: '',
           password: ''
@@ -46,10 +50,12 @@
     methods: {
       ...mapActions(['login']),
       submitHandler() {
+        this.clicked = true
         this.login(this.user).then(res => {
           this.$router.push('/dashboard')
         }).catch(error => {
-          alert(error)
+          this.error(error.message)
+          this.clicked = false
         })
       }
     }
