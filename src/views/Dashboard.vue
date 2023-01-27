@@ -86,23 +86,23 @@
     />
 
     <!-- customer loan list modal -->
-    <customer-loan-list ref="customer-loan-modal" :customer="selectedItem" v-if="selectedItem"/>
+    <customer-loan-list ref="customer-loan-modal" :customer="selectedItem" />
   </div>
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
   import axios from '@/axios'
-  import moment from 'moment'
   import Pagination from '@/components/Pagination'
   import { jsontoexcel } from "vue-table-to-excel"
   import CustomerLoanList from '@/components/CustomerLoanList'
+  import mixin from "@/mixins"
   export default {
     data() {
       return {
         currentPage: 1,
         perPage: 10,
         filter: null,
-        selectedItem: null,
+        selectedItem: {},
         headers: [
           {label: 'Office', key: 'managerName'},
           {label: 'Como. No', key: 'computerNo'},
@@ -119,18 +119,13 @@
         ]
       }
     },
+    mixins: [mixin],
     components: {
       Pagination,
       CustomerLoanList
     },
     computed:  {
       ...mapGetters(['loans', 'totalElements', 'totalPages', 'isBusy']),
-    },
-
-    filters: {
-      formatDate (date) {
-        return moment(date).format("MM/DD/YYYY") 
-      }
     },
 
     async beforeCreate() {
@@ -145,22 +140,6 @@
           this.$store.dispatch('fetchLoans', { page: page, size: this.perPage || 10 })
           this.$root.$emit('bv::refresh::table', 'loans_table')
         }
-      },
-      getColor(loan) {
-        if(loan.status == 'SETTLED' || loan.status == 'LIQUIDATED')
-          return 'var(--blue)'
-        else if (loan.approved)
-          return '#06B941'
-        else
-          return '#CC0606'
-      },
-      getBgColor(loan) {
-        if(loan.status == 'SETTLED' || loan.status == 'LIQUIDATED')
-          return 'rgba(0, 68, 170, 0.1)'
-        else if (loan.approved)
-          return 'rgb(6, 185, 65, 0.1)'
-        else
-          return 'rgb(204, 6, 6, 0.1)'
       },
       searchLoans() {
         this.currentPage = 1
