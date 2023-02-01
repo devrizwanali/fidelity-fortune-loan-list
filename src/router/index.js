@@ -8,6 +8,7 @@ import Settings from '@/views/Settings'
 import ApplicationParameters from '@/views/settings/ApplicationParameters'
 import BranchCodes from '@/views/settings/BranchCodes'
 import Managers from '@/views/settings/Managers'
+import PageNotFound from '@/views/PageNotFound'
 
 
 Vue.use(VueRouter)
@@ -50,10 +51,13 @@ const routes = [
           }
         ]
       }
-
     ]
    },
- 
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: PageNotFound
+  }
 ]
 
 const router = new VueRouter({
