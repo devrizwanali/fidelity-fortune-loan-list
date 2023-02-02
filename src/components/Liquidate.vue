@@ -13,7 +13,7 @@
         </div>
 
          <div class="d-flex justify-content-between mt-4">
-          <button class="button-cancel" @click="$refs['liquidateLoan'].hide()">Cancel</button>
+          <button class="button-cancel" @click.prevent="$refs['liquidateLoan'].hide()">Cancel</button>
           <button class="button-save" style="width: 52%;" >Calculate Loan</button>
         </div>
       </form>

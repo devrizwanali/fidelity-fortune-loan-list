@@ -12,7 +12,7 @@
         </div>
 
        <div class="d-flex justify-content-between mt-4">
-        <button class="button-cancel" @click="$refs['addManagerModal'].hide()">Cancel</button>
+        <button class="button-cancel" @click.prevent="$refs['addManagerModal'].hide()">Cancel</button>
         <button class="button-save">Save</button>
       </div>
     </form>

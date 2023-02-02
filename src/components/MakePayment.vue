@@ -8,7 +8,7 @@
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Choose Source</label>
-        <b-form-select class="input" v-model="form.source"  :options="sources"></b-form-select>
+        <b-form-select class="input" v-model="form.source"  required :options="sources"></b-form-select>
       </div>
 
       <div class="position-relative mt-4">

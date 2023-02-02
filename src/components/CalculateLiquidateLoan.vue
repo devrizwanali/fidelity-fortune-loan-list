@@ -42,7 +42,7 @@
 
 
        <div class="d-flex justify-content-between mt-4">
-        <button class="button-cancel" @click="$refs['calculateLiquidateLoan'].hide()">Cancel</button>
+        <button class="button-cancel" @click.prevent="$refs['calculateLiquidateLoan'].hide()">Cancel</button>
         <button class="button-save" style="width: 52%;">Save</button>
       </div>
     </form>
