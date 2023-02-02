@@ -172,7 +172,23 @@
     max-width: 1248px !important;
   }
 
-  #add-loan-modal .modal-dialog {
+  #add-cu-loan-one .modal-dialog {
     max-width: 610px !important;
   }
+
+  .custom-select:disabled {
+    background: none !important;
+  }
+
+/*  #liquidate-loan .modal-dialog {
+    max-width: 610px !important;
+  }
+
+  #liquidate-loan .modal-body {
+    margin: auto;
+  }
+
+  #calculate-liquidate-loan .modal-dialog {
+    max-width: 610px !important;
+  }*/
 </style>

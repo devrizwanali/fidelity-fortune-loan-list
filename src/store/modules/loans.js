@@ -5,7 +5,16 @@ const state = {
   totalElements: 0,
   totalPages: 0,
   isBusy: false,
-  customerLoans: []
+  customerLoans: [],
+  liquidTypes: [
+    {value:'FULL', text: 'Full'},
+    {value: 'PARTIAL', text: 'Partial'}
+  ],
+  loanModels: [
+    {value: 'STANDARD', text: 'Standard'},
+    {value: 'FLEXI', text: 'Flexi'}
+  ],
+  calculatedLiquiLoan: null
 };
 
 const mutations = {
@@ -28,6 +37,10 @@ const mutations = {
 
   SET_CUSTOMERS_LOAN(state, payload) {
     state.customerLoans = payload
+  },
+
+  SET_CALCULATED_LIQUI_LOAN(state, loan) {
+    state.calculatedLiquiLoan = loan
   }
 };
 
@@ -69,6 +82,19 @@ const actions = {
     })
   },
 
+  computeLoan({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      const id = data['loanId']
+      delete data['loanId']
+      axios.post(`/loan/liquidate/${id}/compute`, data)
+      .then(res => {
+        commit('SET_CALCULATED_LIQUI_LOAN', res.data.response)
+        resolve(res)
+      })
+      .catch(error => reject(error))
+    })
+  },
+
   search({commit, state}, params) {
     commit('SET_BUSY', true)
     return new Promise((resolve, reject) => {
@@ -90,7 +116,10 @@ const getters = {
   totalPages: state => state.totalPages,
   totalElements: state => state.totalElements,
   isBusy: state => state.isBusy,
-  customerLoans: state => state.customerLoans
+  customerLoans: state => state.customerLoans,
+  liquidTypes: state => state.liquidTypes,
+  loanModels: state => state.loanModels,
+  calculatedLiquiLoan: state => state.calculatedLiquiLoan
 };
 
 export default {

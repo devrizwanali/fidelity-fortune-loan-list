@@ -1,45 +1,47 @@
 <template>
   <b-modal ref="calculateLiquidateLoan"
     title="Liquidate Loan"
-    hide-header-close hide-footer>
+    id="calculate-liquidate-loan"
+    hide-header-close hide-footer
+    v-if="calculatedLiquiLoan"
+    >
     <form  @submit.prevent="onSubmit">
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Loan Model</label>
-        <b-form-select required class="input" v-model="loanModal" :options="loanModals"></b-form-select>
+        <b-form-select required class="input" disabled v-model="loanModal" :options="loanModels"></b-form-select>
       </div>
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Liquidation Type</label>
-        <b-form-select required class="input" v-model="liquidType" :options="liquidTypes"></b-form-select>
+        <b-form-select required class="input" disabled v-model="liquidType" :options="liquidTypes"></b-form-select>
       </div>
 
       <div class="mt-2">
-        <input type="text" placeholder="Interest Charged" class="inline-input form-control">
+        <input type="text" readonly v-model="calculatedLiquiLoan.interestRate" placeholder="Interest Charged" class="inline-input form-control">
       </div>
       <div class="mt-2">
-        <input type="text" placeholder="Capital Balance" class="inline-input form-control">
+        <input type="text" readonly v-model="calculatedLiquiLoan.capitalBalance" placeholder="Capital Balance" class="inline-input form-control">
       </div>
 
        <div class="mt-2">
-        <input type="text" placeholder="Liquidation Amount" class="inline-input form-control">
+        <input type="text" v-model="calculatedLiquiLoan.liquidatedBalance" placeholder="Liquidation Amount" class="inline-input form-control">
       </div>
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Interest Owed</label>
-        <input type="number"  required class="input">
+        <input type="text" @keyup="interestOwedChanged" v-model="calculatedLiquiLoan.interestOwed" required class="input">
       </div>
 
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Amount Paid</label>
-        <input type="number"  required class="input">
+        <input type="text" v-model="calculatedLiquiLoan.actualAmountPaid"  required class="input">
       </div>
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Date Paid</label>
-        <input type="date"  required class="input">
+        <input type="date" v-model="calculatedLiquiLoan.paidDate" required class="input">
       </div>
-
 
        <div class="d-flex justify-content-between mt-4">
         <button class="button-cancel" @click.prevent="$refs['calculateLiquidateLoan'].hide()">Cancel</button>
@@ -49,14 +51,10 @@
   </b-modal>
 </template>
 <script>
+  import { mapGetters, mapActions } from 'vuex'
+  import axios from '@/axios'
   export default {
     name: 'CalculateLiquidateLoan',
-    data() {
-      return {
-        liquidTypes: ['Full', 'Partial'],
-        loanModals: ['Standard', 'Flexi'],
-      }
-    },
     props: {
       loanModal: {
         type: String,
@@ -65,14 +63,31 @@
       liquidType: {
         type: String,
         required: true
+      },
+      loanId: {
+        type: Number,
+        required: true
       }
+    },
+    computed: {
+      ...mapGetters(['calculatedLiquiLoan', 'liquidTypes', 'loanModels']),
     },
     methods: {
       showModal() {
         this.$refs['calculateLiquidateLoan'].show()
       },
+      interestOwedChanged() {
+        let liquidBalance = parseFloat(this.calculatedLiquiLoan.liquidatedBalance)
+        let interestOwed = parseFloat(this.calculatedLiquiLoan.interestOwed)
+        this.calculatedLiquiLoan.liquidatedBalance = liquidBalance + interestOwed
+      },
       onSubmit() {
-        console.log('hello')
+        axios.post(`/loan/liquidate/${this.loanId}`, this.calculatedLiquiLoan)
+        .then(res => {
+          this.success(res.data.message)
+          this.$refs['calculateLiquidateLoan'].hide()
+        })
+        .catch(error => this.error(this.error.message))
       }
     }
   }

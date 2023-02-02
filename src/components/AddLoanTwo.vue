@@ -1,6 +1,5 @@
 <template>
-  <b-modal ref="addLoanModal" title="Add Loan"
-   id="add-loan"
+  <b-modal ref="addLoanModalTow" title="Add Loan"
     hide-header-close hide-footer>
     <form  @submit.prevent="onSubmit">
       <b-row>
@@ -75,8 +74,21 @@
         </b-col>
       </b-row>
 
+      <div class="mt-2">
+        <input type="text" placeholder="Processing Fee" class="inline-input form-control">
+      </div>
+      <div class="mt-2">
+        <input type="text" placeholder="Cheque Amount" class="inline-input form-control">
+      </div>
+      <div class="mt-2">
+        <input type="text" placeholder="Monthly Repayment Amount" class="inline-input form-control">
+      </div>
+      <div class="mt-2">
+        <input type="text" placeholder="Total Repayment Amount" class="inline-input form-control">
+      </div>
+
       <div class="d-flex justify-content-between mt-4">
-        <button class="button-cancel" @click.prevent="$refs['addLoanModal'].hide()">Cancel</button>
+        <button class="button-cancel" @click.prevent="$refs['addLoanModalTow'].hide()">Cancel</button>
         <button class="button-save">Save</button>
       </div>
     </form>
@@ -92,12 +104,12 @@
         deductionOptions: ['State', 'Local'],
         form: {
           loanNo: '',
-          duration: '',
+          duration: 0,
           managerName: '',
           deduction: '',
-          netSalary: '',
-          grossSalary: '',
-          interest: '',
+          netSalary: 0,
+          grossSalary: 0,
+          interest: 0,
           startDate: null,
           secondaryManagerName: '',
           amount: ''
@@ -118,7 +130,7 @@
     methods: {
       ...mapActions(['addBranch', 'fetchManagers']),
       showModal() {
-        this.$refs['addLoanModal'].show()
+        this.$refs['addLoanModalTow'].show()
       },
       onSubmit() {
         this.addBranch(this.form).then(res => {

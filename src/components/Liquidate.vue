@@ -1,10 +1,10 @@
 <template>
   <div>
-    <b-modal ref="liquidateLoan" title="Liquidate Loan" hide-header-close hide-footer>
+    <b-modal ref="liquidateLoan" id="liquidate-loan" title="Liquidate Loan" hide-header-close hide-footer>
       <form  @submit.prevent="onSubmit">
         <div class="position-relative mt-4">
           <label for="name" class="name-label">Loan Model</label>
-          <b-form-select required class="input" v-model="loanModal" :options="loanModals"></b-form-select>
+          <b-form-select required class="input" v-model="loanModal" :options="loanModels"></b-form-select>
         </div>
 
         <div class="position-relative mt-4">
@@ -18,35 +18,44 @@
         </div>
       </form>
     </b-modal>
-    <calculate-liquidate-loan ref="calculate-liquidate" :liquidType="liquidType" :loanModal="loanModal" />
+    <calculate-liquidate-loan ref="calculate-liquidate" :loanId="loanId" :liquidType="liquidType" :loanModal="loanModal" />
   </div>
 </template>
 <script>
   import CalculateLiquidateLoan from '@/components/CalculateLiquidateLoan'
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
   export default {
     name: 'Liquidate',
     data() {
       return {
-        liquidTypes: ['Full', 'Partial'],
-        loanModals: ['Standard', 'Flexi'],
-        loanModal: 'Standard',
-        liquidType: 'Full'
+        loanModal: 'STANDARD',
+        liquidType: 'FULL'
       }
     },
     components: {
       CalculateLiquidateLoan
     },
+    computed: {
+      ...mapGetters(['customerLoans', 'liquidTypes', 'loanModels']),
+      loanId() {
+
+        const loans = this.customerLoans.filter(x => (x.status == 'ACTIVE' || x.status == 'TOPUP'))
+        return loans[0]?.id
+      }
+    },
     methods: {
-      ...mapActions(['liquidateLoan']),
+      ...mapActions(['liquidateLoan', 'computeLoan']),
       showModal() {
         this.$refs['liquidateLoan'].show()
       },
       onSubmit() {
-        // this.liquidateLoan(this.form).then(res => {
-        //   this.$refs['liquidateLoan'].hide()
-        // })
-        this.$refs['calculate-liquidate'].showModal()
+        const loanId = this.loanId
+        let data = {model: this.loanModal, type: this.liquidType, loanId}
+        this.computeLoan(data).then(res => {
+          this.$refs['liquidateLoan'].hide()
+          this.$refs['calculate-liquidate'].showModal()
+        })
+        .catch(error => this.error(error.message))
       },
     }
   }
