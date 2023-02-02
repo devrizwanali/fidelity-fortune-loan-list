@@ -9,14 +9,14 @@ const state = {
 };
 
 const mutations = {
-  'SET_LOANS'(state, payload) {
+  SET_LOANS(state, payload) {
     const loans = [...state.loans, ...payload.content]
     state.loans = loans
     state.totalElements = payload.totalElements
     state.totalPages = payload.totalPages
   },
 
-  'SET_BUSY'(state, isBusy) {
+  SET_BUSY(state, isBusy) {
     state.isBusy = isBusy
   },
 
