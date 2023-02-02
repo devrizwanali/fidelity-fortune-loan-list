@@ -153,6 +153,8 @@
           "reportType": "ACCOUNT_STATEMENT"
         }).then(res => {
           window.open(res.response)
+        }).catch(error => {
+          this.error(error.message)
         })
       },
       perpageChangeHandler(perPage) {

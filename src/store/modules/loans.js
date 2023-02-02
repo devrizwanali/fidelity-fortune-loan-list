@@ -4,7 +4,8 @@ const state = {
   loans: [],
   totalElements: 0,
   totalPages: 0,
-  isBusy: true,
+  isBusy: false,
+  customerLoans: []
 };
 
 const mutations = {
@@ -23,6 +24,10 @@ const mutations = {
     state.loans = payload.content
     state.totalElements = payload.totalElements
     state.totalPages = payload.totalPages
+  },
+
+  SET_CUSTOMERS_LOAN(state, payload) {
+    state.customerLoans = payload
   }
 };
 
@@ -37,6 +42,30 @@ const actions = {
     .catch(error => {
       commit('SET_BUSY', false)
       console.log(error)
+    })
+  },
+
+  fetchCustomerLoans({ commit }, id) {
+    commit('SET_CUSTOMERS_LOAN', [])
+    return new Promise((resolve, reject) => {
+      axios.get(`/loan/list/${id}`)
+      .then(res => {
+        commit('SET_CUSTOMERS_LOAN', res.data.response)
+        resolve(res)
+      })
+      .catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  payLoan({commit}, data) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/transaction/create`, data)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(error => reject(error))
     })
   },
 
@@ -60,7 +89,8 @@ const getters = {
   loans: state => state.loans,
   totalPages: state => state.totalPages,
   totalElements: state => state.totalElements,
-  isBusy: state => state.isBusy
+  isBusy: state => state.isBusy,
+  customerLoans: state => state.customerLoans
 };
 
 export default {

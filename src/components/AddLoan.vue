@@ -7,13 +7,13 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Loan Number</label>
-            <input type="text" v-model="form.code" class="input" required>
+            <input type="text" v-model="form.loanNo" class="input" required>
           </div>
         </b-col>
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Deduction</label>
-            <input type="text" v-model="form.name" class="input" required>
+            <b-form-select required class="input" v-model="form.deduction" :options="deductionOptions"></b-form-select>
           </div>
         </b-col>
       </b-row>
@@ -21,13 +21,13 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Duration</label>
-            <input type="text" v-model="form.code" class="input" required>
+            <input type="number" v-model="form.duration" class="input" required>
           </div>
         </b-col>
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Loan Amount</label>
-            <input type="text" v-model="form.name" class="input" required>
+            <input type="number" v-model="form.amount" class="input" required>
           </div>
         </b-col>
       </b-row>
@@ -35,13 +35,13 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Monthly Net Salary</label>
-            <input type="text" v-model="form.code" class="input" required>
+            <input type="number" v-model="form.netSalary" class="input" required>
           </div>
         </b-col>
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Monthly Gross Salary</label>
-            <input type="text" v-model="form.name" class="input" required>
+            <input type="number" v-model="form.grossSalary" class="input" required>
           </div>
         </b-col>
       </b-row>
@@ -49,13 +49,13 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Interest</label>
-            <input type="text" v-model="form.code" class="input" required>
+            <input type="number" v-model="form.interest" class="input" required>
           </div>
         </b-col>
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Start Date</label>
-            <input type="date" v-model="form.name" class="input" required>
+            <input type="date" v-model="form.startDate" class="input" required>
           </div>
         </b-col>
       </b-row>
@@ -64,13 +64,13 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Branch Manager</label>
-            <input type="text" v-model="form.code" class="input" required>
+             <b-form-select required class="input" v-model="form.managerName" :options="managersList"></b-form-select>
           </div>
         </b-col>
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Secondary Branch Manager</label>
-            <input type="text" v-model="form.name" class="input" required>
+            <b-form-select required class="input" v-model="form.secondaryManagerName" :options="managersList"></b-form-select>
           </div>
         </b-col>
       </b-row>
@@ -96,29 +96,48 @@
   </b-modal>
 </template>
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
+  import axios from '@/axios'
   export default {
     name: 'AddLoan',
     data() {
       return {
+        deductionOptions: ['State', 'Local'],
         form: {
-          name: '',
-          code: '',
-          oldCode: ''
+          loanNo: '',
+          duration: 0,
+          managerName: '',
+          deduction: '',
+          netSalary: 0,
+          grossSalary: 0,
+          interest: 0,
+          startDate: null,
+          secondaryManagerName: '',
+          amount: ''
         }
       }
     },
+    computed: {
+      ...mapGetters(['managers']),
+      managersList() {
+        return this.managers.map(x => x.managerName)
+      }
+    },
+    mounted() {
+      if(this.managers.length == 0) {
+        this.fetchManagers()
+      }
+    },
     methods: {
-      ...mapActions(['addBranch']),
+      ...mapActions(['addBranch', 'fetchManagers']),
       showModal() {
-        console.log('0---0')
         this.$refs['addLoanModal'].show()
       },
       onSubmit() {
         this.addBranch(this.form).then(res => {
           this.$refs['addBranchModal'].hide()
         })
-      }
+      },
     }
   }
 </script>

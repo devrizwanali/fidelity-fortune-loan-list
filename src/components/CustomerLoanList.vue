@@ -1,8 +1,9 @@
 <template>
   <div>
     <b-modal ref="customerLoanListModal"
-      :title="customer?.customerName" 
-      hide-header-close hide-footer
+      :title="customer.customerName" 
+      hide-footer
+      hide-header-close
       id="customerLoanList"
       >
       <div class="action-btns justify-content-around my-4">
@@ -24,10 +25,8 @@
       </div>
 
       <b-table
-        :items="loans"
+        :items="customerLoans"
         :fields="headers"
-        :current-page="currentPage"
-        :per-page="perPage"
         show-empty
         :busy.sync="isBusy"
         small
@@ -79,14 +78,6 @@
           <span @click="generateReport(data.item.id)" class="cursor-pointer">{{data.item.loanNo}}</span>
         </template>
       </b-table>
-      <pagination
-        :current-page="currentPage"
-        :per-page="perPage"
-        :total-pages="totalPages"
-        :totalElements="totalElements"
-        @onPageChange="pageChangeHandler"
-        @onPerPageChange="perpageChangeHandler"
-      />
     </b-modal>
     <add-loan ref="add-loan-modal" />
     <make-payment ref="pay-loan-modal" />
@@ -94,20 +85,17 @@
   </div>
 </template>
 <script>
-  import Pagination from '@/components/Pagination'
   import AddLoan from '@/components/AddLoan'
   import MakePayment from '@/components/MakePayment'
   import Liquidate from '@/components/Liquidate'
   import { mapGetters, mapActions } from 'vuex'
   import mixin from "@/mixins"
+  import axios from '@/axios'
   export default {
     name: 'CustomerLoanList',
     data() {
       return {
-        currentPage: 1,
-        perPage: 10,
-        filter: null,
-        selectedItem: null,
+        isBusy: true,
         headers: [
           {label: 'Office', key: 'managerName'},
           {label: 'Como. No', key: 'computerNo'},
@@ -132,28 +120,29 @@
     },
     mixins: [mixin],
     components: {
-      Pagination, 
-      AddLoan, 
+      AddLoan,
       MakePayment,
       Liquidate
     },
+    watch: {
+      customer: function(newVal, oldVal) {
+        this.isBusy = true
+        this.fetchCustomerLoans(newVal.customerId).then(res => {
+          this.isBusy = false
+          this.$root.$emit('bv::refresh::table', 'loans_table')
+        }).catch(error => {
+          this.isBusy = false
+          console.log(error.message)
+        })
+      }
+    },
     computed:  {
-      ...mapGetters(['loans', 'totalElements', 'totalPages', 'isBusy']),
+      ...mapGetters(['customerLoans']),
     },
     methods: {
+      ...mapActions(['fetchCustomerLoans']),
       showModal() {
         this.$refs['customerLoanListModal'].show()
-      },
-      pageChangeHandler(page) {
-        this.currentPage = page
-        if((page * this.perPage > this.loans.length && this.totalElements > this.loans.length)) {
-          this.$store.dispatch('fetchLoans', { page: page, size: this.perPage || 10 })
-          this.$root.$emit('bv::refresh::table', 'loans_table')
-        }
-      },
-      perpageChangeHandler(perPage) {
-        this.perPage = perPage
-        this.currentPage = 1
       },
       addLoanModal() {
         this.$refs['add-loan-modal'].showModal()
@@ -163,6 +152,17 @@
       },
       liquidate() {
         this.$refs['liquidate-modal'].showModal()
+      },
+      generateReport(id) {
+        axios.post('/report', {
+          "format": "pdf",
+          "loanId": id,
+          "reportType": "ACCOUNT_STATEMENT"
+        }).then(res => {
+          window.open(res.response)
+        }).catch(error => {
+          this.error(error.message)
+        })
       }
     }
   }
