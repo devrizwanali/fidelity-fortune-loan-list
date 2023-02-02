@@ -64,3 +64,7 @@
   border-radius: 24px;
   border: 0;
 }
+
+.blue-color {
+  color: var(--blue-color);
+}

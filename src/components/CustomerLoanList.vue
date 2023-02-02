@@ -50,9 +50,15 @@
         </template>
 
         <template #cell(status)="data">
-          <span
+          <img 
+            src="@/assets/naira-sign.png" 
+            width="25"
+            height="25"
+            @click="topUpLoanModal"
+            v-if="data.item.approved && !(data.item.status == 'SETTLED' || data.item.status == 'LIQUIDATED')">
+          <span 
             :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
-            class= "px-3 status"
+            class= "px-2 status"
           >
             {{data.value}}
           </span>
@@ -79,15 +85,17 @@
         </template>
       </b-table>
     </b-modal>
-    <add-loan ref="add-loan-modal" />
+    <add-loan ref="add-loan-modal" :customer="customer" />
     <make-payment ref="pay-loan-modal" />
     <liquidate ref="liquidate-modal" />
+    <top-up-loan ref="top-up-loan-modal" />
   </div>
 </template>
 <script>
   import AddLoan from '@/components/AddLoan'
   import MakePayment from '@/components/MakePayment'
   import Liquidate from '@/components/Liquidate'
+  import TopUpLoan from '@/components/TopUpLoan'
   import { mapGetters, mapActions } from 'vuex'
   import mixin from "@/mixins"
   import axios from '@/axios'
@@ -122,11 +130,13 @@
     components: {
       AddLoan,
       MakePayment,
+      TopUpLoan,
       Liquidate
     },
     watch: {
       customer: function(newVal, oldVal) {
         this.isBusy = true
+        this.customer = newVal
         this.fetchCustomerLoans(newVal.customerId).then(res => {
           this.isBusy = false
           this.$root.$emit('bv::refresh::table', 'loans_table')
@@ -163,6 +173,9 @@
         }).catch(error => {
           this.error(error.message)
         })
+      },
+      topUpLoanModal() {
+        this.$refs['top-up-loan-modal'].showModal()
       }
     }
   }
@@ -178,6 +191,10 @@
 
   .custom-select:disabled {
     background: none !important;
+  }
+
+  #add-loan-two .modal-dialog {
+    max-width: 610px !important;
   }
 
 /*  #liquidate-loan .modal-dialog {

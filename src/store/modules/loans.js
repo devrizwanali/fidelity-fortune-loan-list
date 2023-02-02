@@ -95,6 +95,17 @@ const actions = {
     })
   },
 
+  addLoan({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/loan/create`, data)
+      .then(res => {
+        debugger
+        resolve(res)
+      })
+      .catch(error => reject(error))
+    })
+  },
+
   search({commit, state}, params) {
     commit('SET_BUSY', true)
     return new Promise((resolve, reject) => {

@@ -16,15 +16,19 @@
         <b-form-select required class="input" disabled v-model="liquidType" :options="liquidTypes"></b-form-select>
       </div>
 
-      <div class="mt-2">
-        <input type="text" readonly v-model="calculatedLiquiLoan.interestRate" placeholder="Interest Charged" class="inline-input form-control">
-      </div>
-      <div class="mt-2">
-        <input type="text" readonly v-model="calculatedLiquiLoan.capitalBalance" placeholder="Capital Balance" class="inline-input form-control">
+      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
+        <label class="blue-color">Interest Charged</label>
+        <input type="text" readonly v-model="calculatedLiquiLoan.interestRate" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-       <div class="mt-2">
-        <input type="text" v-model="calculatedLiquiLoan.liquidatedBalance" placeholder="Liquidation Amount" class="inline-input form-control">
+      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
+        <label class="blue-color">Capital Balance</label>
+        <input type="text" readonly v-model="calculatedLiquiLoan.capitalBalance" class="blue-color border-0 text-right loan-input-inline">
+      </div>
+
+      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
+        <label class="blue-color">Liquidation Amount</label>
+        <input type="text" v-model="calculatedLiquiLoan.liquidatedBalance" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="position-relative mt-4">
@@ -65,7 +69,6 @@
         required: true
       },
       loanId: {
-        type: Number,
         required: true
       }
     },
@@ -102,6 +105,11 @@
     border-left: 0;
     border-radius: 0;
     width: 100%;
+  }
+
+  .loan-input-inline:focus {
+    box-shadow: none !important;
+    outline: none !important;
   }
 
   .inline-input:focus {
