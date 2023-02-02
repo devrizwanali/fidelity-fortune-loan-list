@@ -99,7 +99,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       axios.post(`/loan/create`, data)
       .then(res => {
-        debugger
         resolve(res)
       })
       .catch(error => reject(error))

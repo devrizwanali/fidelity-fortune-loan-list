@@ -50,7 +50,8 @@
         </template>
 
         <template #cell(status)="data">
-          <img 
+          <img
+            class="cursor-pointer"
             src="@/assets/naira-sign.png" 
             width="25"
             height="25"
