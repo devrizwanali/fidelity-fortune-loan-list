@@ -30,25 +30,25 @@
         <b-col>
           <div class="position-relative auto-filled mt-4">
             <label for="name" class="name-label">Capital Balance</label>
-            <input type="number" v-model="form.interest" disabled class="input" required>
+            <input type="number" v-model.number="form.capitalBalance" disabled class="input" required>
           </div>
         </b-col>
         <b-col>
           <div class="position-relative auto-filled mt-4">
             <label for="name" class="name-label">Interest Owed</label>
-            <input type="number" v-model.number="form.interestOwed" disabled class="input" required>
+            <input type="number" step=".01" v-model.number="form.interestOwed" disabled class="input" required>
           </div>
         </b-col>
       </b-row>
 
       <div class="position-relative auto-filled mt-4">
         <label for="name" class="name-label">Total Capital Balance</label>
-        <input type="number" v-model="form.interest" disabled class="input full-input" required>
+        <input type="number" v-model.number="form.totalCapitalBalance" disabled class="input full-input" required>
       </div>
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Enter Top Up Amount</label>
-        <input type="number" v-model.number="form.topUpAmount" class="input full-input" required>
+        <input type="number" v-model.number="form.topUpAmount" class="input full-input" required @keyup="topupAmountChanged">
       </div>
 
       <div class="position-relative auto-filled mt-4">
@@ -60,13 +60,13 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Monthly Net Salary</label>
-            <input type="number" v-model="form.netMonthlySalary" class="input" required>
+            <input type="number" v-model.number="form.netMonthlySalary" class="input" required>
           </div>
         </b-col>
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Monthly Gross Salary</label>
-            <input type="number" v-model="form.grossMonthlySalary" class="input" required>
+            <input type="number" v-model.number="form.grossMonthlySalary" class="input" required>
           </div>
         </b-col>
       </b-row>
@@ -80,7 +80,7 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Interest Rate</label>
-            <input type="number" v-model="form.interestRate" class="input" required>
+            <input type="number" step=".01" v-model="form.interestRate" class="input" required>
           </div>
         </b-col>
       </b-row>
@@ -104,7 +104,6 @@
           loanNo: '',
           duration: '',
           managerName: '',
-          deduction: '',
           netMonthlySalary: '',
           grossMonthlySalary: '',
           interestRate: '',
@@ -112,7 +111,8 @@
           amount: '',
           capitalBalance: '',
           interestOwed: '',
-          topUpAmount: ''
+          topUpAmount: '',
+          totalCapitalBalance: ''
         }
       }
     },
@@ -129,16 +129,30 @@
     },
     methods: {
       ...mapActions(['fetchManagers']),
-      showModal(loan) {
+      showModal(loan, customer) {
+        console.log(loan)
         this.loan = loan;
+        this.form.loanNo = `${customer.branchCode}-00000-MON`
         this.form.capitalBalance = loan.capitalBalance
         this.form.interestOwed = loan.interestOwed
         this.form.amount = loan.amount
-        console.log(loan)
+        this.form.interestRate = loan.interestRate
+        this.form.duration = loan.duration
+        this.form.capitalBalance = loan.capitalBalance
+        this.form.totalCapitalBalance = parseFloat(loan.capitalBalance) + parseFloat(loan.interestOwed)
         this.$refs['topUpLoanModal'].show()
       },
       onSubmit() {
+        axios.post(`/loan/topup`, this.form)
+        .then(res => {
+          debugger
+        })
+        .catch(error => this.error(error.response.data.message))
       },
+      topupAmountChanged() {
+        let newAmount = parseFloat(this.form.amount) + parseFloat(this.form.topUpAmount)
+        this.form.amount = newAmount
+      }
     }
   }
 </script>

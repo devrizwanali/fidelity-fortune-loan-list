@@ -190,7 +190,7 @@
       },
       topUpLoanModal(loan) {
         this.computeTopUpLoan(loan.id).then(res => {
-          this.$refs['top-up-loan-modal'].showModal(res.data.response)
+          this.$refs['top-up-loan-modal'].showModal(res.data.response, this.customer)
         })
         .catch(err => this.error(err.response.data.message))
       },

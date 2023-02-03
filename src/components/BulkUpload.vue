@@ -3,7 +3,7 @@
     <form  @submit.prevent="onSubmit">
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Select Branch</label>
-         <b-form-select required class="input" v-model="form.branchName" :options="branchList"></b-form-select>
+         <b-form-select required class="input" v-model="form.branchCode" :options="branchList"></b-form-select>
       </div>
 
       <div class="position-relative mt-4">
@@ -21,7 +21,7 @@
         <p class="my-2">Add File</p>
       </div>
 
-      <input type="file" class="d-none" @change="fileUploaded" ref="file-input" accept=".xlsx">
+      <input type="file" class="d-none" @change="fileUploaded" ref="file-input" accept=".csv">
       <p v-if="form.fileName">{{form.fileName.name}}</p>
       <div class="d-flex justify-content-around mt-4">
         <button class="button-cancel" @click.prevent="$refs['bulkUpload'].hide()">Cancel</button>
@@ -43,7 +43,7 @@
           {text: 'Local', value: 'LOCAL'}
         ],
         form: {
-          branchName: '',
+          branchCode: '',
           loanType: '',
           fileName: '',
           fileType: "LOAN_REPAYMENT",
@@ -56,7 +56,7 @@
       branchList() {
         let branches = []
         this.branchCodes.map(x => {
-          let obj = {text: x.name, value: x.id}
+          let obj = {text: x.name, value: x.code}
           branches.push(obj)
         })
         return branches
@@ -70,11 +70,20 @@
     methods: {
       ...mapActions(['fetchBrachCodes']),
       onSubmit() {
+        const formData = new FormData()
+        debugger
+         formData.append('file', this.form.fileName)
+         formData.append('fileType', this.form.fileType)
+         formData.append('payDate', this.form.payDate)
+         formData.append('branchCode', this.form.branchCode)
+
         if(!this.form.fileName){
           this.error('Please upload file.')
           return
         } else {
-          axios.post(`/file/upload`, this.form)
+
+          axios.defaults.headers['Content-Type'] = 'multipart/form-data'
+          axios.post(`/file/upload`, formData)
           .then(res => {
             debugger
           })
