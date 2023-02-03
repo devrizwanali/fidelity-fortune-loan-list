@@ -74,7 +74,7 @@
           this.success('Successfully Approved')
           this.$refs['approve-loan-modal'].hide()
         })
-        .catch(error => this.error(error.message))
+        .catch(error => this.error(error.response.data.message))
       },
       showModal(loan) {
         this.loan = loan

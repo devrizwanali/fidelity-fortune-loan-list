@@ -59,7 +59,17 @@
             v-if="data.item.approved && !(data.item.status == 'SETTLED' || data.item.status == 'LIQUIDATED')">
           <span 
             :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
-            class= "px-2 status"
+            class= "px-3 status cursor-pointer"
+            v-if="data.value != 'INACTIVE'"
+          >
+            {{data.value}}
+          </span>
+
+          <span
+            :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
+            class= "px-3 status cursor-pointer"
+            v-else
+            @click="approveModal(data.item)"
           >
             {{data.value}}
           </span>
@@ -90,6 +100,7 @@
     <make-payment ref="pay-loan-modal" />
     <liquidate ref="liquidate-modal" />
     <top-up-loan ref="top-up-loan-modal" />
+    <ApproveLoanMoal ref="approve-loan-cus" />
   </div>
 </template>
 <script>
@@ -97,6 +108,7 @@
   import MakePayment from '@/components/MakePayment'
   import Liquidate from '@/components/Liquidate'
   import TopUpLoan from '@/components/TopUpLoan'
+  import ApproveLoanMoal from '@/components/ApproveLoanModal'
   import { mapGetters, mapActions } from 'vuex'
   import mixin from "@/mixins"
   import axios from '@/axios'
@@ -132,7 +144,8 @@
       AddLoan,
       MakePayment,
       TopUpLoan,
-      Liquidate
+      Liquidate,
+      ApproveLoanMoal
     },
     watch: {
       customer: function(newVal, oldVal) {
@@ -180,6 +193,9 @@
           this.$refs['top-up-loan-modal'].showModal(res.data.response)
         })
         .catch(err => this.error(err.response.data.message))
+      },
+      approveModal(item) {
+        this.$refs['approve-loan-cus'].showModal(item)
       }
     }
   }

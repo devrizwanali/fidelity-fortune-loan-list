@@ -50,7 +50,7 @@
       <template #cell(status)="data">
         <span 
           :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
-          class= "px-3 status"
+          class= "px-3 status cursor-pointer"
           v-if="data.value != 'INACTIVE'"
         >
           {{data.value}}
