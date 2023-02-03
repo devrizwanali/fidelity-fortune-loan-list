@@ -55,7 +55,7 @@
             src="@/assets/naira-sign.png" 
             width="25"
             height="25"
-            @click="topUpLoanModal"
+            @click="topUpLoanModal(data.item)"
             v-if="data.item.approved && !(data.item.status == 'SETTLED' || data.item.status == 'LIQUIDATED')">
           <span 
             :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
@@ -151,7 +151,7 @@
       ...mapGetters(['customerLoans']),
     },
     methods: {
-      ...mapActions(['fetchCustomerLoans']),
+      ...mapActions(['fetchCustomerLoans', 'computeTopUpLoan']),
       showModal() {
         this.$refs['customerLoanListModal'].show()
       },
@@ -172,11 +172,14 @@
         }).then(res => {
           window.open(res.response)
         }).catch(error => {
-          this.error(error.message)
+          this.error(error.response.data.message)
         })
       },
-      topUpLoanModal() {
-        this.$refs['top-up-loan-modal'].showModal()
+      topUpLoanModal(loan) {
+        this.computeTopUpLoan(loan.id).then(res => {
+          this.$refs['top-up-loan-modal'].showModal(res.data.response)
+        })
+        .catch(err => this.error(err.response.data.message))
       }
     }
   }

@@ -73,7 +73,7 @@
         this.payLoan(this.form).then(res => {
           this.success(res.data.message)
           this.$refs['payLoan'].hide()
-        }).catch(error => this.error(error.message))
+        }).catch(error => this.error(error.response.data.message))
       }
     }
   }

@@ -146,7 +146,9 @@
           this.loan = res.data.response
           this.$refs['addLoanModal'].hide()
           this.$refs['add-loan-two'].showModal()
-        }).catch(error => this.error(error.message))
+        }).catch(error => {
+          this.error(error.response.data.message)
+        })
       },
     }
   }

@@ -105,6 +105,26 @@ const actions = {
     })
   },
 
+  approveLoan({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/loan/approve/${payload.loanId}`, payload.data)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(error => reject(error))
+    })
+  },
+
+  computeTopUpLoan({ commit }, loanId) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/loan/topup/compute/${loanId}`)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
+
   search({commit, state}, params) {
     commit('SET_BUSY', true)
     return new Promise((resolve, reject) => {

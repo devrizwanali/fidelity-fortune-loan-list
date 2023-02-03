@@ -51,9 +51,21 @@
         <span 
           :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
           class= "px-3 status"
+          v-if="data.value != 'INACTIVE'"
         >
           {{data.value}}
         </span>
+
+        <span
+          :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
+          class= "px-3 status cursor-pointer"
+          v-else
+          @click="approveModal(data.item)"
+        >
+          {{data.value}}
+        </span>
+
+
       </template>
 
       <template #cell(ministry)="data">
@@ -87,6 +99,8 @@
 
     <!-- customer loan list modal -->
     <customer-loan-list ref="customer-loan-modal" :customer="selectedItem" />
+    <!-- approve loan -->
+    <ApproveLoanMoal ref="approve-loan-dash" />
   </div>
 </template>
 <script>
@@ -95,6 +109,7 @@
   import Pagination from '@/components/Pagination'
   import { jsontoexcel } from "vue-table-to-excel"
   import CustomerLoanList from '@/components/CustomerLoanList'
+  import ApproveLoanMoal from '@/components/ApproveLoanModal'
   import mixin from "@/mixins"
   import moment from 'moment'
   export default {
@@ -123,7 +138,8 @@
     mixins: [mixin],
     components: {
       Pagination,
-      CustomerLoanList
+      CustomerLoanList,
+      ApproveLoanMoal
     },
     computed:  {
       ...mapGetters(['loans', 'totalElements', 'totalPages', 'isBusy']),
@@ -186,6 +202,9 @@
       openCustomerLoanModal(item) {
         this.selectedItem = {...item}
         this.$refs['customer-loan-modal'].showModal()
+      },
+      approveModal(item) {
+        this.$refs['approve-loan-dash'].showModal(item)
       }
     }
   }

@@ -42,4 +42,8 @@ export default {
 .v-toast__item--error {
   background-color: var(--red) !important;
 }
+
+#approve-loan-modal .modal-dialog {
+  max-width: 610px !important;
+}
 </style>

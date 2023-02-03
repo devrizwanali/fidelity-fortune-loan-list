@@ -55,7 +55,7 @@
           this.$refs['liquidateLoan'].hide()
           this.$refs['calculate-liquidate'].showModal()
         })
-        .catch(error => this.error(error.message))
+        .catch(error => this.error(error.response.data.message))
       },
     }
   }

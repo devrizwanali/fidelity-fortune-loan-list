@@ -3,64 +3,15 @@
    id="add-cu-loan-one"
     hide-header-close hide-footer>
     <form  @submit.prevent="onSubmit">
-      <b-row>
-        <b-col>
+      <b-row class="justify-content-center">
+        <b-col cols="6">
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Loan Number</label>
             <input type="text" v-model="form.loanNo" class="input" required>
           </div>
         </b-col>
-        <b-col>
-          <div class="position-relative mt-4">
-            <label for="name" class="name-label">Deduction</label>
-            <b-form-select required class="input" v-model="form.deduction" :options="deductionOptions"></b-form-select>
-          </div>
-        </b-col>
       </b-row>
       <b-row>
-        <b-col>
-          <div class="position-relative mt-4">
-            <label for="name" class="name-label">Duration</label>
-            <input type="number" v-model="form.duration" class="input" required>
-          </div>
-        </b-col>
-        <b-col>
-          <div class="position-relative mt-4">
-            <label for="name" class="name-label">Loan Amount</label>
-            <input type="number" v-model="form.amount" class="input" required>
-          </div>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <div class="position-relative mt-4">
-            <label for="name" class="name-label">Monthly Net Salary</label>
-            <input type="number" v-model="form.netSalary" class="input" required>
-          </div>
-        </b-col>
-        <b-col>
-          <div class="position-relative mt-4">
-            <label for="name" class="name-label">Monthly Gross Salary</label>
-            <input type="number" v-model="form.grossSalary" class="input" required>
-          </div>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <div class="position-relative mt-4">
-            <label for="name" class="name-label">Interest</label>
-            <input type="number" v-model="form.interest" class="input" required>
-          </div>
-        </b-col>
-        <b-col>
-          <div class="position-relative mt-4">
-            <label for="name" class="name-label">Start Date</label>
-            <input type="date" v-model="form.startDate" class="input" required>
-          </div>
-        </b-col>
-      </b-row>
-
-       <b-row>
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Branch Manager</label>
@@ -75,9 +26,68 @@
         </b-col>
       </b-row>
 
+      <b-row>
+        <b-col>
+          <div class="position-relative auto-filled mt-4">
+            <label for="name" class="name-label">Capital Balance</label>
+            <input type="number" v-model="form.interest" disabled class="input" required>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="position-relative auto-filled mt-4">
+            <label for="name" class="name-label">Interest Owed</label>
+            <input type="number" v-model.number="form.interestOwed" disabled class="input" required>
+          </div>
+        </b-col>
+      </b-row>
+
+      <div class="position-relative auto-filled mt-4">
+        <label for="name" class="name-label">Total Capital Balance</label>
+        <input type="number" v-model="form.interest" disabled class="input full-input" required>
+      </div>
+
+      <div class="position-relative mt-4">
+        <label for="name" class="name-label">Enter Top Up Amount</label>
+        <input type="number" v-model.number="form.topUpAmount" class="input full-input" required>
+      </div>
+
+      <div class="position-relative auto-filled mt-4">
+        <label for="name" class="name-label">New Loan Amount</label>
+        <input type="number" v-model.number="form.amount" disabled class="input full-input" required>
+      </div>
+
+      <b-row>
+        <b-col>
+          <div class="position-relative mt-4">
+            <label for="name" class="name-label">Monthly Net Salary</label>
+            <input type="number" v-model="form.netMonthlySalary" class="input" required>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="position-relative mt-4">
+            <label for="name" class="name-label">Monthly Gross Salary</label>
+            <input type="number" v-model="form.grossMonthlySalary" class="input" required>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <div class="position-relative mt-4">
+            <label for="name" class="name-label">Loan Duration</label>
+            <input type="number" v-model.number="form.duration" class="input" required>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="position-relative mt-4">
+            <label for="name" class="name-label">Interest Rate</label>
+            <input type="number" v-model="form.interestRate" class="input" required>
+          </div>
+        </b-col>
+      </b-row>
+
       <div class="d-flex justify-content-between mt-4">
         <button class="button-cancel" @click.prevent="$refs['topUpLoanModal'].hide()">Cancel</button>
-        <button class="button-save px-3" style="width: auto">Calculate Loan</button>
+        <button class="button-save px-3" style="width: 20%">Save</button>
       </div>
     </form>
   </b-modal>
@@ -89,23 +99,25 @@
     name: 'AddLoan',
     data() {
       return {
-        deductionOptions: ['State', 'Local'],
+        loan: {},
         form: {
           loanNo: '',
           duration: '',
           managerName: '',
           deduction: '',
-          netSalary: '',
-          grossSalary: '',
-          interest: '',
-          startDate: null,
+          netMonthlySalary: '',
+          grossMonthlySalary: '',
+          interestRate: '',
           secondaryManagerName: '',
-          amount: ''
+          amount: '',
+          capitalBalance: '',
+          interestOwed: '',
+          topUpAmount: ''
         }
       }
     },
     computed: {
-      ...mapGetters(['managers']),
+      ...mapGetters(['managers', 'computedTopUpLoan']),
       managersList() {
         return this.managers.map(x => x.managerName)
       }
@@ -116,14 +128,16 @@
       }
     },
     methods: {
-      ...mapActions(['addBranch', 'fetchManagers']),
-      showModal() {
+      ...mapActions(['fetchManagers']),
+      showModal(loan) {
+        this.loan = loan;
+        this.form.capitalBalance = loan.capitalBalance
+        this.form.interestOwed = loan.interestOwed
+        this.form.amount = loan.amount
+        console.log(loan)
         this.$refs['topUpLoanModal'].show()
       },
       onSubmit() {
-        this.addBranch(this.form).then(res => {
-          this.$refs['addBranchModal'].hide()
-        })
       },
     }
   }

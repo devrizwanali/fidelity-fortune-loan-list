@@ -16,17 +16,17 @@
         <b-form-select required class="input" disabled v-model="liquidType" :options="liquidTypes"></b-form-select>
       </div>
 
-      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
+      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Interest Charged</label>
         <input type="text" readonly v-model="calculatedLiquiLoan.interestRate" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
+      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Capital Balance</label>
         <input type="text" readonly v-model="calculatedLiquiLoan.capitalBalance" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
+      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Liquidation Amount</label>
         <input type="text" v-model="calculatedLiquiLoan.liquidatedBalance" class="blue-color border-0 text-right loan-input-inline">
       </div>
@@ -90,7 +90,7 @@
           this.success(res.data.message)
           this.$refs['calculateLiquidateLoan'].hide()
         })
-        .catch(error => this.error(this.error.message))
+        .catch(error => this.error(error.response.data.message))
       }
     }
   }

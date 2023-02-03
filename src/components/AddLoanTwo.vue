@@ -14,7 +14,7 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Deduction</label>
-            <b-form-select required class="input" v-model="loan.deduction" :options="deductionOptions"></b-form-select>
+            <b-form-select required class="input" v-model="loan.loanType" :options="deductionOptions"></b-form-select>
           </div>
         </b-col>
       </b-row>
@@ -76,23 +76,23 @@
         </b-col>
       </b-row>
 
-      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
-        <label class="bllue-color">Processing Fee</label>
+      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
+        <label class="blue-color">Processing Fee</label>
         <input type="text" v-model="loan.processingFee" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
-        <label class="bllue-color">Cheque Amount</label>
+      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
+        <label class="blue-color">Cheque Amount</label>
         <input type="text"  v-model="loan.chequeAmount" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
-        <label class="bllue-color">Monthly Repayment Amount</label>
+      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
+        <label class="blue-color">Monthly Repayment Amount</label>
         <input type="text" v-model="loan.monthlyRepaymentAmount" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between" style="border-bottom: 2px solid var(--blue-color);">
-        <label class="bllue-color">Total Repayment Amount</label>
+      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
+        <label class="blue-color">Total Repayment Amount</label>
         <input type="text" v-model="loan.totalRepaymentAmount" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
@@ -134,12 +134,16 @@
       }
     },
     methods: {
-      ...mapActions(['addBranch', 'fetchManagers']),
+      ...mapActions(['fetchManagers', 'approveLoan']),
       showModal() {
         this.$refs['addLoanModalTow'].show()
       },
       onSubmit() {
-        this.$refs['addLoanModalTow'].hide()
+        let payload = {data: {"loanNumber": null, "loanStartDate": null}, loanId: this.loan.id }
+        this.approveLoan(payload).then(res => {
+          this.$refs['addLoanModalTow'].hide()
+          this.success('Successfully Created')
+        }).catch(error => this.error('Something went wrong. Please contact the admin'))
       },
     }
   }

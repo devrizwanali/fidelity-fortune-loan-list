@@ -52,9 +52,10 @@
       submitHandler() {
         this.clicked = true
         this.login(this.user).then(res => {
+          this.success(res.data.message)
           this.$router.push('/dashboard')
         }).catch(error => {
-          this.error(error.message)
+          this.error(error.response.data.message)
           this.clicked = false
         })
       }
