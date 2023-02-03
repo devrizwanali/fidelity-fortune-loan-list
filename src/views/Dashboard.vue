@@ -9,6 +9,14 @@
           <img src="@/assets/plus.png">
           Add Customer
         </b-button>
+
+        <b-button class="bulk-pay px-3" 
+          @click="blukUpload"
+         >
+          <img src="@/assets/bulk.svg">
+          Bulk upload
+        </b-button>
+
         <b-button class="export px-3"
           @click="exportExcel"
         >
@@ -101,6 +109,8 @@
     <customer-loan-list ref="customer-loan-modal" :customer="selectedItem" />
     <!-- approve loan -->
     <ApproveLoanMoal ref="approve-loan-dash" />
+    <!-- bulk upload -->
+    <bulk-upload ref="bulk-upload" />
   </div>
 </template>
 <script>
@@ -110,6 +120,7 @@
   import { jsontoexcel } from "vue-table-to-excel"
   import CustomerLoanList from '@/components/CustomerLoanList'
   import ApproveLoanMoal from '@/components/ApproveLoanModal'
+  import BulkUpload from '@/components/BulkUpload'
   import mixin from "@/mixins"
   import moment from 'moment'
   export default {
@@ -139,7 +150,8 @@
     components: {
       Pagination,
       CustomerLoanList,
-      ApproveLoanMoal
+      ApproveLoanMoal,
+      BulkUpload
     },
     computed:  {
       ...mapGetters(['loans', 'totalElements', 'totalPages', 'isBusy']),
@@ -205,6 +217,9 @@
       },
       approveModal(item) {
         this.$refs['approve-loan-dash'].showModal(item)
+      },
+      blukUpload() {
+        this.$refs['bulk-upload'].showModal()
       }
     }
   }

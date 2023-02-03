@@ -1,0 +1,95 @@
+<template>
+  <b-modal ref="bulkUpload" title="Bulk Upload" hide-header-close hide-footer>
+    <form  @submit.prevent="onSubmit">
+      <div class="position-relative mt-4">
+        <label for="name" class="name-label">Select Branch</label>
+         <b-form-select required class="input" v-model="form.branchName" :options="branchList"></b-form-select>
+      </div>
+
+      <div class="position-relative mt-4">
+        <label for="name" class="name-label">Paid Date</label>
+        <input type="date" v-model="form.payDate" class="input" required>
+      </div>
+
+      <div class="position-relative mt-4">
+        <label for="name" class="name-label">Deduction</label>
+        <b-form-select required class="input" v-model="form.loanType" :options="deductionOptions"></b-form-select>
+      </div>
+
+      <div class="mt-4" @click="addFile">
+        <img src="@/assets/bulk-upload.png">
+        <p class="my-2">Add File</p>
+      </div>
+
+      <input type="file" class="d-none" @change="fileUploaded" ref="file-input" accept=".xlsx">
+      <p v-if="form.fileName">{{form.fileName.name}}</p>
+      <div class="d-flex justify-content-around mt-4">
+        <button class="button-cancel" @click.prevent="$refs['bulkUpload'].hide()">Cancel</button>
+        <button class="button-save">Submit</button>
+      </div>
+    </form>
+  </b-modal>
+
+</template>
+<script>
+  import { mapGetters, mapActions } from 'vuex'
+  import axios from '@/axios'
+  export default {
+    name: 'BulkUpload',
+    data() {
+      return {
+        deductionOptions: [
+          {text: 'state', value: 'STATE'}, 
+          {text: 'Local', value: 'LOCAL'}
+        ],
+        form: {
+          branchName: '',
+          loanType: '',
+          fileName: '',
+          fileType: "LOAN_REPAYMENT",
+          payDate: '',
+        }
+      }
+    },
+    computed: {
+      ...mapGetters(['branchCodes']),
+      branchList() {
+        let branches = []
+        this.branchCodes.map(x => {
+          let obj = {text: x.name, value: x.id}
+          branches.push(obj)
+        })
+        return branches
+      }
+    },
+    mounted() {
+      if(this.branchCodes.length == 0) {
+        this.fetchBrachCodes()
+      }
+    },
+    methods: {
+      ...mapActions(['fetchBrachCodes']),
+      onSubmit() {
+        if(!this.form.fileName){
+          this.error('Please upload file.')
+          return
+        } else {
+          axios.post(`/file/upload`, this.form)
+          .then(res => {
+            debugger
+          })
+          .catch(error => this.error(error.response.data.message))
+        }
+      },
+      addFile() {
+        this.$refs['file-input'].click()
+      },
+      showModal() {
+        this.$refs['bulkUpload'].show()
+      },
+      fileUploaded() {
+        this.form.fileName = this.$refs['file-input'].files[0]
+      }
+    }
+  }
+</script>

@@ -6,11 +6,11 @@ const state = {
 }
 
 const mutations = {
-  'SET_BRANCH'(state, branchCodes) {
+  SET_BRANCH(state, branchCodes) {
     state.branchCodes = branchCodes
   },
 
-  'SET_BUSY'(state, isBusy) {
+  SET_BUSY(state, isBusy) {
     state.bBusy = isBusy
   }
 }
