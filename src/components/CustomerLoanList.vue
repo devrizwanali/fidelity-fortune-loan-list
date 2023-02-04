@@ -5,10 +5,12 @@
       hide-footer
       hide-header-close
       id="customerLoanList"
-      >
+      > 
       <div class="action-btns justify-content-around my-4">
         <b-button class="add-customer pl-3 pr-5"
-          @click="addLoanModal">
+          @click="addLoanModal"
+          :disabled="!canAddLoan"
+          >
           <img src="@/assets/plus.png"
           > Add Loan
         </b-button>
@@ -49,6 +51,10 @@
           </span>
         </template>
 
+        <template #cell(interestRate)="data">
+          <span>{{data.value}}%</span>
+        </template>
+
         <template #cell(status)="data">
           <img
             class="cursor-pointer"
@@ -79,8 +85,20 @@
           {{ data.item.customerName }}
         </template>
 
+        <template #cell(monthlyRepaymentAmount)="data">
+          {{ data.value | formatNumber }}
+        </template>
+
+        <template #cell(outstanding)="data">
+          {{ data.value | formatNumber }}
+        </template>
+
+        <template #cell(totalRepaymentAmount)="data">
+          {{ data.value | formatNumber }}
+        </template>
+
         <template #cell(loanAmount)="data">
-          {{ data.item.totalRepaymentAmount }}
+          {{ data.item.totalRepaymentAmount | formatNumber }}
         </template>
 
         <template #cell(CDate)="data">
@@ -95,7 +113,16 @@
           <span @click="generateReport(data.item.id)" class="cursor-pointer">{{data.item.loanNo}}</span>
         </template>
       </b-table>
+      <pagination
+        :current-page="currentPage"
+        :per-page="perPage"
+        :total-pages="customerLoans.length"
+        :totalElements="customerLoans.length"
+        @onPageChange="pageChangeHandler"
+        @onPerPageChange="perpageChangeHandler"
+      />
     </b-modal>
+
     <add-loan ref="add-loan-modal" :customer="customer" />
     <make-payment ref="pay-loan-modal" />
     <liquidate ref="liquidate-modal" />
@@ -109,6 +136,7 @@
   import Liquidate from '@/components/Liquidate'
   import TopUpLoan from '@/components/TopUpLoan'
   import ApproveLoanMoal from '@/components/ApproveLoanModal'
+  import Pagination from '@/components/Pagination'
   import { mapGetters, mapActions } from 'vuex'
   import mixin from "@/mixins"
   import axios from '@/axios'
@@ -117,18 +145,18 @@
     data() {
       return {
         isBusy: true,
+        currentPage: 1,
+        perPage: 10,
         headers: [
           {label: 'Office', key: 'managerName'},
-          {label: 'Como. No', key: 'computerNo'},
-          {label: 'Name', key: 'customerName'},
           {label: 'Loan No.', key: 'loanNo'},
-          {label: 'Ministry', key: 'ministry'},
           {label: 'Duration', key: 'duration'},
+          {label: 'S. Date', key: 'SDate'},
           {label: 'AMT. Disb', key: 'totalRepaymentAmount'},
           {label: 'Loan Amt', key: 'loanAmount'},
           {label: 'Monthly', key: 'monthlyRepaymentAmount'},
-          {label: 'S. Date', key: 'SDate'},
-          {label: 'C. Date', key: 'CDate'},
+          {label: 'Interest', key: 'interestRate'},
+          {label: 'Outstanding', key: 'outstanding'},
           {label: 'Status', key: 'status'},
         ]
       }
@@ -145,7 +173,8 @@
       MakePayment,
       TopUpLoan,
       Liquidate,
-      ApproveLoanMoal
+      ApproveLoanMoal,
+      Pagination
     },
     watch: {
       customer: function(newVal, oldVal) {
@@ -162,6 +191,12 @@
     },
     computed:  {
       ...mapGetters(['customerLoans']),
+      canAddLoan() {
+        if(this.customerLoans[0])
+          return (this.customerLoans[0].status == 'LIQUIDATED' || this.customerLoans[0].status == 'SETTLED')
+        else
+          false
+      },
     },
     methods: {
       ...mapActions(['fetchCustomerLoans', 'computeTopUpLoan']),
@@ -197,6 +232,13 @@
       },
       approveModal(item) {
         this.$refs['approve-loan-cus'].showModal(item)
+      },
+      pageChangeHandler(page) {
+        this.currentPage = page
+      },
+      perpageChangeHandler(perPage) {
+        this.perPage = perPage
+        this.currentPage = 1
       }
     }
   }

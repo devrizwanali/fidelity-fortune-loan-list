@@ -2,8 +2,8 @@
   <div class="login-wrapper">
     <div class="login">
       <div class="login-content text-white text-center">
-        <h4 class="heading">Please enter your details.</h4>
         <h1 class="welcome my-4">Welcome</h1>
+        <h4 class="heading">Please enter your details.</h4>
         <form v-on:submit.prevent="submitHandler">
           <b-form-group id="email">
             <b-form-input

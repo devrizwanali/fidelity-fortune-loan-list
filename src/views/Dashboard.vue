@@ -9,21 +9,15 @@
           <img src="@/assets/plus.png">
           Add Customer
         </b-button>
-
-        <b-button class="bulk-pay px-3" 
-          @click="blukUpload"
-         >
-          <img src="@/assets/bulk.svg">
-          Bulk upload
-        </b-button>
-
         <b-button class="export px-3"
           @click="exportExcel"
         >
           <img src="@/assets/export.png">
           Export Page
         </b-button>
-        <b-button class="bulk-pay px-3">
+        <b-button class="bulk-pay px-3"
+          @click="blukUpload"
+        >
           <img src="@/assets/bulk.svg">
           Bulk Repayment
         </b-button>
@@ -81,7 +75,15 @@
       </template>
 
       <template #cell(loanAmount)="data">
-        {{ data.item.totalRepaymentAmount }}
+        {{ data.item.amount | formatNumber }}
+      </template>
+
+      <template #cell(totalRepaymentAmount)="data">
+        {{ data.value | formatNumber}}
+      </template>
+
+       <template #cell(monthlyRepaymentAmount)="data">
+        {{ data.item.monthlyRepaymentAmount | formatNumber}}
       </template>
 
       <template #cell(CDate)="data">

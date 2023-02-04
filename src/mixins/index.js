@@ -19,8 +19,11 @@ export default {
     },
   },
   filters: {
-    formatDate (date) {
+    formatDate(date) {
       return moment(date).format("MM/DD/YYYY") 
+    },
+    formatNumber(number) {
+      return number.toLocaleString("en-US");
     }
   },
 }
