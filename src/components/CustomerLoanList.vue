@@ -32,7 +32,7 @@
         show-empty
         :busy.sync="isBusy"
         small
-        ref="loans_table"
+        ref="customer_loan_list"
         responsive
         class="mb-5"
         >
@@ -148,7 +148,7 @@
         currentPage: 1,
         perPage: 10,
         headers: [
-          {label: 'Office', key: 'managerName'},
+          {label: 'Manager', key: 'managerName'},
           {label: 'Loan No.', key: 'loanNo'},
           {label: 'Duration', key: 'duration'},
           {label: 'S. Date', key: 'SDate'},

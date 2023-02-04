@@ -83,6 +83,19 @@
   background: none !important;
 }
 
+.auto-filled-inline {
+  border-bottom: 2px solid #808080 !important;
+}
+
+.auto-filled-inline label, .auto-filled-inline input {
+  color: #808080 !important;
+  background: transparent !important;
+}
+
+.auto-filled select {
+  border: 2px solid #808080 !important;
+}
+
 .border-bottom-blue {
   border-bottom: 2px solid var(--blue-color) !important;
 }

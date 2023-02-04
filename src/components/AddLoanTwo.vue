@@ -6,94 +6,94 @@
     <form  @submit.prevent="onSubmit" v-if="loan">
       <b-row>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Loan Number</label>
-            <input type="text" v-model="loan.loanNo" class="input" required>
+            <input disabled type="text" v-model="loan.loanNo" class="input" required>
           </div>
         </b-col>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Deduction</label>
-            <b-form-select required class="input" v-model="loan.loanType" :options="deductionOptions"></b-form-select>
+            <b-form-select disabled required class="input" v-model="loan.loanType" :options="deductionOptions"></b-form-select>
           </div>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Duration</label>
-            <input type="number" step="any" v-model="loan.duration" class="input" required>
+            <input disabled type="number" step="any" v-model="loan.duration" class="input" required>
           </div>
         </b-col>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Loan Amount</label>
-            <input type="number" step="any" v-model="loan.amount" class="input" required>
+            <input type="number" disabled step="any" v-model="loan.amount" class="input" required>
           </div>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Monthly Net Salary</label>
-            <input type="number" step="any" v-model="loan.netMonthlySalary" class="input" required>
+            <input type="number" disabled step="any" v-model="loan.netMonthlySalary" class="input" required>
           </div>
         </b-col>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Monthly Gross Salary</label>
-            <input type="number" step="any" v-model="loan.grossMonthlySalary" class="input" required>
+            <input type="number" disabled step="any" v-model="loan.grossMonthlySalary" class="input" required>
           </div>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Interest</label>
-            <input type="number" step="any" v-model="loan.interestRate" class="input" required>
+            <input type="number" disabled step="any" v-model="loan.interestRate" class="input" required>
           </div>
         </b-col>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Start Date</label>
-            <input type="date" v-model="loan.paymentStartDate" class="input" required>
+            <input type="date" disabled v-model="loan.paymentStartDate" class="input" required>
           </div>
         </b-col>
       </b-row>
 
        <b-row>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Branch Manager</label>
-             <b-form-select required class="input" v-model="loan.managerName" :options="managersList"></b-form-select>
+             <b-form-select required disabled class="input" v-model="loan.managerName" :options="managersList"></b-form-select>
           </div>
         </b-col>
         <b-col>
-          <div class="position-relative mt-4">
+          <div class="auto-filled position-relative mt-4">
             <label for="name" class="name-label">Secondary Branch Manager</label>
-            <b-form-select required class="input" v-model="loan.secondaryManagerName" :options="managersList"></b-form-select>
+            <b-form-select required disabled class="input" v-model="loan.secondaryManagerName" :options="managersList"></b-form-select>
           </div>
         </b-col>
       </b-row>
 
-      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
-        <label class="blue-color">Processing Fee</label>
-        <input type="text" v-model="loan.processingFee" class="blue-color border-0 text-right loan-input-inline">
+      <div class="mt-2 d-flex justify-content-between auto-filled-inline">
+        <label>Processing Fee</label>
+        <input type="text" disabled v-model="loan.processingFee" class="border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
-        <label class="blue-color">Cheque Amount</label>
-        <input type="text"  v-model="loan.chequeAmount" class="blue-color border-0 text-right loan-input-inline">
+      <div class="mt-2 d-flex justify-content-between auto-filled-inline">
+        <label>Cheque Amount</label>
+        <input type="text" disabled v-model="loan.chequeAmount" class="border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
-        <label class="blue-color">Monthly Repayment Amount</label>
-        <input type="text" v-model="loan.monthlyRepaymentAmount" class="blue-color border-0 text-right loan-input-inline">
+      <div class="mt-2 d-flex justify-content-between auto-filled-inline">
+        <label>Monthly Repayment Amount</label>
+        <input type="text" disabled v-model="loan.monthlyRepaymentAmount" class="border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
-        <label class="blue-color">Total Repayment Amount</label>
-        <input type="text" v-model="loan.totalRepaymentAmount" class="blue-color border-0 text-right loan-input-inline">
+      <div class="mt-2 d-flex justify-content-between auto-filled-inline">
+        <label>Total Repayment Amount</label>
+        <input type="text" disabled v-model="loan.totalRepaymentAmount" class="border-0 text-right loan-input-inline">
       </div>
 
       <div class="d-flex justify-content-between mt-4">
@@ -134,7 +134,7 @@
       }
     },
     methods: {
-      ...mapActions(['fetchManagers', 'approveLoan']),
+      ...mapActions(['fetchManagers', 'approveLoan', 'addCustomerLoan']),
       showModal() {
         this.$refs['addLoanModalTow'].show()
       },
@@ -143,6 +143,8 @@
         this.approveLoan(payload).then(res => {
           this.$refs['addLoanModalTow'].hide()
           this.success('Successfully Created')
+          this.addCustomerLoan(res.data.response)
+          this.$root.$emit('bv::refresh::table', 'customer_loan_list')
         }).catch(error => this.error('Something went wrong. Please contact the admin'))
       },
     }

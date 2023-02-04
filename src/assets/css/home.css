@@ -52,6 +52,10 @@ thead {
   gap: 15px;
 }
 
+.action-btns button {
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 1000px) {
   .loans__table--header {
     flex-direction: column;

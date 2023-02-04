@@ -18,7 +18,7 @@
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Interest Charged</label>
-        <input type="text" readonly v-model="loan.interestRate" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.interestCharged" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
@@ -78,9 +78,10 @@
       }
     },
     computed: {
-      ...mapGetters(['calculatedLiquiLoan', 'liquidTypes', 'loanModels']),
+      ...mapGetters(['calculatedLiquiLoan', 'liquidTypes', 'loanModels', 'customerLoans']),
     },
     methods: {
+      ...mapActions(['fetchCustomerLoans']),
       showModal(loan) {
         let copyObj = {...loan}
         this.loan = copyObj
@@ -101,6 +102,10 @@
         .then(res => {
           this.success(res.data.message)
           this.$refs['calculateLiquidateLoan'].hide()
+          let id = this.customerLoans[0].customerId
+          this.fetchCustomerLoans(id).then(res => {
+            this.$root.$emit('bv::refresh::table', 'customer_loan_list')
+          })
         })
         .catch(error => this.error(error.response.data.message))
       },

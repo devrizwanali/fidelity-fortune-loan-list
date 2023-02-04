@@ -133,8 +133,8 @@
         filter: null,
         selectedItem: {},
         headers: [
-          {label: 'Office', key: 'managerName'},
-          {label: 'Como. No', key: 'computerNo'},
+          {label: 'Manager', key: 'managerName'},
+          {label: 'Comp No', key: 'computerNo'},
           {label: 'Name', key: 'customerName'},
           {label: 'Loan No.', key: 'loanNo'},
           {label: 'Ministry', key: 'ministry'},

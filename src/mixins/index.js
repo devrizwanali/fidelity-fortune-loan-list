@@ -20,7 +20,7 @@ export default {
   },
   filters: {
     formatDate(date) {
-      return moment(date).format("MM/DD/YYYY") 
+      return moment(date).format("DD/MM/YYYY") 
     },
     formatNumber(number) {
       return number.toLocaleString("en-US");

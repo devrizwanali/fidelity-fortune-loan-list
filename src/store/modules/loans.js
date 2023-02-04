@@ -47,7 +47,7 @@ const mutations = {
 const actions = {
   async fetchLoans({ commit }, params) {
     commit('SET_BUSY', true)
-    await axios.get(`/loan/page?size=${params.size}&page=${params.page}`)
+    await axios.get(`/loan/page?size=${params.size}&page=20`)
     .then(res => {
       commit('SET_LOANS', res.data.response)
       commit('SET_BUSY', false)
@@ -70,6 +70,12 @@ const actions = {
         reject(error)
       })
     })
+  },
+
+  addCustomerLoan({ commit, state }, payload) {
+    let loans = state.customerLoans
+    loans.push(payload)
+    commit('SET_CUSTOMERS_LOAN', loans)
   },
 
   payLoan({commit}, data) {

@@ -71,7 +71,7 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Secondary Branch Manager</label>
-              <b-form-select required class="input" v-model="form.secondaryManagerName" :options="managersList"></b-form-select>
+              <b-form-select class="input" v-model="form.secondaryManagerName" :options="managersList"></b-form-select>
             </div>
           </b-col>
         </b-row>
@@ -94,7 +94,7 @@
       return {
         loan: {},
         deductionOptions: [
-          {text: 'state', value: 'STATE'}, 
+          {text: 'State', value: 'STATE'}, 
           {text: 'Local', value: 'LOCAL'}
         ],
         form: {
@@ -120,9 +120,6 @@
       customer: function(newVal, oldVal) {
         this.form.loanNo = `${newVal.branchCode}-00000-MON`
         this.form.customerId = newVal.customerId
-      },
-      customerId: {
-
       }
     },
     computed: {
