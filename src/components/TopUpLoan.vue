@@ -7,7 +7,7 @@
         <b-col cols="6">
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Loan Number</label>
-            <input type="text" v-model="form.loanNo" class="input" required>
+            <input type="text" v-model="form.loanNumber" class="input" required>
           </div>
         </b-col>
       </b-row>
@@ -43,12 +43,12 @@
 
       <div class="position-relative auto-filled mt-4">
         <label for="name" class="name-label">Total Capital Balance</label>
-        <input type="number" v-model.number="form.totalCapitalBalance" disabled class="input full-input" required>
+        <input type="number" v-model.number="totalCapitalBalance" disabled class="input full-input" required>
       </div>
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Enter Top Up Amount</label>
-        <input type="number" v-model.number="form.topUpAmount" class="input full-input" required @keyup="topupAmountChanged">
+        <input type="number" v-model.number="topUpAmount" class="input full-input" required @keyup="topupAmountChanged">
       </div>
 
       <div class="position-relative auto-filled mt-4">
@@ -100,8 +100,10 @@
     data() {
       return {
         loan: {},
+        topUpAmount: '',
+        totalCapitalBalance: '',
         form: {
-          loanNo: '',
+          loanNumber: '',
           duration: '',
           managerName: '',
           netMonthlySalary: '',
@@ -111,8 +113,9 @@
           amount: '',
           capitalBalance: '',
           interestOwed: '',
-          topUpAmount: '',
-          totalCapitalBalance: ''
+          customerId: '',
+          loanType: "STATE",
+          remainingUnpaidInterest: 0
         }
       }
     },
@@ -129,17 +132,18 @@
     },
     methods: {
       ...mapActions(['fetchManagers']),
-      showModal(loan, customer) {
+      showModal(loan, customer, customerId) {
         console.log(loan)
         this.loan = loan;
-        this.form.loanNo = `${customer.branchCode}-00000-MON`
+        this.form.loanNumber = `${customer.branchCode}-00000-MON`
         this.form.capitalBalance = loan.capitalBalance
         this.form.interestOwed = loan.interestOwed
         this.form.amount = loan.amount
         this.form.interestRate = loan.interestRate
         this.form.duration = loan.duration
         this.form.capitalBalance = loan.capitalBalance
-        this.form.totalCapitalBalance = parseFloat(loan.capitalBalance) + parseFloat(loan.interestOwed)
+        this.form.customerId = customerId
+        this.totalCapitalBalance = parseFloat(loan.capitalBalance) + parseFloat(loan.interestOwed)
         this.$refs['topUpLoanModal'].show()
       },
       onSubmit() {
@@ -150,8 +154,13 @@
         .catch(error => this.error(error.response.data.message))
       },
       topupAmountChanged() {
-        let newAmount = parseFloat(this.form.amount) + parseFloat(this.form.topUpAmount)
-        this.form.amount = newAmount
+        let topUp = this.topUpAmount == "" ? 0 : this.topUpAmount
+        if(topUp == 0) {
+          this.form.amount = this.loan.amount
+        } else {
+          let newAmount = parseFloat(this.loan.amount) + parseFloat(topUp)
+          this.form.amount = newAmount
+        }
       }
     }
   }
