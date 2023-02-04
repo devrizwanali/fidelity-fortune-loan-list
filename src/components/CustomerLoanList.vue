@@ -218,7 +218,8 @@
           "loanId": id,
           "reportType": "ACCOUNT_STATEMENT"
         }).then(res => {
-          window.open(res.response)
+          this.success(res.data.message)
+          window.open(res.data.response)
         }).catch(error => {
           this.error(error.response.data.message)
         })

@@ -111,7 +111,7 @@
     data() {
       return {
         deductionOptions: [
-          {text: 'state', value: 'STATE'}, 
+          {text: 'State', value: 'STATE'}, 
           {text: 'Local', value: 'LOCAL'}
         ],
       }
