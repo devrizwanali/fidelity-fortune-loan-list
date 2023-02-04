@@ -18,7 +18,7 @@
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Repayment Amount</label>
-        <input type="number" v-model="form.amount" required class="input">
+        <input type="number" step="any" v-model="form.amount" required class="input">
       </div>
 
       <div class="position-relative mt-4">

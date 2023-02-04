@@ -22,13 +22,13 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Duration</label>
-              <input type="number" v-model.number="form.duration" class="input" required>
+              <input type="number" step="any" v-model.number="form.duration" class="input" required>
             </div>
           </b-col>
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Loan Amount</label>
-              <input type="number" v-model.number="form.amount" class="input" required>
+              <input type="number" step="any" v-model.number="form.amount" class="input" required>
             </div>
           </b-col>
         </b-row>
@@ -36,13 +36,13 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Monthly Net Salary</label>
-              <input type="number" v-model.number="form.netMonthlySalary" class="input" required>
+              <input type="number" step="any" v-model.number="form.netMonthlySalary" class="input" required>
             </div>
           </b-col>
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Monthly Gross Salary</label>
-              <input type="number" v-model.number="form.grossMonthlySalary" class="input" required>
+              <input type="number" step="any" v-model.number="form.grossMonthlySalary" class="input" required>
             </div>
           </b-col>
         </b-row>
@@ -50,7 +50,7 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Interest</label>
-              <input type="number" v-model.number="form.interestRate" class="input" required>
+              <input type="number" step="any" v-model.number="form.interestRate" class="input" required>
             </div>
           </b-col>
           <b-col>
