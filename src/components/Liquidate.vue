@@ -52,8 +52,9 @@
         const loanId = this.loanId
         let data = {model: this.loanModal, type: this.liquidType, loanId}
         this.computeLoan(data).then(res => {
+          const loan = res.data.response
           this.$refs['liquidateLoan'].hide()
-          this.$refs['calculate-liquidate'].showModal()
+          this.$refs['calculate-liquidate'].showModal(loan)
         })
         .catch(error => this.error(error.response.data.message))
       },

@@ -71,6 +71,7 @@
       ...mapActions(['fetchBrachCodes']),
       onSubmit() {
         const formData = new FormData()
+        formData.append('data', null)
          formData.append('fileName', this.form.fileName)
          formData.append('fileType', this.form.fileType)
          formData.append('payDate', this.form.payDate)

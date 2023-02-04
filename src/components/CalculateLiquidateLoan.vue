@@ -3,7 +3,7 @@
     title="Liquidate Loan"
     id="calculate-liquidate-loan"
     hide-header-close hide-footer
-    v-if="calculatedLiquiLoan"
+    v-if="loan"
     >
     <form  @submit.prevent="onSubmit">
       <div class="position-relative mt-4">
@@ -18,33 +18,33 @@
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Interest Charged</label>
-        <input type="text" readonly v-model="calculatedLiquiLoan.interestRate" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.interestRate" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Capital Balance</label>
-        <input type="text" readonly v-model="calculatedLiquiLoan.capitalBalance" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.capitalBalance" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Liquidation Amount</label>
-        <input type="text" v-model="calculatedLiquiLoan.liquidatedBalance" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" v-model="loan.liquidatedBalance" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Interest Owed</label>
-        <input type="text" @keyup="interestOwedChanged" v-model="calculatedLiquiLoan.interestOwed" required class="input">
+        <input type="text" @keyup="interestOwedChanged" v-model="loan.interestOwed" required class="input">
       </div>
 
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Amount Paid</label>
-        <input type="text" v-model="calculatedLiquiLoan.actualAmountPaid"  required class="input">
+        <input type="text" v-model="loan.actualAmountPaid"  required class="input">
       </div>
 
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Date Paid</label>
-        <input type="date" v-model="calculatedLiquiLoan.paidDate" required class="input">
+        <input type="date" v-model="loan.paidDate" required class="input">
       </div>
 
        <div class="d-flex justify-content-between mt-4">
@@ -59,6 +59,11 @@
   import axios from '@/axios'
   export default {
     name: 'CalculateLiquidateLoan',
+    data() {
+      return {
+        loan: {}
+      }
+    },
     props: {
       loanModal: {
         type: String,
@@ -76,22 +81,29 @@
       ...mapGetters(['calculatedLiquiLoan', 'liquidTypes', 'loanModels']),
     },
     methods: {
-      showModal() {
+      showModal(loan) {
+        let copyObj = {...loan}
+        this.loan = copyObj
         this.$refs['calculateLiquidateLoan'].show()
       },
       interestOwedChanged() {
-        let liquidBalance = parseFloat(this.calculatedLiquiLoan.liquidatedBalance)
-        let interestOwed = parseFloat(this.calculatedLiquiLoan.interestOwed)
-        this.calculatedLiquiLoan.liquidatedBalance = liquidBalance + interestOwed
+        let interestOwed = this.loan.interestOwed
+        let val = (interestOwed == "" || isNaN(interestOwed)) ? 0 : interestOwed
+        if(val == 0) {
+          this.loan.liquidatedBalance = this.calculatedLiquiLoan.liquidatedBalance
+        } else {
+          let newAmount = parseFloat(this.calculatedLiquiLoan.liquidatedBalance) + parseFloat(val)
+          this.loan.liquidatedBalance = newAmount
+        }
       },
       onSubmit() {
-        axios.post(`/loan/liquidate/${this.loanId}`, this.calculatedLiquiLoan)
+        axios.post(`/loan/liquidate/${this.loanId}`, this.loan)
         .then(res => {
           this.success(res.data.message)
           this.$refs['calculateLiquidateLoan'].hide()
         })
         .catch(error => this.error(error.response.data.message))
-      }
+      },
     }
   }
 </script>
