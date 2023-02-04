@@ -16,7 +16,7 @@
         <b-form-select required class="input" v-model="form.loanType" :options="deductionOptions"></b-form-select>
       </div>
 
-      <div class="mt-4" @click="addFile">
+      <div class="mt-4 cursor-pointer" @click="addFile">
         <img src="@/assets/bulk-upload.png">
         <p class="my-2">Add File</p>
       </div>
@@ -72,17 +72,16 @@
       onSubmit() {
         const formData = new FormData()
         formData.append('data', null)
-         formData.append('fileName', this.form.fileName)
+         formData.append('fileName', this.form.fileName.name)
          formData.append('fileType', this.form.fileType)
          formData.append('payDate', this.form.payDate)
          formData.append('branchCode', this.form.branchCode)
+         formData.append('', this.form.fileName)
 
         if(!this.form.fileName){
           this.error('Please upload file.')
           return
         } else {
-
-          axios.defaults.headers['Content-Type'] = 'multipart/form-data'
           axios.post(`/file/upload`, formData)
           .then(res => {
             debugger

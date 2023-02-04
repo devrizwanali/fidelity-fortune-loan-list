@@ -139,7 +139,7 @@
         this.$refs['addLoanModal'].show()
       },
       onSubmit() {
-        this.addLoan(this.form).then(res => {
+        axios.post(`/loan/compute`, this.form).then(res => {
           this.loan = res.data.response
           this.$refs['addLoanModal'].hide()
           this.$refs['add-loan-two'].showModal()

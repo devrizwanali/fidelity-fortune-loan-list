@@ -134,18 +134,21 @@
       }
     },
     methods: {
-      ...mapActions(['fetchManagers', 'approveLoan', 'addCustomerLoan']),
+      ...mapActions(['fetchManagers', 'approveLoan', 'addCustomerLoan', 'addLoan']),
       showModal() {
         this.$refs['addLoanModalTow'].show()
       },
       onSubmit() {
-        let payload = {data: {"loanNumber": null, "loanStartDate": null}, loanId: this.loan.id }
-        this.approveLoan(payload).then(res => {
+        this.addLoan(this.loan).then(res =>  {
+          let payload = {data: {"loanNumber": null, "loanStartDate": null}, loanId: res.data.response.id }
+          this.approveLoan(payload).then(res => {
           this.$refs['addLoanModalTow'].hide()
           this.success('Successfully Created')
           this.addCustomerLoan(res.data.response)
           this.$root.$emit('bv::refresh::table', 'customer_loan_list')
-        }).catch(error => this.error('Something went wrong. Please contact the admin'))
+        }).catch(e => this.error(e.response.data.message))
+        })
+        .catch(error => this.error('Something went wrong. Please contact the admin'))
       },
     }
   }
