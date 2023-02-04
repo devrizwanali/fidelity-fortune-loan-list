@@ -134,7 +134,6 @@
     methods: {
       ...mapActions(['fetchManagers']),
       showModal(loan, customer, customerId) {
-        console.log(loan)
         this.loan = loan;
         this.form.loanNumber = `${customer.branchCode}-00000-MON`
         this.form.capitalBalance = loan.capitalBalance
