@@ -84,7 +84,8 @@
         } else {
           axios.post(`/file/upload`, formData)
           .then(res => {
-            debugger
+            this.success(res.data.message)
+            this.$refs['bulkUpload'].hide()
           })
           .catch(error => this.error(error.response.data.message))
         }
