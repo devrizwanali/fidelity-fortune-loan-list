@@ -114,6 +114,7 @@
           capitalBalance: '',
           interestOwed: '',
           customerId: '',
+          id: '',
           loanType: "STATE",
           remainingUnpaidInterest: 0
         }
@@ -143,13 +144,15 @@
         this.form.duration = loan.duration
         this.form.capitalBalance = loan.capitalBalance
         this.form.customerId = customerId
+        this.form.id = loan.id
         this.totalCapitalBalance = parseFloat(loan.capitalBalance) + parseFloat(loan.interestOwed)
         this.$refs['topUpLoanModal'].show()
       },
       onSubmit() {
         axios.post(`/loan/topup`, this.form)
         .then(res => {
-          debugger
+          this.success(res.data.message)
+          this.$refs['topUpLoanModal'].hide()
         })
         .catch(error => this.error(error.response.data.message))
       },
