@@ -39,7 +39,7 @@
         </div>
       </div>
       <div>
-        <img @click="showModal" src="@/assets/add.png" class="mr-5 cursor-pointer" v-if="addBranchOrManager">
+        <img @click="showModal" src="@/assets/add.svg" class="mr-5 cursor-pointer" v-if="addBranchOrManager">
         <img src="@/assets/dots.svg" class="cursor-pointer">
       </div>
     </div>
