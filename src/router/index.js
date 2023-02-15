@@ -9,6 +9,7 @@ import ApplicationParameters from '@/views/settings/ApplicationParameters'
 import BranchCodes from '@/views/settings/BranchCodes'
 import Managers from '@/views/settings/Managers'
 import PageNotFound from '@/views/PageNotFound'
+import Reports from '@/views/Reports'
 
 
 Vue.use(VueRouter)
@@ -50,6 +51,11 @@ const routes = [
             component: Managers
           }
         ]
+      },
+      {
+        path: '/reports',
+        name: 'Reports',
+        component: Reports
       }
     ]
    },

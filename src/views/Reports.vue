@@ -1,0 +1,161 @@
+<template>
+  <div class="main pb-5">
+    <div class="d-flex justify-content-between mx-2">
+      <h1>Reports</h1>
+      <img src="@/assets/dots.svg" class="cursor-pointer">
+    </div>
+    <div class="container">
+      <b-row class="d-flex justify-content-center">
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('LEDGER')"
+          >
+          <img src="@/assets/library_books.svg">
+          <p>LEDGER</p>
+        </div>
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('SHORT-PAID LIST')"
+          >
+          <img src="@/assets/subtitles.svg">
+          <p>SHORT-PAID LIST</p>
+        </div>
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('DEFAULTERS LIST')"
+          >
+          <img src="@/assets/close.svg">
+          <p>DEFAULTERS LIST</p>
+        </div>
+      </b-row>
+      <b-row class="d-flex justify-content-center">
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('EXPIRY')"
+          >
+          <img src="@/assets/done_all.svg">
+          <p>EXPIRY</p>
+        </div>
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('OVER-PAID LIST')"
+          >
+          <img src="@/assets/assignment.png">
+          <p>OVER-PAID LIST</p>
+        </div>
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('PAID-UP LIST')"
+          >
+          <img src="@/assets/done_all.svg">
+          <p>PAID-UP LIST</p>
+        </div>
+      </b-row>
+      <b-row class="d-flex justify-content-center">
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('Payoff Statement')"
+          >
+          <img src="@/assets/library_books.svg">
+          <p>Payoff Statement</p>
+        </div>
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('Performance Reports')"
+          >
+          <img src="@/assets/subtitles.svg">
+          <p>Performance Reports</p>
+        </div>
+        <div class="box mx-5 my-3" 
+          @click="reportHandler('Customer List')"
+         >
+          <img src="@/assets/library_books.svg">
+          <p>Customer List</p>
+        </div>
+      </b-row>
+    </div>
+
+    <b-modal ref="reportsItem" :title="title" hide-header-close hide-footer>
+      <form  @submit.prevent="onSubmit">
+        <div class="position-relative mt-5">
+          <label for="name" class="name-label">Select Branch</label>
+           <b-form-select required class="input" v-model="form.branchCode" :options="branchList"></b-form-select>
+        </div>
+
+        <div class="position-relative mt-5">
+          <label for="name" class="name-label">Select Date</label>
+          <input type="date" v-model="form.date" class="input" required>
+        </div>
+
+        <div class="mt-4 cursor-pointer">
+          <p style="color: #808080">PDF/Excel</p>
+          <div class="d-flex justify-content-center">
+            <b-form-radio v-model="selected" name="some-radios"></b-form-radio>
+            <b-form-radio v-model="selected" name="some-radios"></b-form-radio>
+          </div>
+         </div>
+
+        <div class="d-flex justify-content-around mt-4">
+          <button class="button-cancel" @click.prevent="$refs['reportsItem'].hide()">Cancel</button>
+          <button class="button-save">Generate</button>
+        </div>
+      </form>
+    </b-modal>
+  </div>
+</template>
+<script>
+  import { mapGetters, mapActions } from 'vuex'
+  export default {
+    data() {
+      return {
+        title: '',
+        selected: '',
+        form: {
+          date: '',
+          branchCode: ''
+        }
+      }
+    },
+    methods: {
+      ...mapActions(['fetchBrachCodes']),
+      reportHandler(name) {
+        this.title = name
+        this.$refs['reportsItem'].show()
+      }
+    },
+    computed: {
+      ...mapGetters(['branchCodes']),
+      branchList() {
+        let branches = []
+        this.branchCodes.map(x => {
+          let obj = {text: x.name, value: x.code}
+          branches.push(obj)
+        })
+        return branches
+      }
+    },
+    mounted() {
+      if(this.branchCodes.length == 0) {
+        this.fetchBrachCodes()
+      }
+    },
+  }
+</script>
+
+<style scoped>
+  @import '@/assets/css/form.css';
+
+  .box {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 208px;
+    height: 121.9px;
+    background: #F1F0F0;
+    box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+  }
+
+  .box p {
+    margin-top: 5px;
+  }
+
+  .box img {
+    margin-top: 15px;
+  }
+</style>
+

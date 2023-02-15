@@ -18,6 +18,8 @@
         </b-nav-item> -->
         <b-nav-item 
           class="link"
+          @click="$router.push({name: 'Reports'})"
+          :class="$route.path.includes('reports') ? 'active' : ''"
           >Reports
         </b-nav-item>
         <b-nav-item 
