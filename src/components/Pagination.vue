@@ -89,14 +89,4 @@
     color: #131518;
     opacity: 0.7;
   }
-
-/*  .page-item.active .page-link {
-    color: #0044AA !important;
-    opacity: 1 !important;
-  }*/
-
- /* .page-item.active {
-    background: rgba(0, 68, 170, 0.7);
-    border-radius: 7px;
-  }*/
 </style>

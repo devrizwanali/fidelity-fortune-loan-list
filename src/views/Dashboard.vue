@@ -5,7 +5,9 @@
       <img src="@/assets/search.png" class="px-3 search-icon">
       <input type="text" v-model="filter" placeholder="Search by Loan No, Comput..." v-on:keyup="searchLoans">
       <div class="action-btns">
-        <b-button class="add-customer px-3">
+        <b-button class="add-customer px-3"
+          @click="addCustomerModal"
+         >
           <img src="@/assets/plus.png">
           Add Customer
         </b-button>
@@ -113,6 +115,8 @@
     <ApproveLoanMoal ref="approve-loan-dash" />
     <!-- bulk upload -->
     <bulk-upload ref="bulk-upload" />
+    <!-- add customer -->
+    <add-cutomer ref="addCustomerModal" />
   </div>
 </template>
 <script>
@@ -123,6 +127,7 @@
   import CustomerLoanList from '@/components/CustomerLoanList'
   import ApproveLoanMoal from '@/components/ApproveLoanModal'
   import BulkUpload from '@/components/BulkUpload'
+  import AddCutomer from '@/components/AddCustomer'
   import mixin from "@/mixins"
   import moment from 'moment'
   export default {
@@ -153,7 +158,8 @@
       Pagination,
       CustomerLoanList,
       ApproveLoanMoal,
-      BulkUpload
+      BulkUpload,
+      AddCutomer
     },
     computed:  {
       ...mapGetters(['loans', 'totalElements', 'totalPages', 'isBusy']),
@@ -223,6 +229,9 @@
       },
       blukUpload() {
         this.$refs['bulk-upload'].showModal()
+      },
+      addCustomerModal() {
+        this.$refs['addCustomerModal'].showModal()
       }
     }
   }
