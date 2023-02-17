@@ -7,19 +7,19 @@
     <div class="container">
       <b-row class="d-flex justify-content-center">
         <div class="box mx-5 my-3" 
-          @click="reportHandler('LEDGER')"
+          @click="reportHandler(0)"
           >
           <img src="@/assets/library_books.svg">
           <p>LEDGER</p>
         </div>
         <div class="box mx-5 my-3" 
-          @click="reportHandler('SHORT-PAID LIST')"
+          @click="reportHandler(1)"
           >
           <img src="@/assets/subtitles.svg">
           <p>SHORT-PAID LIST</p>
         </div>
         <div class="box mx-5 my-3" 
-          @click="reportHandler('DEFAULTERS LIST')"
+          @click="reportHandler(2)"
           >
           <img src="@/assets/close.svg">
           <p>DEFAULTERS LIST</p>
@@ -27,40 +27,34 @@
       </b-row>
       <b-row class="d-flex justify-content-center">
         <div class="box mx-5 my-3" 
-          @click="reportHandler('EXPIRY')"
+          @click="reportHandler(3)"
           >
           <img src="@/assets/done_all.svg">
           <p>EXPIRY</p>
         </div>
         <div class="box mx-5 my-3" 
-          @click="reportHandler('OVER-PAID LIST')"
+          @click="reportHandler(4)"
           >
           <img src="@/assets/assignment.png">
           <p>OVER-PAID LIST</p>
         </div>
         <div class="box mx-5 my-3" 
-          @click="reportHandler('PAID-UP LIST')"
+          @click="reportHandler(5)"
           >
           <img src="@/assets/done_all.svg">
           <p>PAID-UP LIST</p>
         </div>
       </b-row>
       <b-row class="d-flex justify-content-center">
-        <div class="box mx-5 my-3" 
-          @click="reportHandler('Payoff Statement')"
-          >
+        <div class="box mx-5 my-3">
           <img src="@/assets/library_books.svg">
           <p>Payoff Statement</p>
         </div>
-        <div class="box mx-5 my-3" 
-          @click="reportHandler('Performance Reports')"
-          >
+        <div class="box mx-5 my-3">
           <img src="@/assets/subtitles.svg">
           <p>Performance Reports</p>
         </div>
-        <div class="box mx-5 my-3" 
-          @click="reportHandler('Customer List')"
-         >
+        <div class="box mx-5 my-3">
           <img src="@/assets/library_books.svg">
           <p>Customer List</p>
         </div>
@@ -76,14 +70,14 @@
 
         <div class="position-relative mt-5">
           <label for="name" class="name-label">Select Date</label>
-          <input type="date" v-model="form.date" class="input" required>
+          <input type="date" v-model="form.startDate" class="input" required>
         </div>
 
         <div class="mt-4 cursor-pointer">
           <p style="color: #808080">PDF/Excel</p>
           <div class="d-flex justify-content-center">
-            <b-form-radio v-model="selected" name="some-radios"></b-form-radio>
-            <b-form-radio v-model="selected" name="some-radios"></b-form-radio>
+            <b-form-radio v-model="form.format" name="some-radios" value="pdf"></b-form-radio>
+            <b-form-radio v-model="form.format" name="some-radios" value="excel"></b-form-radio>
           </div>
          </div>
 
@@ -97,28 +91,55 @@
 </template>
 <script>
   import { mapGetters, mapActions } from 'vuex'
+  import axios from '@/axios'
   export default {
     data() {
       return {
+        reportTypes: [
+          {title: 'LEDGER', type: 'LEDGER'},
+          {title: 'SHORT-PAID LIST', type: 'SHORT_PAID_FOR_PERIOD'},
+          {title: 'DEFAULTERS LIST', type: 'DEFAULTERS_FOR_PERIOD'},
+          {title: 'EXPIRY', type: 'EXPIRY'},
+          {title: 'OVER-PAID LIST', type: 'OVER_PAYMENT_FOR_PERIOD'},
+          {title: 'PAID-UP LIST', type: 'PAID_UP_CUSTOMER'},
+          {title: 'Payoff Statement', type: ""},
+          {title: 'Performance Reports', type: ""},
+          {title: 'Customer List', type: ""},
+        ],
         title: '',
-        selected: '',
-        form: {
-          date: '',
-          branchCode: ''
+        form:{
+          branchCode: '',
+          customerId: null,
+          endDate: null,
+          format: 'pdf',
+          reportType: '',
+          startDate: '',
+          status: null,
+          loanId: null,
         }
       }
     },
     methods: {
       ...mapActions(['fetchBrachCodes']),
-      reportHandler(name) {
-        this.title = name
+      reportHandler(index) {
+        this.title = this.reportTypes[index].title
+        this.form.reportType = this.reportTypes[index].type
         this.$refs['reportsItem'].show()
+      },
+      onSubmit() {
+        axios.post('/report', this.form)
+        .then(res => {
+          this.success(res.data.message)
+          window.open(res.data.response)
+        }).catch(error => {
+          this.error(error.response.data.message)
+        })
       }
     },
     computed: {
       ...mapGetters(['branchCodes']),
       branchList() {
-        let branches = []
+        let branches = ['All Branches']
         this.branchCodes.map(x => {
           let obj = {text: x.name, value: x.code}
           branches.push(obj)

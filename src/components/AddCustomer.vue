@@ -170,7 +170,6 @@
         </div>
       </form>
 
-
       <form  @submit.prevent="onSubmit" v-if="step == 4">
         <b-row>
           <b-col>
@@ -270,8 +269,6 @@
           <button class="button-save">Submit</button>
         </div>
       </form>
-
-
     </b-modal>
   </div>
 </template>
