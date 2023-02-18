@@ -37,7 +37,7 @@
     />
 
     <!-- Delete modal -->
-    <b-modal ref="delete-modal-p" title="Delete" hide-header-close hide-footer>
+    <b-modal ref="delete-modal-p" title="Delete" no-close-on-backdrop hide-header-close hide-footer>
       <p class="text-center mt-5 del-p">Delete  Parameter?</p>
       <div class="d-flex justify-content-between mt-4">
         <button class="button-cancel no" @click="$refs['delete-modal-p'].hide()">No</button>
@@ -46,7 +46,7 @@
     </b-modal>
 
     <!-- Edit application parameter -->
-    <b-modal ref="edit-modal-p" title="Edit Parameter" hide-header-close hide-footer>
+    <b-modal ref="edit-modal-p" title="Edit Parameter" no-close-on-backdrop hide-header-close hide-footer>
       <form ref="application-param-form" @submit.prevent="onSubmit">
         <div class="position-relative mt-4">
           <label for="name" class="name-label">Parameter Name</label>

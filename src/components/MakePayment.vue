@@ -1,5 +1,7 @@
 <template>
-  <b-modal ref="payLoan" title="Pay Loan" hide-header-close hide-footer>
+  <b-modal ref="payLoan" no-close-on-backdrop
+    @show="resetModal"
+   title="Pay Loan" hide-header-close hide-footer>
     <form  @submit.prevent="onSubmit">
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Choose Loan</label>
@@ -68,6 +70,15 @@
       ...mapActions(['payLoan']),
       showModal() {
         this.$refs['payLoan'].show()
+      },
+      resetModal() {
+        this.form = {
+          source: '',
+          paidDate: '',
+          amount: '',
+          description: '',
+          loanId: ''
+        }
       },
       onSubmit() {
         this.payLoan(this.form).then(res => {

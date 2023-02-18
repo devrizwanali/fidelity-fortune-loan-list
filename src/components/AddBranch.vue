@@ -1,5 +1,5 @@
 <template>
-  <b-modal ref="addBranchModal" title="Add Branch" hide-header-close hide-footer>
+  <b-modal ref="addBranchModal" title="Add Branch" no-close-on-backdrop hide-header-close hide-footer>
     <form  @submit.prevent="onSubmit">
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Branch Name</label>

@@ -1,5 +1,5 @@
 <template>
-  <b-modal ref="bulkUpload" title="Bulk Upload" hide-header-close hide-footer>
+  <b-modal ref="bulkUpload" title="Bulk Upload" no-close-on-backdrop hide-header-close hide-footer>
     <form  @submit.prevent="onSubmit">
       <div class="position-relative mt-4">
         <label for="name" class="name-label">Select Branch</label>

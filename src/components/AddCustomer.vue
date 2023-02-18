@@ -4,6 +4,7 @@
       ref="addCustomerOne" :title="steps[step - 1].title" 
       hide-header-close hide-footer
       @show="resetModal"
+      no-close-on-backdrop
       >
       <stepper :step="step" />
 
@@ -304,7 +305,7 @@ export default {
         {title: 'Occupation'},
         {title: 'Loan Details'}
       ],
-      step: 1,
+      step: 4,
       calculate: true,
       form: {
         vbn: '',

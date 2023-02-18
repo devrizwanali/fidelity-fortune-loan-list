@@ -64,6 +64,7 @@
     <b-modal ref="reportsItem" :title="title" 
       hide-header-close hide-footer
       @show="resetModal"
+      no-close-on-backdrop
       >
       <form  @submit.prevent="onSubmit">
         <div class="position-relative mt-5">

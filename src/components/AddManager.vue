@@ -1,5 +1,5 @@
 <template>
-  <b-modal ref="addManagerModal" title="Add Manager" hide-header-close hide-footer>
+  <b-modal ref="addManagerModal" title="Add Manager" no-close-on-backdrop hide-header-close hide-footer>
     <form  @submit.prevent="onSubmit">
        <div class="position-relative mt-4">
           <label for="name" class="name-label">Manager Name</label>

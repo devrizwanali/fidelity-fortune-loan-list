@@ -1,6 +1,10 @@
 <template>
   <div>
-    <b-modal ref="liquidateLoan" id="liquidate-loan" title="Liquidate Loan" hide-header-close hide-footer>
+    <b-modal ref="liquidateLoan" id="liquidate-loan" title="Liquidate Loan" 
+      hide-header-close hide-footer
+      no-close-on-backdrop
+      @show="resetModal"
+      >
       <form  @submit.prevent="onSubmit">
         <div class="position-relative mt-4">
           <label for="name" class="name-label">Loan Model</label>
@@ -47,6 +51,10 @@
       ...mapActions(['liquidateLoan', 'computeLoan']),
       showModal() {
         this.$refs['liquidateLoan'].show()
+      },
+      resetModal() {
+        this.loanModal = ''
+        this.liquidType = ''
       },
       onSubmit() {
         const loanId = this.loanId

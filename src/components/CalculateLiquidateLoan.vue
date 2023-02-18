@@ -3,6 +3,7 @@
     title="Liquidate Loan"
     id="calculate-liquidate-loan"
     hide-header-close hide-footer
+    no-close-on-backdrop
     v-if="loan"
     >
     <form  @submit.prevent="onSubmit">
