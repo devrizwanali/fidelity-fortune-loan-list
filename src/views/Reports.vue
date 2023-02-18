@@ -131,6 +131,9 @@
         .then(res => {
           this.success(res.data.message)
           window.open(res.data.response)
+          this.form.branchCode = ''
+          this.form.format = ''
+          this.form.startDate = ''
         }).catch(error => {
           this.error(error.response.data.message)
         })
@@ -179,4 +182,3 @@
     margin-top: 15px;
   }
 </style>
-

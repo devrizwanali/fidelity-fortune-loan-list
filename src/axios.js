@@ -1,7 +1,7 @@
 import axios from 'axios';
 import router from './router'
 
-const baseURL = `http://35.176.54.56:8080/lms/api`
+const baseURL = `http://13.40.61.15:8080/lms/api`
 let instance = axios.create({
   baseURL,
   headers: {

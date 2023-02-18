@@ -44,6 +44,12 @@
             {{data.value == 'CASH' ? 'Cash' : 'Cheque'}}
           </span>
         </template>
+
+        <template #cell(amount)="data">
+          <span>
+            {{data.value | formatNumber}}
+          </span>
+        </template>
       </b-table>
       <pagination
         :current-page="currentPage"

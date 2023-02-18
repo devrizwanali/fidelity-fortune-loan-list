@@ -11,7 +11,7 @@
       <p>entries</p>
     </div>
     <b-pagination
-      v-model="currentPage"
+      v-model="currentPageLocal"
       :total-rows="totalPages"
       :per-page="perPage"
       pills
@@ -64,11 +64,19 @@
         get: function() {
           return this.perPage
         }
+      },
+      currentPageLocal: {
+        set: function(newValue) {
+          this.$emit('onPageChange', newValue)
+        },
+        get: function() {
+          return this.perPage
+        }
       }
     },
     methods: {
       handerPageChange(page) {
-        this.$emit('onPageChange', page)
+        this.currentPageLocal = page
       }
     }
   }

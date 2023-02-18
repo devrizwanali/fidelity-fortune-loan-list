@@ -7,7 +7,7 @@
         <b-row no-gutters>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">BVN</label>
-            <input type="text" v-model="form.vbn" class="input">
+            <input type="text" v-model="form.bvn" class="input">
           </div>
         </b-row>
 
@@ -21,17 +21,17 @@
         <b-row no-gutters>
           <div class="col-4 position-relative mt-4">
             <label for="name" class="name-label">First Name</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="text" required v-model="form.firstName" class="input name">
           </div>
 
           <div class=" col-4 position-relative mt-4">
             <label for="name" class="name-label">Middle Name</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="text" v-model="form.middleName" class="input name">
           </div>
 
           <div class="col-4 position-relative mt-4">
             <label for="name" class="name-label">Last Name</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="text" v-model="form.lastName" class="input name" required>
           </div>
         </b-row>
 
@@ -39,8 +39,8 @@
           <div class="mt-4 cursor-pointer">
             <p class="gray-text">Male / Female</p>
             <div class="d-flex justify-content-center">
-              <b-form-radio v-model="form.gender" value="male"></b-form-radio>
-              <b-form-radio v-model="form.gender" value="female" class="ml-3"></b-form-radio>
+              <b-form-radio v-model="form.gender" value="MALE"></b-form-radio>
+              <b-form-radio v-model="form.gender" value="FEMALE" class="ml-3"></b-form-radio>
             </div>
            </div>
         </b-row>
@@ -48,17 +48,17 @@
         <b-row no-gutters>
           <div class="col-4 position-relative mt-4">
             <label for="name" class="name-label">Date of Birth</label>
-            <input type="date" v-model="form.min" class="input name">
+            <input type="date" v-model="form.dob" class="input name" required>
           </div>
 
           <div class=" col-4 position-relative mt-4">
             <label for="name" class="name-label">Phone Number</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="text" v-model="form.phoneNumber" class="input name" required>
           </div>
 
           <div class="col-4 position-relative mt-4">
             <label for="name" class="name-label">Secondary Number</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="text" v-model="form.secondaryPhoneNumbers[0]" class="input name">
           </div>
         </b-row>
 
@@ -66,35 +66,35 @@
           <p class="gray-text">Marital Status</p>
         </b-row>
         <b-row no-gutters style="margin-left: 98px;">
-          <b-form-radio v-model="form.maritalStatus" value="single" class="gray-text">Single</b-form-radio>
-          <b-form-radio v-model="form.maritalStatus" value="married" class="ml-3 gray-text">Married</b-form-radio>
-          <b-form-radio v-model="form.maritalStatus" value="divorced" class="ml-3 gray-text">Divorced</b-form-radio>
-          <b-form-radio v-model="form.maritalStatus" value="widowed" class="ml-3 gray-text">Widowed</b-form-radio>
+          <b-form-radio v-model="form.maritalStatus" value="SINGLE" class="gray-text">Single</b-form-radio>
+          <b-form-radio v-model="form.maritalStatus" value="MARRIED" class="ml-3 gray-text">Married</b-form-radio>
+          <b-form-radio v-model="form.maritalStatus" value="DIVORCED" class="ml-3 gray-text">Divorced</b-form-radio>
+          <b-form-radio v-model="form.maritalStatus" value="WIDOWED" class="ml-3 gray-text">Widowed</b-form-radio>
         </b-row>
         <b-row no-gutters>
           <div class="position-relative mt-4">
-            <label for="name" class="name-label">LGA</label>
-            <b-form-select class="input" v-model="form.lga" options="[]"></b-form-select>
-          </div>
-
-          <div class="position-relative ml-2 mt-4">
             <label for="name" class="name-label">State</label>
-            <b-form-select class="input" v-model="form.state" options="[]"></b-form-select>
+            <b-form-select class="input" v-model="form.stateOfOrigin" @change="stateChangeHandler" required :options="states"></b-form-select>
+          </div>
+         
+          <div class="position-relative ml-3 mt-4">
+            <label for="name" class="name-label">LGA</label>
+            <b-form-select class="input" v-model="form.lgaOfOrigin" :options="LGAs" required></b-form-select>
           </div>
         </b-row>
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">E-Mail Address</label>
-          <input type="email" v-model="form.email" class="input w-100">
+          <input type="email" v-model="form.email" class="input w-100" required>
         </b-row>
 
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Address</label>
-          <input type="text" v-model="form.address" class="input w-100">
+          <input type="text" required v-model="form.residentialAddress" class="input w-100">
         </b-row>
 
          <b-row no-gutters class="position-relative mt-4">
             <label for="name" class="name-label">Directions to Home</label>
-            <textarea class="textarea w-100" rows="5" v-model="form.directions"></textarea>
+            <textarea class="textarea w-100" required rows="5" v-model="form.homeTownAddress"></textarea>
         </b-row>
 
         <div class="d-flex justify-content-between mt-4">
@@ -106,24 +106,24 @@
       <form @submit.prevent="onSubmit" v-if="step == 2">
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Name</label>
-          <input type="text" v-model="form.name" class="input w-100">
+          <input type="text" required v-model="form.nextOfKin" class="input w-100">
         </b-row>
 
         <b-row no-gutters class="justify-content-between">
           <div class="col-4 position-relative mt-4">
             <label for="name" class="name-label">Relationship</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="text" class="input name" required>
           </div>
 
           <div class=" col-4 position-relative mt-4">
             <label for="name" class="name-label">Phone Number</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="text" v-model="form.nextOfKinPhoneNumber" required class="input name">
           </div>
         </b-row>
 
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Address</label>
-          <input type="text" v-model="form.address" class="input w-100">
+          <input type="text" class="input w-100">
         </b-row>
 
         <div class="mt-5 d-flex justify-content-between">
@@ -143,25 +143,25 @@
         <b-row no-gutters class="justify-content-between">
           <div class="col-4 position-relative mt-4">
             <label for="name" class="name-label">Employee ID</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="text" required v-model="form.computerNumber" class="input name">
           </div>
         </b-row>
 
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Organization</label>
-          <input type="text" v-model="form.address" class="input w-100">
+          <input type="text" required v-model="form.employer" class="input w-100">
         </b-row>
 
          <b-row no-gutters class="justify-content-between">
           <div class="col-4 position-relative mt-4">
             <label for="name" class="name-label">Employment Date</label>
-            <input type="text" v-model="form.min" class="input name">
+            <input type="date" required v-model="form.dateOfEmployment" class="input name">
           </div>
         </b-row>
 
          <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Organization Address</label>
-          <input type="text" v-model="form.address" class="input w-100">
+          <input type="text" required v-model="form.employerAddress" class="input w-100">
         </b-row>
 
         <div class="mt-5 d-flex justify-content-between">
@@ -260,7 +260,7 @@
 
         <div class="mt-2 d-flex border-bottom-blue justify-content-between">
           <label class="blue-color">Total Repayment Amount</label>
-          <input type="text" v-model="loan.totalRepaymentAmount" class="border-0 blue-color text-right loan-input-inline">
+          <input type="text" required v-model="loan.totalRepaymentAmount" class="border-0 blue-color text-right loan-input-inline">
         </div>
 
         <div class="d-flex justify-content-between mt-4">
@@ -275,7 +275,9 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex'
-import Stepper from '@/components/Stepper'
+  import Stepper from '@/components/Stepper'
+  import STATES from '@/data/states'
+  import axios from '@/axios'
 export default {
   name: "AddCustomer",
   components: {
@@ -284,27 +286,40 @@ export default {
   data() {
     return {
       deductionOptions: [
-          {text: 'State', value: 'STATE'}, 
-          {text: 'Local', value: 'LOCAL'}
-        ],
+        {text: 'State', value: 'STATE'}, 
+        {text: 'Local', value: 'LOCAL'}
+      ],
+      LGAs: [],
       steps: [
         {title: 'Personal Information'},
         {title: 'Next of Kin'},
         {title: 'Occupation'},
         {title: 'Loan Details'}
       ],
-      step: 1,
+      step: 4,
       form: {
         vbn: '',
         min: '',
-        lga: '',
-        state: '',
-        gender: 'male',
-        maritalStatus: 'single',
+        firstName: '',
+        lastName: '',
+        middleName: '',
+        lgaOfOrigin: '',
+        stateOfOrigin: '',
+        gender: 'MALE',
+        maritalStatus: 'SINGLE',
         email:'',
-        address: '',
-        directions: ''
+        residentialAddress: '',
+        secondaryPhoneNumbers: [],
+        homeTownAddress: '',
+        nextOfKinPhoneNumber: '',
+        nextOfKin: '',
+        computerNumber: '',
+        employer: '',
+        dateOfEmployment: '',
+        employerAddress: ''
+
       },
+      customer: null,
       loan: {
         loanNo: '',
         duration: 0,
@@ -329,19 +344,40 @@ export default {
         branches.push(obj)
       })
       return branches
+    },
+    states() {
+      return STATES.map((x) => {
+        return {text: x.state.name, value: x.state.id, locals: x.state.locals}
+      })
+    },
+  },
+  mounted() {
+    if(this.branchCodes.length == 0) {
+      this.fetchBrachCodes()
     }
   },
-    mounted() {
-      if(this.branchCodes.length == 0) {
-        this.fetchBrachCodes()
-      }
-    },
   methods: {
+    ...mapActions(['fetchBrachCodes']),
     showModal() {
       this.$refs['addCustomerOne'].show()
     },
     onSubmit() {
       this.step += 1;
+      if(this.step == 4) {
+        axios.post('/customer/add', this.form)
+        .then(res => {
+          this.customer = res.data.response
+          this.success(res.data.message)
+        })
+        .catch(error => this.error(error.response.data.message))
+      }
+    },
+    stateChangeHandler(event) {
+      const stateChosen = STATES.filter(x => x.state.id == event)[0]
+      const lgas = stateChosen.state.locals.map(x => {
+        return {text: x.name, value: x.id, stateId: stateChosen.state.id}
+       })
+      this.LGAs = lgas
     }
   }
 };
