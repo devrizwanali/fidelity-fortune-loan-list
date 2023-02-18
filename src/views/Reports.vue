@@ -61,7 +61,10 @@
       </b-row>
     </div>
 
-    <b-modal ref="reportsItem" :title="title" hide-header-close hide-footer>
+    <b-modal ref="reportsItem" :title="title" 
+      hide-header-close hide-footer
+      @show="resetModal"
+      >
       <form  @submit.prevent="onSubmit">
         <div class="position-relative mt-5">
           <label for="name" class="name-label">Select Branch</label>
@@ -137,6 +140,18 @@
         }).catch(error => {
           this.error(error.response.data.message)
         })
+      },
+      resetModal() {
+        this.form = {
+          branchCode: '',
+          customerId: null,
+          endDate: null,
+          format: 'pdf',
+          reportType: '',
+          startDate: '',
+          status: null,
+          loanId: null,
+        }
       }
     },
     computed: {

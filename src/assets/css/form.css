@@ -16,12 +16,28 @@
   border-radius: 24px !important;
 }
 
+.textarea-full {
+  height: 126px;
+  width: 100% !important;
+  border: 2px solid var(--blue-color) !important;
+  padding: 12px 0 0 12px;
+  border-radius: 24px !important;
+}
+
 .input {
   width: 256px !important;
   padding-left: 12px;
   border: 2px solid var(--blue-color) !important;
   border-radius: 24px !important;
   height: 59px !important;
+}
+
+.input-full {
+  padding-left: 12px;
+  border: 2px solid var(--blue-color) !important;
+  border-radius: 24px !important;
+  height: 59px !important;
+  width: 100% !important;
 }
 
 .btn-edit {
@@ -102,4 +118,8 @@
 
 input.border-0{
   outline: none !important;
+}
+
+button:disabled {
+  opacity: 0.8 !important;
 }

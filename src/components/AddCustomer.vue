@@ -1,6 +1,10 @@
 <template>
   <div>
-    <b-modal scrollable modal-class="addCustomerOne" ref="addCustomerOne" :title="steps[step - 1].title" hide-header-close hide-footer>
+    <b-modal scrollable modal-class="addCustomerOne" 
+      ref="addCustomerOne" :title="steps[step - 1].title" 
+      hide-header-close hide-footer
+      @show="resetModal"
+      >
       <stepper :step="step" />
 
       <form @submit.prevent="onSubmit" v-if="step == 1">
@@ -53,12 +57,12 @@
 
           <div class=" col-4 position-relative mt-4">
             <label for="name" class="name-label">Phone Number</label>
-            <input type="text" v-model="form.phoneNumber" class="input name" required>
+            <input type="number" v-model="form.phoneNumber" class="input name" required>
           </div>
 
           <div class="col-4 position-relative mt-4">
             <label for="name" class="name-label">Secondary Number</label>
-            <input type="text" v-model="form.secondaryPhoneNumbers[0]" class="input name">
+            <input type="number" v-model="form.secondaryPhoneNumbers[0]" class="input name">
           </div>
         </b-row>
 
@@ -84,17 +88,17 @@
         </b-row>
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">E-Mail Address</label>
-          <input type="email" v-model="form.email" class="input w-100" required>
+          <input type="email" v-model="form.email" class="input-full" required>
         </b-row>
 
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Address</label>
-          <input type="text" required v-model="form.residentialAddress" class="input w-100">
+          <input type="text" required v-model="form.residentialAddress" class="input-full">
         </b-row>
 
          <b-row no-gutters class="position-relative mt-4">
             <label for="name" class="name-label">Directions to Home</label>
-            <textarea class="textarea w-100" required rows="5" v-model="form.homeTownAddress"></textarea>
+            <textarea class="textarea-full" required rows="5" v-model="form.homeTownAddress"></textarea>
         </b-row>
 
         <div class="d-flex justify-content-between mt-4">
@@ -106,7 +110,7 @@
       <form @submit.prevent="onSubmit" v-if="step == 2">
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Name</label>
-          <input type="text" required v-model="form.nextOfKin" class="input w-100">
+          <input type="text" required v-model="form.nextOfKin" class="input-full">
         </b-row>
 
         <b-row no-gutters class="justify-content-between">
@@ -117,13 +121,13 @@
 
           <div class=" col-4 position-relative mt-4">
             <label for="name" class="name-label">Phone Number</label>
-            <input type="text" v-model="form.nextOfKinPhoneNumber" required class="input name">
+            <input type="number" v-model="form.nextOfKinPhoneNumber" required class="input name">
           </div>
         </b-row>
 
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Address</label>
-          <input type="text" class="input w-100">
+          <input type="text" class="input-full">
         </b-row>
 
         <div class="mt-5 d-flex justify-content-between">
@@ -149,7 +153,7 @@
 
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Organization</label>
-          <input type="text" required v-model="form.employer" class="input w-100">
+          <input type="text" required v-model="form.employer" class="input-full">
         </b-row>
 
          <b-row no-gutters class="justify-content-between">
@@ -161,7 +165,7 @@
 
          <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">Organization Address</label>
-          <input type="text" required v-model="form.employerAddress" class="input w-100">
+          <input type="text" required v-model="form.employerAddress" class="input-full">
         </b-row>
 
         <div class="mt-5 d-flex justify-content-between">
@@ -268,10 +272,9 @@
 
         <div class="d-flex justify-content-end mt-4">
           <button class="mx-2 button-cancel" @click.prevent="$refs['addCustomerOne'].hide()">Cancel</button>
-          <button class="mx-2 button-cancel" @click.prevent="step -= 1">Back</button>
           <button class="mx-2 button-save" style="width: 152px" v-if="!calculate" @click.prevent="onCalculateLoan">Re-Calculate</button>
-          <button class="mx-2 btn-update" v-if="calculate" @click.prevent="onCalculateLoan">Calculate</button>
-          <button class="mx-2 btn-update" v-else="calculate" @click.prevent="onSubmitLoan">Submit</button>
+          <button class="mx-2 button-save" v-if="calculate" @click.prevent="onCalculateLoan">Calculate</button>
+          <button class="mx-2 btn-update" :disabled="calculate" @click.prevent="onSubmitLoan">Submit</button>
         </div>
       </div>
     </b-modal>
@@ -301,7 +304,7 @@ export default {
         {title: 'Occupation'},
         {title: 'Loan Details'}
       ],
-      step: 1,
+      step: 4,
       calculate: true,
       form: {
         vbn: '',
@@ -376,8 +379,56 @@ export default {
     showModal() {
       this.$refs['addCustomerOne'].show()
     },
+    resetModal() {
+      this.form = {
+        vbn: '',
+        min: '',
+        firstName: '',
+        lastName: '',
+        middleName: '',
+        lgaOfOrigin: '',
+        stateOfOrigin: '',
+        gender: 'MALE',
+        maritalStatus: 'SINGLE',
+        email:'',
+        residentialAddress: '',
+        secondaryPhoneNumbers: [],
+        homeTownAddress: '',
+        nextOfKinPhoneNumber: '',
+        nextOfKin: '',
+        computerNumber: '',
+        employer: '',
+        dateOfEmployment: '',
+        employerAddress: ''
+      }
+      this.loanForm ={
+        loanNo: '',
+        duration: 0,
+        managerName: '',
+        loanType: '',
+        netMonthlySalary: 0,
+        grossMonthlySalary: 0,
+        interestRate: 0,
+        paymentStartDate: null,
+        secondaryManagerName: '',
+        amount: 0,
+        customerId: 0
+      }
+    },
     onSubmit() {
       let success = false;
+      if(this.form.secondaryPhoneNumbers[0] && this.form.secondaryPhoneNumbers[0].length != 11) {
+        this.error('Secondary phoneNumber must be 11 digits')
+        return
+      }
+      if(this.form.phoneNumber.length != 11) {
+        this.error("Phone number must be 11 digits")
+        return
+      }
+      if(this.form.nextOfKinPhoneNumber && this.form.nextOfKinPhoneNumber.length != 11) {
+        this.error("Phone number must be 11 digits")
+        return
+      }
       if(this.step == 3) {
         axios.post('/customer/add', this.form)
         .then(res => {
