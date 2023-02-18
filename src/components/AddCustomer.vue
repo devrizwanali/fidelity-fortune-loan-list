@@ -166,22 +166,22 @@
 
         <div class="mt-5 d-flex justify-content-between">
           <button class="button-cancel" @click.prevent="step -= 1">Back</button>
-          <button class="button-save">Next</button>
+          <button class="button-save" style="width: 190px">Submit Customer</button>
         </div>
       </form>
 
-      <form  @submit.prevent="onSubmit" v-if="step == 4">
+      <div v-if="step == 4">
         <b-row>
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Loan Number</label>
-              <input type="text" v-model="loan.loanNo" class="input" required>
+              <input type="text" v-model="loanForm.loanNo" class="input" required>
             </div>
           </b-col>
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Deduction</label>
-              <b-form-select required class="input" v-model="loan.loanType" :options="deductionOptions"></b-form-select>
+              <b-form-select required class="input" v-model="loanForm.loanType" :options="deductionOptions"></b-form-select>
             </div>
           </b-col>
         </b-row>
@@ -189,13 +189,13 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Duration</label>
-              <input type="number" step="any" v-model="loan.duration" class="input" required>
+              <input type="number" step="any" v-model="loanForm.duration" class="input" required>
             </div>
           </b-col>
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Loan Amount</label>
-              <input type="number" step="any" v-model="loan.amount" class="input" required>
+              <input type="number" step="any" v-model="loanForm.amount" class="input" required>
             </div>
           </b-col>
         </b-row>
@@ -203,13 +203,13 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Monthly Net Salary</label>
-              <input type="number" step="any" v-model="loan.netMonthlySalary" class="input" required>
+              <input type="number" step="any" v-model="loanForm.netMonthlySalary" class="input" required>
             </div>
           </b-col>
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Monthly Gross Salary</label>
-              <input type="number" step="any" v-model="loan.grossMonthlySalary" class="input" required>
+              <input type="number" step="any" v-model="loanForm.grossMonthlySalary" class="input" required>
             </div>
           </b-col>
         </b-row>
@@ -217,13 +217,13 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Interest</label>
-              <input type="number" step="any" v-model="loan.interestRate" class="input" required>
+              <input type="number" step="any" v-model="loanForm.interestRate" class="input" required>
             </div>
           </b-col>
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Start Date</label>
-              <input type="date" v-model="loan.paymentStartDate" class="input" required>
+              <input type="date" v-model="loanForm.paymentStartDate" class="input" required>
             </div>
           </b-col>
         </b-row>
@@ -232,43 +232,48 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Branch Manager</label>
-               <b-form-select required class="input" v-model="loan.managerName" :options="managersList"></b-form-select>
+               <b-form-select required class="input" v-model="loanForm.managerName" :options="managersList"></b-form-select>
             </div>
           </b-col>
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Secondary Branch Manager</label>
-              <b-form-select required class="input" v-model="loan.secondaryManagerName" :options="managersList"></b-form-select>
+              <b-form-select required class="input" v-model="loanForm.secondaryManagerName" :options="secondaryManagersList"></b-form-select>
             </div>
           </b-col>
         </b-row>
 
-        <div class="mt-2 d-flex border-bottom-blue justify-content-between">
-          <label class="blue-color">Processing Fee</label>
-          <input type="text" v-model="loan.processingFee" class="border-0 text-right blue-color loan-input-inline">
+        <div v-if="loan">
+          <div class="mt-2 d-flex justify-content-between auto-filled-inline">
+            <label>Processing Fee</label>
+            <input type="text" disabled v-model="loanForm.processingFee" class="border-0 text-right loan-input-inline">
+          </div>
+
+          <div class="mt-2 d-flex justify-content-between auto-filled-inline">
+            <label>Cheque Amount</label>
+            <input type="text" disabled v-model="loanForm.chequeAmount" class="border-0 text-right loan-input-inline">
+          </div>
+
+          <div class="mt-2 d-flex justify-content-between auto-filled-inline">
+            <label>Monthly Repayment Amount</label>
+            <input type="text" disabled v-model="loanForm.monthlyRepaymentAmount" class="border-0 text-right loan-input-inline">
+          </div>
+
+          <div class="mt-2 d-flex justify-content-between auto-filled-inline">
+            <label>Total Repayment Amount</label>
+            <input type="text" disabled v-model="loanForm.totalRepaymentAmount" class="border-0 text-right loan-input-inline">
+          </div>
         </div>
 
-        <div class="mt-2 d-flex  border-bottom-blue justify-content-between">
-          <label class="blue-color">Cheque Amount</label>
-          <input type="text" v-model="loan.chequeAmount" class="border-0 text-right blue-color loan-input-inline">
-        </div>
 
-        <div class="mt-2 d-flex border-bottom-blue justify-content-between">
-          <label class="blue-color">Monthly Repayment Amount</label>
-          <input type="text" v-model="loan.monthlyRepaymentAmount" class="border-0 blue-color text-right loan-input-inline">
+        <div class="d-flex justify-content-end mt-4">
+          <button class="mx-2 button-cancel" @click.prevent="$refs['addCustomerOne'].hide()">Cancel</button>
+          <button class="mx-2 button-cancel" @click.prevent="step -= 1">Back</button>
+          <button class="mx-2 button-save" style="width: 152px" v-if="!calculate" @click.prevent="onCalculateLoan">Re-Calculate</button>
+          <button class="mx-2 btn-update" v-if="calculate" @click.prevent="onCalculateLoan">Calculate</button>
+          <button class="mx-2 btn-update" v-else="calculate" @click.prevent="onSubmitLoan">Submit</button>
         </div>
-
-        <div class="mt-2 d-flex border-bottom-blue justify-content-between">
-          <label class="blue-color">Total Repayment Amount</label>
-          <input type="text" required v-model="loan.totalRepaymentAmount" class="border-0 blue-color text-right loan-input-inline">
-        </div>
-
-        <div class="d-flex justify-content-between mt-4">
-          <button class="button-cancel" @click.prevent="$refs['addCustomerOne'].hide()">Cancel</button>
-          <button class="button-cancel" @click.prevent="step -= 1">Back</button>
-          <button class="button-save">Submit</button>
-        </div>
-      </form>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -296,7 +301,8 @@ export default {
         {title: 'Occupation'},
         {title: 'Loan Details'}
       ],
-      step: 4,
+      step: 1,
+      calculate: true,
       form: {
         vbn: '',
         min: '',
@@ -320,7 +326,9 @@ export default {
 
       },
       customer: null,
-      loan: {
+      secondaryManagersList: [],
+      loan: null,
+      loanForm: {
         loanNo: '',
         duration: 0,
         managerName: '',
@@ -336,7 +344,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['branchCodes']),
+    ...mapGetters(['branchCodes', 'managers']),
+    managersList() {
+      const mang = this.managers.map(x => x.managerName)
+      this.secondaryManagersList = ["", ...mang]
+      return mang
+    },
     branchList() {
       let branches = []
       this.branchCodes.map(x => {
@@ -354,23 +367,54 @@ export default {
   mounted() {
     if(this.branchCodes.length == 0) {
       this.fetchBrachCodes()
+    } if(this.managers.length == 0) {
+      this.fetchManagers()
     }
   },
   methods: {
-    ...mapActions(['fetchBrachCodes']),
+    ...mapActions(['fetchBrachCodes', 'fetchManagers', 'addLoan', 'approveLoan']),
     showModal() {
       this.$refs['addCustomerOne'].show()
     },
     onSubmit() {
-      this.step += 1;
-      if(this.step == 4) {
+      let success = false;
+      if(this.step == 3) {
         axios.post('/customer/add', this.form)
         .then(res => {
           this.customer = res.data.response
+          this.loanForm.loanNo = `${this.customer.branchCode}-00000-MON`
+          this.loanForm.customerId = this.customer.id
           this.success(res.data.message)
+          this.step += 1;
+          success = true
         })
-        .catch(error => this.error(error.response.data.message))
-      }
+        .catch(error => {
+          this.error(error.response.data.message)
+        })
+      } else this.step += 1
+    },
+    onCalculateLoan() {
+      axios.post(`/loan/compute`, this.loanForm).then(res => {
+        this.loan = res.data.response
+        this.loanForm.processingFee = this.loan.processingFee
+        this.loanForm.chequeAmount = this.loan.chequeAmount
+        this.loanForm.monthlyRepaymentAmount = this.loan.monthlyRepaymentAmount
+        this.loanForm.totalRepaymentAmount = this.loan.totalRepaymentAmount
+        this.calculate = false
+        this.success(res.data.message)
+      }).catch(error => {
+        this.error(error.response.data.message)
+      })
+    },
+    onSubmitLoan() {
+      this.addLoan(this.loanForm).then(res =>  {
+        let payload = {data: {"loanNumber": null, "loanStartDate": null}, loanId: res.data.response.id }
+          this.approveLoan(payload).then(res => {
+          this.success('Successfully Created')
+          this.$refs['addCustomerOne'].hide()
+          }).catch(e => this.error(e.response.data.message))
+        })
+        .catch(error => this.error('Something went wrong. Please contact the admin'))
     },
     stateChangeHandler(event) {
       const stateChosen = STATES.filter(x => x.state.id == event)[0]

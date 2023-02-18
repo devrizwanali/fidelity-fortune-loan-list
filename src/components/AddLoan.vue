@@ -71,7 +71,7 @@
           <b-col>
             <div class="position-relative mt-4">
               <label for="name" class="name-label">Secondary Branch Manager</label>
-              <b-form-select class="input" v-model="form.secondaryManagerName" :options="managersList"></b-form-select>
+              <b-form-select class="input" v-model="form.secondaryManagerName" :options="secondaryManagersList"></b-form-select>
             </div>
           </b-col>
         </b-row>
@@ -97,6 +97,7 @@
           {text: 'State', value: 'STATE'}, 
           {text: 'Local', value: 'LOCAL'}
         ],
+        secondaryManagersList: [],
         form: {
           loanNo: '',
           duration: 0,
@@ -125,7 +126,9 @@
     computed: {
       ...mapGetters(['managers']),
       managersList() {
-        return this.managers.map(x => x.managerName)
+        const mang = this.managers.map(x => x.managerName)
+        this.secondaryManagersList = ["", ...mang]
+        return mang
       }
     },
     mounted() {
