@@ -4,7 +4,7 @@
       :title="customer.customerName" 
       hide-footer
       hide-header-close
-      id="customerLoanList"
+      modal-class="customerLoanList"
       > 
       <div class="action-btns justify-content-around my-4">
         <b-button class="add-customer pl-3 pr-5"
@@ -29,6 +29,8 @@
       <b-table
         :items="customerLoans"
         :fields="headers"
+        :current-page="currentPage"
+        :per-page="perPage"
         show-empty
         :busy.sync="isBusy"
         small
@@ -86,7 +88,9 @@
         </template>
 
         <template #cell(monthlyRepaymentAmount)="data">
-          {{ data.value | formatNumber }}
+          <span @click="repaymentTransactions(data.item)" class="cursor-pointer">
+            {{ data.value | formatNumber }}
+          </span>
         </template>
 
         <template #cell(outstanding)="data">
@@ -128,6 +132,10 @@
     <liquidate ref="liquidate-modal" />
     <top-up-loan ref="top-up-loan-modal" />
     <ApproveLoanMoal ref="approve-loan-cus" />
+    <RepaymentTransactions
+      :title="RepaymentTransactiontitle"
+      ref="re-payment-transation" 
+      :loanId="repaymentTransactionloanId" />
   </div>
 </template>
 <script>
@@ -136,6 +144,7 @@
   import Liquidate from '@/components/Liquidate'
   import TopUpLoan from '@/components/TopUpLoan'
   import ApproveLoanMoal from '@/components/ApproveLoanModal'
+  import RepaymentTransactions from '@/components/RepaymentTransactions'
   import Pagination from '@/components/Pagination'
   import { mapGetters, mapActions } from 'vuex'
   import mixin from "@/mixins"
@@ -147,6 +156,8 @@
         isBusy: true,
         currentPage: 1,
         perPage: 10,
+        repaymentTransactionloanId: 0,
+        RepaymentTransactiontitle: '',
         headers: [
           {label: 'Manager', key: 'managerName'},
           {label: 'Loan No.', key: 'loanNo'},
@@ -174,7 +185,8 @@
       TopUpLoan,
       Liquidate,
       ApproveLoanMoal,
-      Pagination
+      Pagination,
+      RepaymentTransactions
     },
     watch: {
       customer: function(newVal, oldVal) {
@@ -212,6 +224,11 @@
       liquidate() {
         this.$refs['liquidate-modal'].showModal()
       },
+      repaymentTransactions(item) {
+        this.RepaymentTransactiontitle = `Transactions for Loan ${item.loanNo}`
+        this.repaymentTransactionloanId = item.id
+        this.$refs['re-payment-transation'].showModal()
+      },
       generateReport(id) {
         axios.post('/report', {
           "format": "pdf",
@@ -245,7 +262,7 @@
   }
 </script>
 <style>
-  #customerLoanList .modal-dialog {
+  .customerLoanList .modal-dialog {
     max-width: 1248px !important;
   }
 
@@ -260,16 +277,4 @@
   #add-loan-two .modal-dialog {
     max-width: 610px !important;
   }
-
-/*  #liquidate-loan .modal-dialog {
-    max-width: 610px !important;
-  }
-
-  #liquidate-loan .modal-body {
-    margin: auto;
-  }
-
-  #calculate-liquidate-loan .modal-dialog {
-    max-width: 610px !important;
-  }*/
 </style>
