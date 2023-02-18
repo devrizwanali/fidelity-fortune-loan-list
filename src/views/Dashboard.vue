@@ -139,6 +139,7 @@
         selectedItem: {},
         headers: [
           {label: 'Manager', key: 'managerName'},
+          {label: 'secondaryManagerName', key: ''},
           {label: 'Comp No', key: 'computerNo'},
           {label: 'Name', key: 'customerName'},
           {label: 'Loan No.', key: 'loanNo'},
@@ -205,6 +206,7 @@
         let data = this.loans.map(loan => {
           return  {
             'Office': loan.managerName,
+            'secondaryManagerName': loan.secondaryManagerName,
             'Como. No': loan.computerNo,
             'Name': loan.customerName,
             'Loan No.': loan.loanNo,

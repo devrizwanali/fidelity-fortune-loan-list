@@ -305,7 +305,7 @@ export default {
         {title: 'Occupation'},
         {title: 'Loan Details'}
       ],
-      step: 4,
+      step: 1,
       calculate: true,
       form: {
         vbn: '',
