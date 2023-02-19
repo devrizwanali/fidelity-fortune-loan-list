@@ -402,7 +402,8 @@ export default {
         dateOfEmployment: '',
         employerAddress: ''
       }
-      this.loanForm ={
+      this.step = 1;
+      this.loanForm = {
         loanNo: '',
         duration: 0,
         managerName: '',
