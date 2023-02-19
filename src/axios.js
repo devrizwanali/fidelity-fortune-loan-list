@@ -19,6 +19,7 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(null, function (error) {
   if (error?.response?.status === 401) {
     localStorage.removeItem('token')
+    localStorage.removeItem('user')
     router.push('/')
   }
   return Promise.reject(error)

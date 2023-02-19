@@ -48,10 +48,11 @@
       }
     },
     methods: {
-      ...mapActions(['login']),
+      ...mapActions(['login', 'fetchUser']),
       submitHandler() {
         this.clicked = true
         this.login(this.user).then(res => {
+          this.fetchUser()
           this.success(res.data.message)
           this.$router.push('/dashboard')
         }).catch(error => {

@@ -29,7 +29,7 @@
         <b-nav-item-dropdown right>
           <template #button-content>
             <img src="@/assets/profile.svg">
-            <em class="mx-2">Ronald C.</em>
+            <em class="mx-2">{{user.name}}</em>
           </template>
           <b-dropdown-item href="#">Profile</b-dropdown-item>
           <b-dropdown-item @click="signOut">Sign Out</b-dropdown-item>
@@ -39,7 +39,7 @@
   </b-navbar>
 </template>
 <script>
-  import { mapActions } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
   export default {
     name: 'NavBar',
     methods: {
@@ -49,7 +49,10 @@
           this.$router.push("/")
         })
       }
-    }
+    },
+    computed: {
+      ...mapGetters(['user']),
+    },
   }
 </script>
 
