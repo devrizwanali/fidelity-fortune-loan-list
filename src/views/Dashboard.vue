@@ -2,29 +2,39 @@
   <div class="main">
     <h1>Dashboard</h1>
     <div class="loans__table--header">
-      <img src="@/assets/search.png" class="px-3 search-icon">
-      <input type="text" v-model="filter" placeholder="Search by Loan No, Comput..." v-on:keyup="searchLoans">
-      <div class="action-btns">
-        <b-button class="add-customer px-3"
-          @click="addCustomerModal"
-         >
-          <img src="@/assets/plus.png">
-          Add Customer
-        </b-button>
-        <b-button class="export px-3"
-          @click="exportExcel"
-        >
-          <img src="@/assets/export.png">
-          Export Page
-        </b-button>
-        <b-button class="bulk-pay px-3"
-          @click="blukUpload"
-        >
-          <img src="@/assets/bulk.svg">
-          Bulk Repayment
-        </b-button>
+      <div>
+        <img src="@/assets/search.png" class="px-3 search-icon">
+        <input type="text" v-model="searchKeys.search" placeholder="Search by Loan No, Comput...">
+        <b-form-select class="input-search" v-model="searchKeys.status" :options="STATUS" placeholder="Search by status"></b-form-select>
+        <input type="text" class="mx-1" v-model="searchKeys.managerName" placeholder="Office">
+        <input type="date" class="mx-1" style="width: 190px;" v-model="searchKeys.paymentStartDate">
+        <button class="btn add-customer btn-secondary mx-1" style="width: 90px"  v-on:click="searchLoans">Search</button>
+        <button class="btn export btn-secondary" style="width: 90px;" @click="clearSearch">Clear</button>
       </div>
     </div>
+
+    <div class="action-btns mb-4 justify-content-end">
+      <b-button class="add-customer px-3"
+        @click="addCustomerModal"
+       >
+        <img src="@/assets/plus.png">
+        Add Customer
+      </b-button>
+      <b-button class="export px-3"
+        @click="exportExcel"
+      >
+        <img src="@/assets/export.png">
+        Export Page
+      </b-button>
+      <b-button class="bulk-pay px-3"
+        @click="blukUpload"
+      >
+        <img src="@/assets/bulk.svg">
+        Bulk Repayment
+      </b-button>
+    </div>
+      
+   
     <b-table
       :items="loans"
       :fields="headers"
@@ -135,8 +145,14 @@
       return {
         currentPage: 1,
         perPage: 10,
-        filter: null,
+        searchKeys: {
+          paymentStartDate: '',
+          status: '',
+          serach: '',
+          managerName: ''
+        },
         selectedItem: {},
+        STATUS: ['', 'ACTIVE', 'ACTIVE_PENDING', 'LIQUIDATED', 'TOPUP', 'TOPUP_PENDING', 'PENDING', 'SETTLED', 'DEFAULTED', 'INACTIVE'],
         headers: [
           {label: 'Manager', key: 'managerName'},
           {label: 'secondaryManagerName', key: ''},
@@ -181,7 +197,21 @@
       },
       searchLoans() {
         this.currentPage = 1
-        this.search({page: 1, size: this.perPage || 10, query: this.filter})
+        let status =  { filterKey: "status", operation: "eq", value : this.searchKeys.status }
+        let managerName = { filterKey: "managerName", operation: "eq", value: this.searchKeys.managerName }
+        let paymentStartDate = { filterKey: "paymentStartDate", operation: "eq",  value: this.searchKeys.paymentStartDate }
+        let se = { filterKey: "search", operation: "cn", value: this.searchKeys.search }
+        let obj = {"dataOption": "all", "searchCriteriaList": []}
+        
+        if(this.searchKeys.managerName)
+          obj["searchCriteriaList"].push(managerName)
+        if(this.searchKeys.status)
+          obj["searchCriteriaList"].push(status)
+        if(this.searchKeys.search)
+          obj["searchCriteriaList"].push(search)
+        if(this.searchKeys.paymentStartDate)
+          obj["searchCriteriaList"].push(paymentStartDate)
+        this.search(JSON.stringify(obj))
       },
       generateReport(id) {
         axios.post('/report', {
@@ -222,6 +252,14 @@
         })
         jsontoexcel.getXlsx(data, headers, fileName);
       },
+      clearSearch() {
+        this.searchKeys =  {
+          paymentStartDate: '',
+          status: '',
+          serach: '',
+          managerName: ''
+        }
+      },
       openCustomerLoanModal(item) {
         this.selectedItem = {...item}
         this.$refs['customer-loan-modal'].showModal()
@@ -239,5 +277,10 @@
   }
 </script>
 <style scoped>
-  @import '../assets/css/home.css'; 
+  @import '../assets/css/home.css';
+  .input-search {
+    width: 180px !important;
+    height: 50px !important;
+    margin-left: 8px;
+  }
 </style>

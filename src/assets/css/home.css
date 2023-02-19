@@ -16,16 +16,19 @@
 .add-customer {
   background: #06B941 !important;
   border: #06B941 !important;
+  height: 50px;
 }
 
 .export {
   background: var(--blue-color) !important;
   border: var(--blue-color) !important;
+  height: 50px;
 }
 
 .bulk-pay {
   background: var(--red) !important;
   border: var(--red) !important;
+  height: 50px;
 }
 
 thead {

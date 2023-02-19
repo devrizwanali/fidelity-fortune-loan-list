@@ -134,7 +134,7 @@ const actions = {
   search({commit, state}, params) {
     commit('SET_BUSY', true)
     return new Promise((resolve, reject) => {
-      axios.get(`/loan/page?size=${params.size}&page=${params.page}&search=${params.query}`)
+      axios.post(`/loan/page`, params)
         .then(res => {
           commit('SET_SEARCH_LOANS', res.data.response)
           commit('SET_BUSY', false)
