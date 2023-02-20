@@ -70,7 +70,7 @@
           this.$emit('onPageChange', newValue)
         },
         get: function() {
-          return this.perPage
+          return this.currentPage
         }
       }
     },
@@ -78,7 +78,7 @@
       handerPageChange(page) {
         this.currentPageLocal = page
       }
-    }
+    },
   }
 </script>
 

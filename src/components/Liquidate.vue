@@ -16,6 +16,11 @@
           <b-form-select required class="input" v-model="liquidType" :options="liquidTypes"></b-form-select>
         </div>
 
+        <div class="position-relative mt-4" v-if="loanModal == 'FLEXI'">
+          <label for="name" class="name-label">B/w</label>
+          <b-form-select required class="input" v-model="duration" :options="durations"></b-form-select>
+        </div>
+
          <div class="d-flex justify-content-between mt-4">
           <button class="button-cancel" @click.prevent="$refs['liquidateLoan'].hide()">Cancel</button>
           <button class="button-save" style="width: 52%;" >Calculate Loan</button>
@@ -33,7 +38,9 @@
     data() {
       return {
         loanModal: 'STANDARD',
-        liquidType: 'FULL'
+        liquidType: 'FULL',
+        duration: '',
+        durations: [1,2,3,4,5,6,7,8,9,10,11,12]
       }
     },
     components: {
@@ -59,6 +66,8 @@
       onSubmit() {
         const loanId = this.loanId
         let data = {model: this.loanModal, type: this.liquidType, loanId}
+
+        if(this.loanModal == 'FLEXI') data['duration'] = this.duration;
         this.computeLoan(data).then(res => {
           const loan = res.data.response
           this.$refs['liquidateLoan'].hide()

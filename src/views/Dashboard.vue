@@ -83,7 +83,7 @@
       </template>
 
       <template #cell(ministry)="data">
-        {{ data.item.customerName }}
+        {{ data.item.employerAddress }}
       </template>
 
       <template #cell(loanAmount)="data">
@@ -126,7 +126,7 @@
     <!-- bulk upload -->
     <bulk-upload ref="bulk-upload" />
     <!-- add customer -->
-    <add-cutomer ref="addCustomerModal" />
+    <add-cutomer ref="addCustomerModal" :per-page="perPage" />
   </div>
 </template>
 <script>
@@ -148,7 +148,7 @@
         searchKeys: {
           paymentStartDate: '',
           status: '',
-          serach: '',
+          search: '',
           managerName: ''
         },
         selectedItem: {},
@@ -208,7 +208,7 @@
         if(this.searchKeys.status)
           obj["searchCriteriaList"].push(status)
         if(this.searchKeys.search)
-          obj["searchCriteriaList"].push(search)
+          obj["searchCriteriaList"].push(se)
         if(this.searchKeys.paymentStartDate)
           obj["searchCriteriaList"].push(paymentStartDate)
         this.search(JSON.stringify(obj))
@@ -256,7 +256,7 @@
         this.searchKeys =  {
           paymentStartDate: '',
           status: '',
-          serach: '',
+          search: '',
           managerName: ''
         }
       },

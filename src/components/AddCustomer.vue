@@ -89,7 +89,7 @@
         </b-row>
         <b-row no-gutters class="position-relative mt-4">
           <label for="name" class="name-label">E-Mail Address</label>
-          <input type="email" v-model="form.email" class="input-full" required>
+          <input type="email" v-model="form.email" class="input-full">
         </b-row>
 
         <b-row no-gutters class="position-relative mt-4">
@@ -375,6 +375,7 @@ export default {
       this.fetchManagers()
     }
   },
+  props: ['perPage'],
   methods: {
     ...mapActions(['fetchBrachCodes', 'fetchManagers', 'addLoan', 'approveLoan']),
     showModal() {
@@ -438,6 +439,7 @@ export default {
           this.loanForm.loanNo = `${this.customer.branchCode}-00000-MON`
           this.loanForm.customerId = this.customer.id
           this.success(res.data.message)
+          this.$store.dispatch('fetchLoans', { page: 1, size: this.perPage ||10 })
           this.step += 1;
           success = true
         })

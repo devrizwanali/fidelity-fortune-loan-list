@@ -17,6 +17,11 @@
         <b-form-select required class="input" disabled v-model="liquidType" :options="liquidTypes"></b-form-select>
       </div>
 
+      <div class="position-relative mt-4" v-if="loanModal == 'FLEXI'">
+        <label for="name" class="name-label">B/w</label>
+        <b-form-select required class="input" disabled v-model="loan.duration" :options="durations"></b-form-select>
+      </div>
+
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Interest Charged</label>
         <input type="text" readonly v-model="loan.interestCharged" class="blue-color border-0 text-right loan-input-inline">
@@ -62,7 +67,8 @@
     name: 'CalculateLiquidateLoan',
     data() {
       return {
-        loan: {}
+        loan: {},
+        durations: [1,2,3,4,5,6,7,8,9,10,11,12]
       }
     },
     props: {

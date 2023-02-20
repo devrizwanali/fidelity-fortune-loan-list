@@ -110,6 +110,7 @@
           {title: 'Performance Reports', type: ""},
           {title: 'Customer List', type: ""},
         ],
+        type: '',
         title: '',
         form:{
           branchCode: '',
@@ -127,10 +128,11 @@
       ...mapActions(['fetchBrachCodes']),
       reportHandler(index) {
         this.title = this.reportTypes[index].title
-        this.form.reportType = this.reportTypes[index].type
+        this.type = this.reportTypes[index].type
         this.$refs['reportsItem'].show()
       },
       onSubmit() {
+        this.form.reportType = this.type
         axios.post('/report', this.form)
         .then(res => {
           this.success(res.data.message)

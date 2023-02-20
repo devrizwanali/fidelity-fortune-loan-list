@@ -136,6 +136,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       axios.post(`/loan/page`, params)
         .then(res => {
+          debugger
           commit('SET_SEARCH_LOANS', res.data.response)
           commit('SET_BUSY', false)
         })
