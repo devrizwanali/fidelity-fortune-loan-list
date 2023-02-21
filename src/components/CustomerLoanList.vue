@@ -21,7 +21,7 @@
         </b-button>
         <b-button class="bulk-pay pl-3 pr-5"
           @click="liquidate"
-          :disabled="canAddLoan"
+          :disabled="!canLiquidate"
          >
 
           <img src="@/assets/bulk.svg"> Liquidate
@@ -211,6 +211,11 @@
         else
           false
       },
+      canLiquidate() {
+        // return this.customerLoans[0] && this.customerLoans[0].status != 'PENDING'
+        const loans = this.customerLoans.filter(x => (x.status == 'ACTIVE' || x.status == 'TOPUP'))
+        return loans[0]?.id
+      }
     },
     methods: {
       ...mapActions(['fetchCustomerLoans', 'computeTopUpLoan']),

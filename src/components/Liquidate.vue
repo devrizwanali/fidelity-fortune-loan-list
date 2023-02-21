@@ -49,7 +49,6 @@
     computed: {
       ...mapGetters(['customerLoans', 'liquidTypes', 'loanModels']),
       loanId() {
-
         const loans = this.customerLoans.filter(x => (x.status == 'ACTIVE' || x.status == 'TOPUP'))
         return loans[0]?.id
       }
