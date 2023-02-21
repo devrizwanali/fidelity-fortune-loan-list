@@ -20,11 +20,6 @@
         </div>
       </b-row>
 
-      <div class="d-flex position-relative mt-4" v-if="loanModal == 'FLEXI'">
-        <label for="name" class="name-label">Duration</label>
-        <b-form-select required class="input" disabled v-model="loan.duration" :options="durations"></b-form-select>
-      </div>
-
       <div class="mt-2 d-flex mx-2 justify-content-between border-bottom-blue">
         <label class="blue-color">Interest Charged</label>
         <input type="number" readonly step="any" v-model.number="loan.interestCharged" class="blue-color border-0 text-right loan-input-inline">
@@ -45,11 +40,15 @@
         <input type="number" @keyup="interestOwedChanged" step="any" v-model.number="loan.interestOwed" required class="input">
       </div>
 
-      <div class="mt-2 d-flex mx-2 justify-content-between border-bottom-blue">
+      <div class="mt-2 d-flex mx-2 justify-content-between border-bottom-blue" v-if="!(loanModal== 'STANDARD' && liquidType == 'FULL')">
         <label class="blue-color">Partial Liqudation Amount</label>
         <input type="number" step="any" v-model.number="loan.partialAmount" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
+      <div class="mt-2 d-flex mx-2 justify-content-between border-bottom-blue" v-if="liquidType == 'PARTIAL'">
+        <label class="blue-color">New Loan Duration</label>
+        <input type="number" step="any" v-model.number="loan.duration" class="blue-color border-0 text-right loan-input-inline">
+      </div>
 
      <b-row>
       <div class="position-relative col d-flex mt-4">

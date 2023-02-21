@@ -17,7 +17,7 @@
         </div>
 
         <div class="position-relative mt-4" v-if="loanModal == 'FLEXI'">
-          <label for="name" class="name-label">Duration</label>
+          <label for="name" class="name-label">Months Owed</label>
           <b-form-select required class="input" v-model="duration" :options="durations"></b-form-select>
         </div>
 
