@@ -2,6 +2,7 @@
   <div>
     <b-modal ref="addLoanModal" title="Add Loan"
      id="add-cu-loan-one"
+     @show="resetModal"
       hide-header-close hide-footer>
       <form  @submit.prevent="onSubmit">
         <b-row>
@@ -140,6 +141,21 @@
       ...mapActions(['addLoan', 'fetchManagers']),
       showModal() {
         this.$refs['addLoanModal'].show()
+      },
+      resetModal() {
+        this.form = {
+          loanNo:  `${this.customer.branchCode}-00000-MON`,
+          duration: 0,
+          managerName: '',
+          loanType: '',
+          netMonthlySalary: 0,
+          grossMonthlySalary: 0,
+          interestRate: 0,
+          paymentStartDate: null,
+          secondaryManagerName: '',
+          amount: 0,
+          customerId: this.customer.customerId
+        }
       },
       onSubmit() {
         axios.post(`/loan/compute`, this.form).then(res => {

@@ -6,45 +6,45 @@
     <form  @submit.prevent="onSubmit">
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Customer Name</label>
-        <input type="text" v-model="loan.customerName" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.customerName" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Loan Duration</label>
-        <input type="text" v-model="loan.duration" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.duration" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Outstanding Balance</label>
-        <input type="text" v-model="loan.outstanding" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.outstanding" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Loan Amount</label>
-        <input type="text" v-model="loan.amount" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.amount" class="blue-color border-0 text-right loan-input-inline">
       </div>
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Interest Paid</label>
-        <input type="text" v-model="loan.interestPaid" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.interestPaid" class="blue-color border-0 text-right loan-input-inline">
       </div>
       
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Monthly Repayment</label>
-        <input type="text" v-model="loan.monthlyRepaymentAmount" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.monthlyRepaymentAmount" class="blue-color border-0 text-right loan-input-inline">
       </div>
      
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color"> Total Repayment</label>
-        <input type="text" v-model="loan.totalRepaymentAmount" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.totalRepaymentAmount" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Loan Number</label>
-        <input type="text" v-model="loan.loanNo" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.loanNo" class="blue-color border-0 text-right loan-input-inline">
       </div>
       <div class="mt-2 d-flex justify-content-between border-bottom-blue">
         <label class="blue-color">Loan Start Date</label>
-        <input type="text" v-model="loan.paymentStartDate" class="blue-color border-0 text-right loan-input-inline">
+        <input type="text" readonly v-model="loan.paymentStartDate" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
       <div class="d-flex justify-content-around mt-4">

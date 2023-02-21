@@ -21,7 +21,9 @@
         </b-button>
         <b-button class="bulk-pay pl-3 pr-5"
           @click="liquidate"
+          :disabled="canAddLoan"
          >
+
           <img src="@/assets/bulk.svg"> Liquidate
         </b-button>
       </div>
@@ -68,7 +70,8 @@
           <span 
             :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
             class= "px-3 status cursor-pointer"
-            v-if="data.value != 'INACTIVE'"
+            v-if="data.value == 'INACTIVE' || data.value == 'PENDING'"
+            @click="approveModal(data.item)"
           >
             {{data.value}}
           </span>
@@ -77,7 +80,6 @@
             :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
             class= "px-3 status cursor-pointer"
             v-else
-            @click="approveModal(data.item)"
           >
             {{data.value}}
           </span>

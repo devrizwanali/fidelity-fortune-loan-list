@@ -4,58 +4,96 @@
     id="calculate-liquidate-loan"
     hide-header-close hide-footer
     no-close-on-backdrop
+    modal-class="liquidate-modal"
     v-if="loan"
     >
     <form  @submit.prevent="onSubmit">
-      <div class="position-relative mt-4">
-        <label for="name" class="name-label">Loan Model</label>
-        <b-form-select required class="input" disabled v-model="loanModal" :options="loanModels"></b-form-select>
-      </div>
+      <b-row>
+        <div class="position-relative col mt-4">
+          <label for="name" class="name-label">Loan Model</label>
+          <b-form-select required class="input" disabled v-model="loanModal" :options="loanModels"></b-form-select>
+        </div>
 
-      <div class="position-relative mt-4">
-        <label for="name" class="name-label">Liquidation Type</label>
-        <b-form-select required class="input" disabled v-model="liquidType" :options="liquidTypes"></b-form-select>
-      </div>
+        <div class="col position-relative mt-4">
+          <label for="name" class="name-label">Liquidation Type</label>
+          <b-form-select required class="input" disabled v-model="liquidType" :options="liquidTypes"></b-form-select>
+        </div>
+      </b-row>
 
-      <div class="position-relative mt-4" v-if="loanModal == 'FLEXI'">
-        <label for="name" class="name-label">B/w</label>
+      <div class="d-flex position-relative mt-4" v-if="loanModal == 'FLEXI'">
+        <label for="name" class="name-label">Duration</label>
         <b-form-select required class="input" disabled v-model="loan.duration" :options="durations"></b-form-select>
       </div>
 
-      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
+      <div class="mt-2 d-flex mx-2 justify-content-between border-bottom-blue">
         <label class="blue-color">Interest Charged</label>
-        <input type="text" readonly v-model="loan.interestCharged" class="blue-color border-0 text-right loan-input-inline">
+        <input type="number" readonly step="any" v-model.number="loan.interestCharged" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
+      <div class="mt-2 d-flex mx-2 justify-content-between border-bottom-blue">
         <label class="blue-color">Capital Balance</label>
-        <input type="text" readonly v-model="loan.capitalBalance" class="blue-color border-0 text-right loan-input-inline">
+        <input type="number" readonly step="any" v-model.number="loan.capitalBalance" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-      <div class="mt-2 d-flex justify-content-between border-bottom-blue">
+      <div class="mt-2 d-flex mx-2 justify-content-between border-bottom-blue">
         <label class="blue-color">Liquidation Amount</label>
-        <input type="text" v-model="loan.liquidatedBalance" class="blue-color border-0 text-right loan-input-inline">
+        <input type="number" readonly step="any" v-model.number="loan.liquidatedBalance" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
-      <div class="position-relative mt-4">
+      <div class="d-flex position-relative mt-4">
         <label for="name" class="name-label">Interest Owed</label>
-        <input type="text" @keyup="interestOwedChanged" v-model="loan.interestOwed" required class="input">
+        <input type="number" @keyup="interestOwedChanged" step="any" v-model.number="loan.interestOwed" required class="input">
+      </div>
+
+      <div class="mt-2 d-flex mx-2 justify-content-between border-bottom-blue">
+        <label class="blue-color">Partial Liqudation Amount</label>
+        <input type="number" step="any" v-model.number="loan.partialAmount" class="blue-color border-0 text-right loan-input-inline">
       </div>
 
 
-      <div class="position-relative mt-4">
+     <b-row>
+      <div class="position-relative col d-flex mt-4">
         <label for="name" class="name-label">Amount Paid</label>
-        <input type="text" v-model="loan.actualAmountPaid"  required class="input">
+        <input type="number" step="any" v-model.number="loan.actualAmountPaid"  required class="input">
       </div>
 
-      <div class="position-relative mt-4">
+      <div class="col position-relative d-flex mt-4">
         <label for="name" class="name-label">Date Paid</label>
         <input type="date" v-model="loan.paidDate" required class="input">
       </div>
 
+     </b-row>
+
+      <div v-if="liquidType == 'PARTIAL'">
+        <b-row>
+          <div class="position-relative mt-4 col">
+            <label for="name" class="name-label">Interest Rate</label>
+            <input type="number" v-model.number="loan.interestRate"  step="any" required class="input">
+          </div>
+
+          <div class="position-relative mt-4 col">
+            <label for="name" class="name-label">Manager Name</label>
+             <b-form-select required class="input" v-model="loan.managerName" :options="managersList"></b-form-select>
+          </div>
+        </b-row>
+        
+
+        <b-row>
+          <div class="position-relative col mt-4">
+            <label for="name" class="name-label">Loan Number</label>
+            <input type="text" v-model="loan.loanNo" required class="input">
+          </div>
+
+          <div class="position-relative col mt-4">
+            <label for="name" class="name-label">Payment Start Date</label>
+            <input type="date" v-model="loan.paymentStartDate" required class="input">
+          </div>
+        </b-row>
+      </div>
+
        <div class="d-flex justify-content-between mt-4">
         <button class="button-cancel" @click.prevent="$refs['calculateLiquidateLoan'].hide()">Cancel</button>
-        <button class="button-save" style="width: 52%;">Save</button>
+        <button class="button-save">Save</button>
       </div>
     </form>
   </b-modal>
@@ -68,7 +106,7 @@
     data() {
       return {
         loan: {},
-        durations: [1,2,3,4,5,6,7,8,9,10,11,12]
+        durations: [0,1,2,3,4,5,6,7,8,9,10,11,12]
       }
     },
     props: {
@@ -85,7 +123,18 @@
       }
     },
     computed: {
-      ...mapGetters(['calculatedLiquiLoan', 'liquidTypes', 'loanModels', 'customerLoans']),
+      ...mapGetters(['calculatedLiquiLoan', 'liquidTypes', 'loanModels', 'customerLoans', 'managers']),
+      managersList() {
+        return this.managers.map(x => x.managerName)
+      },
+      loanNumber() {
+        return `${this.customerLoans[0].branchCode}-00000-MON`
+      }
+    },
+    watch: {
+      loan(newVal, oldVal) {
+        this.loan.loanNo = this.loanNumber
+      }
     },
     methods: {
       ...mapActions(['fetchCustomerLoans']),

@@ -65,7 +65,8 @@
         <span 
           :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
           class= "px-3 status cursor-pointer"
-          v-if="data.value != 'INACTIVE'"
+          v-if="data.value == 'INACTIVE' || data.value == 'PENDING'"
+          @click="approveModal(data.item)"
         >
           {{data.value}}
         </span>
@@ -74,7 +75,6 @@
           :style="{color: getColor(data.item), background: getBgColor(data.item)}" 
           class= "px-3 status cursor-pointer"
           v-else
-          @click="approveModal(data.item)"
         >
           {{data.value}}
         </span>
@@ -252,7 +252,8 @@
         })
         jsontoexcel.getXlsx(data, headers, fileName);
       },
-      clearSearch() {
+      async clearSearch() {
+        await this.$store.dispatch('fetchLoans', { page: 1, size: this.perPage || 10 })
         this.searchKeys =  {
           paymentStartDate: '',
           status: '',

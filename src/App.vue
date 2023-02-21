@@ -46,4 +46,8 @@ export default {
 #approve-loan-modal .modal-dialog {
   max-width: 610px !important;
 }
+
+.liquidate-modal .modal-dialog {
+  max-width: 610px !important;
+}
 </style>

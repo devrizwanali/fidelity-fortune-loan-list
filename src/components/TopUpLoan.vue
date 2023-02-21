@@ -21,7 +21,7 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Secondary Branch Manager</label>
-            <b-form-select required class="input" v-model="form.secondaryManagerName" :options="managersList"></b-form-select>
+            <b-form-select class="input" v-model="form.secondaryManagerName" :options="secondaryManagersList"></b-form-select>
           </div>
         </b-col>
       </b-row>
@@ -34,9 +34,9 @@
           </div>
         </b-col>
         <b-col>
-          <div class="position-relative auto-filled mt-4">
+          <div class="position-relative mt-4">
             <label for="name" class="name-label">Interest Owed</label>
-            <input type="number" step="any" v-model.number="form.interestOwed" disabled class="input" required>
+            <input type="number" step="any" v-model.number="form.interestOwed" class="input" required>
           </div>
         </b-col>
       </b-row>
@@ -85,6 +85,15 @@
         </b-col>
       </b-row>
 
+      <b-row class="justify-content-center">
+        <b-col cols="6">
+          <div class="position-relative mt-4">
+             <label class="name-label">Start Date</label>
+            <input type="date" v-model="form.loanStartDate" class="input" required>
+          </div>
+        </b-col>
+      </b-row>
+
       <div class="d-flex justify-content-between mt-4">
         <button class="button-cancel" @click.prevent="$refs['topUpLoanModal'].hide()">Cancel</button>
         <button class="button-save px-3" style="width: 20%">Save</button>
@@ -100,6 +109,7 @@
     data() {
       return {
         loan: {},
+        secondaryManagersList: [],
         topUpAmount: '',
         totalCapitalBalance: '',
         form: {
@@ -116,14 +126,17 @@
           customerId: '',
           id: '',
           loanType: "STATE",
-          remainingUnpaidInterest: 0
+          remainingUnpaidInterest: 0,
+          loanStartDate: ''
         }
       }
     },
     computed: {
       ...mapGetters(['managers', 'computedTopUpLoan']),
       managersList() {
-        return this.managers.map(x => x.managerName)
+        const mang = this.managers.map(x => x.managerName)
+        this.secondaryManagersList = ["", ...mang]
+        return mang
       }
     },
     mounted() {
@@ -132,7 +145,7 @@
       }
     },
     methods: {
-      ...mapActions(['fetchManagers']),
+      ...mapActions(['fetchManagers', 'addCustomerLoan']),
       showModal(loan, customer, customerId) {
         this.loan = loan;
         this.form.loanNumber = `${customer.branchCode}-00000-MON`
@@ -144,12 +157,13 @@
         this.form.capitalBalance = loan.capitalBalance
         this.form.customerId = customerId
         this.form.id = loan.id
-        this.totalCapitalBalance = parseFloat(loan.capitalBalance) + parseFloat(loan.interestOwed)
+        this.totalCapitalBalance = Math.round(parseFloat(loan.capitalBalance) + parseFloat(loan.interestOwed))
         this.$refs['topUpLoanModal'].show()
       },
       onSubmit() {
         axios.post(`/loan/topup`, this.form)
         .then(res => {
+          this.addCustomerLoan(res.data.response)
           this.success(res.data.message)
           this.$refs['topUpLoanModal'].hide()
         })

@@ -74,7 +74,7 @@ const actions = {
 
   addCustomerLoan({ commit, state }, payload) {
     let loans = state.customerLoans
-    loans.push(payload)
+    loans.unshift(payload)
     commit('SET_CUSTOMERS_LOAN', loans)
   },
 
@@ -136,7 +136,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       axios.post(`/loan/page`, params)
         .then(res => {
-          debugger
           commit('SET_SEARCH_LOANS', res.data.response)
           commit('SET_BUSY', false)
         })
