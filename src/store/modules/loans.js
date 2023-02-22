@@ -49,7 +49,7 @@ const mutations = {
 const actions = {
   async fetchLoans({ commit }, params) {
     commit('SET_BUSY', true)
-    await axios.get(`/loan/page?size=${params.size}&page=${params.page}`)
+    await axios.get(`/loan/page?size=${params.size}&page=${params.page - 1 }`)
     .then(res => {
       commit('SET_LOANS', res.data.response)
       commit('SET_BUSY', false)
