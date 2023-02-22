@@ -158,6 +158,7 @@
           this.success(res.data.message)
           this.$refs['calculateLiquidateLoan'].hide()
           let id = this.customerLoans[0].customerId
+          this.$store.dispatch('fetchLoans', { page: 1, size: 10 })
           this.fetchCustomerLoans(id).then(res => {
             this.$root.$emit('bv::refresh::table', 'customer_loan_list')
           })

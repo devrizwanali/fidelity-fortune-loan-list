@@ -165,6 +165,7 @@
         .then(res => {
           this.addCustomerLoan(res.data.response)
           this.success(res.data.message)
+          this.$store.dispatch('fetchLoans', { page: 1, size: 10 })
           this.$refs['topUpLoanModal'].hide()
         })
         .catch(error => this.error(error.response.data.message))

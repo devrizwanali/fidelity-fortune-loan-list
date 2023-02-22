@@ -83,6 +83,7 @@
       onSubmit() {
         this.payLoan(this.form).then(res => {
           this.success(res.data.message)
+          this.$store.dispatch('fetchLoans', { page: 1, size: 10 })
           this.$refs['payLoan'].hide()
         }).catch(error => this.error(error.response.data.message))
       }

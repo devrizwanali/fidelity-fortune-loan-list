@@ -147,6 +147,7 @@
           this.$refs['addLoanModalTow'].hide()
           this.success('Successfully Created')
           this.addCustomerLoan(res.data.response)
+          this.$store.dispatch('fetchLoans', { page: 1, size: 10 })
           this.$root.$emit('bv::refresh::table', 'customer_loan_list')
         }).catch(e => this.error(e.response.data.message))
         })

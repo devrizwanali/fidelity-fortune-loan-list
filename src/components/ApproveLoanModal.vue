@@ -71,6 +71,7 @@
           "loanStartDate": null
         })
         .then(res => {
+          this.$store.dispatch('fetchLoans', { page: 1, size: 10 })
           this.success('Successfully Approved')
           this.$refs['approve-loan-modal'].hide()
         })
