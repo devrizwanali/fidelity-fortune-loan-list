@@ -37,8 +37,6 @@
     <b-table
       :items="loans"
       :fields="headers"
-      :current-page="currentPage"
-      :per-page="perPage"
       show-empty
       :busy.sync="isBusy"
       small
@@ -114,9 +112,10 @@
     <div class="d-flex align-items-center" style="gap: 8px">
       <p>Show</p>
       <b-form-select
-        v-model="currentPage"
+        v-model="perPage"
         :options="options"
         class="mb-3"
+        @change="perpageChangeHandler"
         >
       </b-form-select>
       <p>entries</p>
@@ -124,7 +123,7 @@
 
     <b-pagination
       v-model="currentPage"
-       :total-rows="totalPages"
+      :total-rows="totalElements"
       :per-page="perPage"
       pills
       @change="pageChangeHandler"
@@ -252,6 +251,7 @@
       perpageChangeHandler(perPage) {
         this.perPage = perPage
         this.currentPage = 1
+        this.pageChangeHandler(this.currentPage)
       },
       exportExcel() {
         const fileName = `${new Date()}.csv`
