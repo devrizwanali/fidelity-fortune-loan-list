@@ -33,8 +33,7 @@
         Bulk Repayment
       </b-button>
     </div>
-      
-   
+
     <b-table
       :items="loans"
       :fields="headers"
@@ -110,14 +109,32 @@
         <span @click="generateReport(data.item.id)" class="cursor-pointer">{{data.item.loanNo}}</span>
       </template>
     </b-table>
-    <pagination
-      :current-page="currentPage"
+
+    <div class="d-flex justify-content-between align-items-center p-footer">
+    <div class="d-flex align-items-center" style="gap: 8px">
+      <p>Show</p>
+      <b-form-select
+        v-model="currentPage"
+        :options="options"
+        class="mb-3"
+        >
+      </b-form-select>
+      <p>entries</p>
+    </div>
+
+    <b-pagination
+      v-model="currentPage"
+       :total-rows="totalPages"
       :per-page="perPage"
-      :total-pages="totalPages"
-      :totalElements="totalElements"
-      @onPageChange="pageChangeHandler"
-      @onPerPageChange="perpageChangeHandler"
-    />
+      pills
+      @change="pageChangeHandler"
+      size="sm"
+    ></b-pagination>
+
+      <p class="pagination-footer">
+        Showing {{((currentPage - 1) * perPage ) + 1}} to {{showingEnteries}} of {{totalElements}} entries
+      </p>
+    </div>
 
     <!-- customer loan list modal -->
     <customer-loan-list ref="customer-loan-modal" :customer="selectedItem" />
@@ -145,6 +162,7 @@
       return {
         currentPage: 1,
         perPage: 10,
+        options: [10, 20, 50],
         searchKeys: {
           paymentStartDate: '',
           status: '',
@@ -180,6 +198,12 @@
     },
     computed:  {
       ...mapGetters(['loans', 'totalElements', 'totalPages', 'isBusy']),
+      showingEnteries () {
+        if((this.currentPage * this.perPage) > this.totalElements)
+          return this.totalElements
+        else
+          return this.currentPage * this.perPage
+      },
     },
 
     async beforeCreate() {
@@ -277,11 +301,26 @@
     }
   }
 </script>
-<style scoped>
+<style>
   @import '../assets/css/home.css';
   .input-search {
     width: 180px !important;
     height: 50px !important;
     margin-left: 8px;
+  }
+
+  .p-footer p, select {
+    color: #131518;
+    opacity: 0.7;
+    text-shadow: 0px 10px 40px rgba(1, 0, 39, 0.25);
+  }
+
+  .page-link {
+    border: none;
+  }
+
+  button[role=menuitemradio], .page-item {
+    color: #131518;
+    opacity: 0.7;
   }
 </style>

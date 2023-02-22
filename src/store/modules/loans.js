@@ -19,8 +19,9 @@ const state = {
 
 const mutations = {
   SET_LOANS(state, payload) {
-    const loans = [...state.loans, ...payload.content]
-    state.loans = loans
+    let loans = [...state.loans]
+    const index = payload.pageable.offset - payload.pageable.pageSize
+    state.loans.splice(index, 0, ...payload.content)
     state.totalElements = payload.totalElements
     state.totalPages = payload.totalPages
   },
