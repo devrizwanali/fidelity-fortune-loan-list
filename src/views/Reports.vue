@@ -87,7 +87,9 @@
 
         <div class="d-flex justify-content-around mt-4">
           <button class="button-cancel" @click.prevent="$refs['reportsItem'].hide()">Cancel</button>
-          <button class="button-save">Generate</button>
+          <button class="button-save w-50"  disabled v-if="generating">Generating...</button>
+          <button class="button-save w-50" v-else>Generate</button>
+
         </div>
       </form>
     </b-modal>
@@ -112,6 +114,7 @@
         ],
         type: '',
         title: '',
+        generating: false,
         form:{
           branchCode: '',
           customerId: null,
@@ -132,6 +135,7 @@
         this.$refs['reportsItem'].show()
       },
       onSubmit() {
+        this.generating = true
         this.form.reportType = this.type
         axios.post('/report', this.form)
         .then(res => {
@@ -140,7 +144,9 @@
           this.form.branchCode = ''
           this.form.format = ''
           this.form.startDate = ''
+          this.generating = false
         }).catch(error => {
+          this.generating = false
           this.error(error.response.data.message)
         })
       },
