@@ -145,15 +145,15 @@
       resetModal() {
         this.form = {
           loanNo:  `${this.customer.branchCode}-00000-MON`,
-          duration: 0,
+          duration: '',
           managerName: '',
           loanType: '',
-          netMonthlySalary: 0,
-          grossMonthlySalary: 0,
-          interestRate: 0,
+          netMonthlySalary: '',
+          grossMonthlySalary: '',
+          interestRate: '',
           paymentStartDate: null,
           secondaryManagerName: '',
-          amount: 0,
+          amount: '',
           customerId: this.customer.customerId
         }
       },

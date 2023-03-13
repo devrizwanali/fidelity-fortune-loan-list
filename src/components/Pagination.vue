@@ -47,7 +47,7 @@
     },
     data() {
       return {
-        options: [10, 20, 50],
+        options: [10, 20, 50, 100, 500],
       }
     },
     computed: {

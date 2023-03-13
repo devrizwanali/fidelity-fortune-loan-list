@@ -36,7 +36,7 @@
         <b-col>
           <div class="position-relative mt-4">
             <label for="name" class="name-label">Interest Owed</label>
-            <input type="number" step="any" v-model.number="form.interestOwed" class="input" required>
+            <input type="number" step="any" v-model.number="form.interestOwed" class="input" required @keyup="totalCapBalanceChanged">
           </div>
         </b-col>
       </b-row>
@@ -65,8 +65,8 @@
         </b-col>
         <b-col>
           <div class="position-relative mt-4">
-            <label for="name" class="name-label">Monthly Gross Salary</label>
-            <input type="number" step="any" v-model.number="form.grossMonthlySalary" class="input" required>
+            <label for="name" class="name-label">Assumed Months</label>
+            <input type="number" step="any" v-model.number="assumedMonths" class="input" @keyup="capitalBalanceChanged">
           </div>
         </b-col>
       </b-row>
@@ -84,17 +84,22 @@
           </div>
         </b-col>
       </b-row>
-
-      <b-row class="justify-content-center">
-        <b-col cols="6">
+      <b-row>
+        <b-col>
           <div class="position-relative mt-4">
-             <label class="name-label">Start Date</label>
+            <label class="name-label">Start Date</label>
             <input type="date" v-model="form.loanStartDate" class="input" required>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="position-relative mt-4">
+            <label class="name-label">Disbursement Date</label>
+            <input type="date" v-model="form.disbursementDate" class="input" required>
           </div>
         </b-col>
       </b-row>
 
-      <div class="d-flex justify-content-between mt-4">
+       <div class="d-flex justify-content-between mt-4">
         <button class="button-cancel" @click.prevent="$refs['topUpLoanModal'].hide()">Cancel</button>
         <button class="button-save px-3" style="width: 20%">Save</button>
       </div>
@@ -117,7 +122,7 @@
           duration: '',
           managerName: '',
           netMonthlySalary: '',
-          grossMonthlySalary: '',
+          grossMonthlySalary: 0,
           interestRate: '',
           secondaryManagerName: '',
           amount: '',
@@ -127,7 +132,8 @@
           id: '',
           loanType: "STATE",
           remainingUnpaidInterest: 0,
-          loanStartDate: ''
+          loanStartDate: '',
+          additionalAmountRequested: ''
         }
       }
     },
@@ -148,16 +154,21 @@
       ...mapActions(['fetchManagers', 'addCustomerLoan']),
       showModal(loan, customer, customerId) {
         this.loan = loan;
-        this.form.loanNumber = `${customer.branchCode}-00000-MON`
+        //this.form.loanNumber = `${customer.branchCode}-00000-MON`
+        this.form.loanNumber = loan.loanNumber
         this.form.capitalBalance = loan.capitalBalance
         this.form.interestOwed = loan.interestOwed
-        this.form.amount = loan.amount
         this.form.interestRate = loan.interestRate
         this.form.duration = loan.duration
         this.form.capitalBalance = loan.capitalBalance
         this.form.customerId = customerId
         this.form.id = loan.id
+        // added grossMonthlySalary default
+        this.form.grossMonthlySalary = 0
         this.totalCapitalBalance = Math.round(parseFloat(loan.capitalBalance) + parseFloat(loan.interestOwed))
+        this.form.totalCapitalBalance = this.totalCapitalBalance
+        this.form.amount = this.form.totalCapitalBalance
+        this.form.additionalAmountRequested = this.topUpAmount
         this.$refs['topUpLoanModal'].show()
       },
       onSubmit() {
@@ -165,19 +176,49 @@
         .then(res => {
           this.addCustomerLoan(res.data.response)
           this.success(res.data.message)
-          this.$store.dispatch('fetchLoans', { page: 1, size: 10 })
+          this.$store.dispatch('fetchLoans', { page: 0, size: 10 })
           this.$refs['topUpLoanModal'].hide()
         })
         .catch(error => this.error(error.response.data.message))
       },
-      topupAmountChanged() {
-        let topUp = this.topUpAmount == "" ? 0 : this.topUpAmount
-        if(topUp == 0) {
-          this.form.amount = this.loan.amount
-        } else {
-          let newAmount = parseFloat(this.loan.amount) + parseFloat(topUp)
-          this.form.amount = newAmount
+      totalCapBalanceChanged() {
+        let interestOwed = this.form.interestOwed == "" ? 0 : parseFloat(this.form.interestOwed)
+        let capitalBalance = parseFloat(this.form.capitalBalance)
+        let totalCapitalBalance = Math.round(capitalBalance + interestOwed)
+        this.totalCapitalBalance = totalCapitalBalance;
+
+        this.form.totalCapitalBalance = totalCapitalBalance
+        this.topupAmountChanged()
+      },
+       topupAmountChanged() {
+        let topUp = this.topUpAmount == "" ? 0 : parseFloat(this.topUpAmount)
+        let totalCapitalBalance = parseFloat(this.totalCapitalBalance)
+        let newAmount = topUp + totalCapitalBalance
+        this.form.amount = newAmount
+        this.form.additionalAmountRequested = this.topUpAmount
+      },
+      capitalBalanceChanged() {
+        let capitalBalance = parseFloat(this.form.capitalBalance);
+        let lastCapPayment = parseFloat(this.loan.lastCapPayment);
+        let monthlyInterestAmount = parseFloat(this.loan.monthlyInterestAmount);
+        let assumedMonths = parseFloat(this.assumedMonths);
+
+        if (isNaN(assumedMonths) || assumedMonths === null || assumedMonths === '') {
+          this.form.capitalBalance = this.loan.capitalBalance;
+        } else if (assumedMonths !== null && lastCapPayment !== 0) {
+          let newCapitalBalance = capitalBalance - (lastCapPayment * assumedMonths);
+          this.form.capitalBalance = newCapitalBalance.toFixed(2);
+        } else if (assumedMonths !== null && lastCapPayment === 0) {
+          let newCapitalBalance = capitalBalance + (monthlyInterestAmount * assumedMonths);
+          this.form.capitalBalance = newCapitalBalance.toFixed(2);
         }
+        let interestOwed = this.form.interestOwed == "" ? 0 : parseFloat(this.form.interestOwed)
+        let newCapitalBalance = parseFloat(this.form.capitalBalance)
+        let totalCapitalBalance = Math.round(newCapitalBalance + interestOwed)
+        this.totalCapitalBalance = totalCapitalBalance;
+
+        this.form.totalCapitalBalance = totalCapitalBalance
+        this.topupAmountChanged()
       }
     }
   }

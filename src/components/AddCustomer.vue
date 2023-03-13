@@ -334,15 +334,15 @@ export default {
       loan: null,
       loanForm: {
         loanNo: '',
-        duration: 0,
+        duration: '',
         managerName: '',
         loanType: '',
         netMonthlySalary: 0,
         grossMonthlySalary: 0,
-        interestRate: 0,
+        interestRate: '',
         paymentStartDate: null,
         secondaryManagerName: '',
-        amount: 0,
+        amount: '',
         customerId: 0
       }
     };
