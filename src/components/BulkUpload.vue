@@ -46,6 +46,7 @@
           branchCode: '',
           loanType: '',
           fileName: '',
+          data: null, // added for Base64 string
           fileType: "LOAN_REPAYMENT",
           payDate: '',
         }
@@ -71,12 +72,13 @@
       ...mapActions(['fetchBrachCodes']),
       onSubmit() {
         const formData = new FormData()
-        formData.append('data', null)
+        formData.append('data', this.form.data) // append the Base64 encoded string
          formData.append('fileName', this.form.fileName.name)
          formData.append('fileType', this.form.fileType)
          formData.append('payDate', this.form.payDate)
          formData.append('branchCode', this.form.branchCode)
          formData.append('', this.form.fileName)
+         formData.append('loanType', this.form.loanType) //loanType was not previously being appended
 
         if(!this.form.fileName){
           this.error('Please upload file.')
@@ -98,7 +100,12 @@
         this.$refs['bulkUpload'].show()
       },
       fileUploaded() {
-        this.form.fileName = this.$refs['file-input'].files[0]
+        const fileReader = new FileReader()
+        fileReader.readAsDataURL(this.$refs['file-input'].files[0])
+        fileReader.onload = () => {
+          this.form.fileName = this.$refs['file-input'].files[0]
+          this.form.data = fileReader.result.split(',')[1] // get the Base64 encoded string
+        }
       }
     }
   }

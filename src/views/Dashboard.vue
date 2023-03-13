@@ -87,7 +87,7 @@
         {{ data.item.amount | formatNumber }}
       </template>
 
-      <template #cell(totalRepaymentAmount)="data">
+      <template #cell(chequeAmount)="data">
         {{ data.value | formatNumber}}
       </template>
 
@@ -161,7 +161,7 @@
       return {
         currentPage: 1,
         perPage: 10,
-        options: [10, 20, 50],
+        options: [10, 20, 50, 100, 500],
         searchKeys: {
           paymentStartDate: '',
           status: '',
@@ -178,7 +178,7 @@
           {label: 'Loan No.', key: 'loanNo'},
           {label: 'Ministry', key: 'ministry'},
           {label: 'Duration', key: 'duration'},
-          {label: 'AMT. Disb', key: 'totalRepaymentAmount'},
+          {label: 'AMT. Disb', key: 'chequeAmount'},
           {label: 'Loan Amt', key: 'loanAmount'},
           {label: 'Monthly', key: 'monthlyRepaymentAmount'},
           {label: 'S. Date', key: 'SDate'},
@@ -266,8 +266,8 @@
             'Loan No.': loan.loanNo,
             'Ministry': loan.customerName,
             'Duration': loan.duration,
-            'AMT. Disb': loan.totalRepaymentAmount,
-            'Loan Amt': loan.totalRepaymentAmount,
+            'AMT. Disb': loan.chequeAmount,
+            'Loan Amt': loan.amount,
             'Monthly': loan.monthlyRepaymentAmount,
             'S. Date': moment(loan.paymentStartDate).format("MM/DD/YYYY") ,
             'CDate': moment(loan.created).format("MM/DD/YYYY") ,

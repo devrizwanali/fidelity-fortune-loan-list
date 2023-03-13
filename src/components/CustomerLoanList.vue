@@ -99,12 +99,12 @@
           {{ data.value | formatNumber }}
         </template>
 
-        <template #cell(totalRepaymentAmount)="data">
+        <template #cell(chequeAmount)="data">
           {{ data.value | formatNumber }}
         </template>
 
         <template #cell(loanAmount)="data">
-          {{ data.item.totalRepaymentAmount | formatNumber }}
+          {{ data.item.amount | formatNumber }}
         </template>
 
         <template #cell(CDate)="data">
@@ -165,7 +165,7 @@
           {label: 'Loan No.', key: 'loanNo'},
           {label: 'Duration', key: 'duration'},
           {label: 'S. Date', key: 'SDate'},
-          {label: 'AMT. Disb', key: 'totalRepaymentAmount'},
+          {label: 'AMT. Disb', key: 'chequeAmount'},
           {label: 'Loan Amt', key: 'loanAmount'},
           {label: 'Monthly', key: 'monthlyRepaymentAmount'},
           {label: 'Interest', key: 'interestRate'},
